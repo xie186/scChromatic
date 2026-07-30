@@ -19,22 +19,30 @@ pak::pak("TODO/scChromatic")
 The repository metadata contains TODO author and URL placeholders that must be
 replaced before release.
 
+## Example dataset
+
+`sc_example` is a deterministic synthetic PBMC-like dataset with 720 cells. It
+contains a UMAP-like embedding plus cell identity, parent lineage, sample,
+condition, marker expression, signed score, pseudotime, and QC columns.
+
+```r
+data(sc_example)
+dim(sc_example)
+head(sc_example[c("cell_type", "sample", "condition", "MS4A1")])
+```
+
 ## Quick start
 
 ```r
 library(scChromatic)
 library(ggplot2)
 
-cell_types <- c("B", "T", "NK", "Mono")
-cell_map <- sc_color_map(cell_types, palette = "chromatic")
+data(sc_example)
+cell_types <- levels(sc_example$cell_type)
+cell_map <- sc_color_map(sc_example$cell_type, palette = "chromatic")
 as_named_colors(cell_map)
 
-umap <- data.frame(
-  UMAP1 = cos(seq(0, 12, length.out = 400)) + rnorm(400, sd = 0.25),
-  UMAP2 = sin(seq(0, 12, length.out = 400)) + rnorm(400, sd = 0.25),
-  cell_type = rep(cell_types, each = 100)
-)
-ggplot(umap, aes(UMAP1, UMAP2, color = cell_type)) +
+ggplot(sc_example, aes(UMAP1, UMAP2, color = cell_type)) +
   geom_point(size = 0.7) +
   scale_color_sc_map(cell_map)
 ```
@@ -43,10 +51,16 @@ ggplot(umap, aes(UMAP1, UMAP2, color = cell_type)) +
 
 ```r
 full_colors <- as_named_colors(cell_map)[cell_types]
-subset_colors <- as_named_colors(cell_map)[c("T", "NK")]
-stopifnot(identical(subset_colors, full_colors[c("T", "NK")]))
+stimulated <- subset(
+  sc_example,
+  condition == "Stimulated" & cell_type %in% c("CD4 T", "NK", "Monocyte")
+)
+subset_colors <- as_named_colors(cell_map)[levels(droplevels(stimulated$cell_type))]
+stopifnot(identical(subset_colors, full_colors[names(subset_colors)]))
 
-cell_map <- update_sc_color_map(cell_map, c(cell_types, "DC"))
+ggplot(stimulated, aes(UMAP1, UMAP2, color = cell_type)) +
+  geom_point(size = 0.7) +
+  scale_color_sc_map(cell_map)
 ```
 
 ## ArchR palettes
@@ -63,13 +77,27 @@ pal_archr("stallion")(8)
 ## Continuous expression and signed scores
 
 ```r
-ggplot(umap, aes(UMAP1, UMAP2, color = UMAP1)) +
+ggplot(sc_example, aes(UMAP1, UMAP2, color = MS4A1)) +
   geom_point() +
   scale_color_sc_c("viridis")
 
-ggplot(umap, aes(UMAP1, UMAP2, color = UMAP1 * UMAP2)) +
+ggplot(sc_example, aes(UMAP1, UMAP2, color = signed_score)) +
   geom_point() +
   scale_color_sc_c("archr_coolwarm", midpoint = 0)
+```
+
+## Lineages, pseudotime, and QC
+
+```r
+lineage_map <- sc_hierarchy_map(sc_example$lineage, sc_example$cell_type)
+
+ggplot(sc_example, aes(UMAP1, UMAP2, color = cell_type)) +
+  geom_point(size = 0.7) +
+  scale_color_sc_map(lineage_map)
+
+ggplot(sc_example, aes(UMAP1, UMAP2, color = pseudotime)) +
+  geom_point(size = 0.7) +
+  scale_color_sc_c("cividis")
 ```
 
 ## Accessibility auditing
@@ -96,3 +124,4 @@ metrics. The full registry is installed at `extdata/palette-provenance.csv`;
 SingleCellExperiment metadata workflows, ArchR plotting arguments, and
 ComplexHeatmap annotations. These frameworks remain optional. scico palettes
 are also optional and produce an installation hint only when requested.
+# scChromatic
