@@ -10,6 +10,15 @@ scChromatic provides provenance-aware palettes, persistent label-to-color
 mappings, ggplot2 scales, deterministic palette extension, and perceptual
 diagnostics for single-cell visualizations.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://xie186.github.io/scChromatic/}
+  \item \url{https://github.com/xie186/scChromatic}
+  \item Report bugs at \url{https://github.com/xie186/scChromatic/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: TODO Author \email{TODO@example.org} (TODO: replace with package author details)
 

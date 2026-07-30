@@ -13,6 +13,10 @@ test_that("provenance registry includes required fields", {
     sc_palette_info("archr_stallion")$source_commit,
     "6feec354ad6c8052ddbc4626a2ca2d858ed465bf"
   )
+  expect_identical(
+    sc_palette_info("chromatic")$source_url,
+    "https://github.com/xie186/scChromatic"
+  )
 })
 
 test_that("optional single-cell frameworks are not runtime dependencies", {

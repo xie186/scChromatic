@@ -11,6 +11,8 @@ Description: Reproducible, provenance-aware, and accessible color systems for
     recommendations support categorical annotations, expression, signed
     scores, pseudotime, quality-control metrics, and heatmaps.
 License: GPL (>= 3) + file LICENSE
+URL: https://xie186.github.io/scChromatic/, https://github.com/xie186/scChromatic
+BugReports: https://github.com/xie186/scChromatic/issues
 Depends:
     R (>= 4.2.0)
 Imports:
@@ -32,7 +34,11 @@ Suggests:
     testthat (>= 3.0.0),
     vdiffr,
     yaml
+Config/Needs/website:
+    pkgdown,
+    scico
 VignetteBuilder: knitr
+LazyData: true
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

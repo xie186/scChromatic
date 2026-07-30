@@ -187,7 +187,7 @@ core_specs <- list(
   ),
   chromatic = list(
     "scChromatic", "qualitative", "cell_identity,sample,lineage,heatmap_annotation",
-    "https://github.com/TODO/scChromatic", "scChromatic package authors",
+    "https://github.com/xie186/scChromatic", "scChromatic package authors",
     "GPL (>= 3)", TRUE,
     "Perceptually optimized and audited; no universal CVD-safety claim.",
     "Frozen nested maximin sequence generated in HCL with normal/CVD diagnostics."

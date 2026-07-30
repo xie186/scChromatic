@@ -1,0 +1,88 @@
+url: https://xie186.github.io/scChromatic/
+
+template:
+  bootstrap: 5
+  bslib:
+    primary: "#475D8F"
+    link-color: "#475D8F"
+    border-radius: 0.5rem
+  includes:
+    in_header: |
+      <meta name="theme-color" content="#475D8F">
+
+home:
+  title: "scChromatic • Reproducible single-cell color systems"
+  description: >
+    Persistent, provenance-aware, and accessible palettes for single-cell
+    identities, annotations, expression, trajectories, QC, and heatmaps.
+  links:
+  - text: Source code
+    href: https://github.com/xie186/scChromatic
+  - text: Report an issue
+    href: https://github.com/xie186/scChromatic/issues
+
+navbar:
+  structure:
+    left: [intro, gallery, reference, articles, news]
+    right: [search, github]
+  components:
+    intro:
+      text: Get started
+      href: articles/scChromatic.html
+    gallery:
+      text: Palette gallery
+      href: articles/palette-gallery.html
+    articles:
+      text: Guides
+      menu:
+      - text: Stable color maps
+        href: articles/stable-color-maps.html
+      - text: Accessibility
+        href: articles/palette-accessibility.html
+    github:
+      icon: fab fa-github fa-lg
+      href: https://github.com/xie186/scChromatic
+      aria-label: GitHub
+
+articles:
+- title: Explore scChromatic
+  navbar: ~
+  contents:
+  - palette-gallery
+  - scChromatic
+  - stable-color-maps
+  - palette-accessibility
+
+reference:
+- title: Palette discovery and access
+  desc: Retrieve registered colors, metadata, and scales-compatible closures.
+  contents:
+  - sc_palette
+  - sc_pal
+  - pal_archr
+  - sc_palette_names
+  - sc_palette_info
+  - sc_palette_generate
+- title: Persistent mappings
+  desc: Keep labels stable across subsets, reorderings, and related lineages.
+  contents:
+  - sc_color_map
+  - update_sc_color_map
+  - as_named_colors
+  - write_sc_color_map
+  - read_sc_color_map
+  - sc_hierarchy_map
+  - sc_highlight_map
+- title: ggplot2 scales
+  contents:
+  - scale_color_sc_d
+  - scale_color_sc_c
+  - scale_color_sc_map
+- title: Diagnostics and recommendations
+  contents:
+  - sc_palette_audit
+  - sc_palette_recommend
+  - sc_palette_plot
+- title: Example data
+  contents:
+  - sc_example

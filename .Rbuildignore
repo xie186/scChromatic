@@ -5,3 +5,6 @@
 ^cran-comments\.md$
 ^README\.Rmd$
 ^CITATION\.cff$
+^_pkgdown\.yml$
+^pkgdown$
+^docs$

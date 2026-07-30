@@ -1,0 +1,146 @@
+---
+title: "Palette gallery"
+description: "Every color option registered in scChromatic"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Palette gallery}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+library(scChromatic)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+
+This gallery is generated from the package's offline registry, so it stays in
+sync with the colors returned by `sc_palette()`. Hover over a qualitative
+swatch to see its hexadecimal value.
+
+```{r summary, results='asis'}
+ids <- sc_palette_names()
+info <- do.call(rbind, lapply(ids, sc_palette_info))
+counts <- table(info$palette_type)
+cat(
+  '<div class="palette-summary">',
+  sprintf("<div><strong>%d</strong><span>registered palettes</span></div>", nrow(info)),
+  sprintf(
+    "<div><strong>%d</strong><span>qualitative</span></div>",
+    unname(counts[["qualitative"]])
+  ),
+  sprintf(
+    "<div><strong>%d</strong><span>sequential</span></div>",
+    unname(counts[["sequential"]])
+  ),
+  sprintf(
+    "<div><strong>%d</strong><span>diverging</span></div>",
+    unname(counts[["diverging"]])
+  ),
+  "</div>",
+  sep = ""
+)
+```
+
+```{r helpers, include=FALSE}
+palette_card <- function(id) {
+  metadata <- sc_palette_info(id)
+  type <- metadata$palette_type[[1L]]
+  if (startsWith(id, "scico_") &&
+      !requireNamespace("scico", quietly = TRUE)) {
+    return(paste0(
+      '<article class="palette-card">',
+      '<div class="palette-id"><strong class="palette-heading"><code>',
+      id,
+      "</code></strong>",
+      '<span class="palette-badge">', type, "</span></div>",
+      '<div class="palette-meta">',
+      metadata$source[[1L]], " · ", metadata$status[[1L]],
+      "<br>", gsub(",", " · ", metadata$intended_use[[1L]]),
+      "</div>",
+      '<div class="palette-unavailable">',
+      "Install the optional scico package to render this palette.",
+      "</div></article>"
+    ))
+  }
+  n <- if (type == "qualitative") metadata$max_n[[1L]] else 64L
+  colors <- sc_palette(
+    id,
+    n = n,
+    selection = "source",
+    extend = "generate"
+  )
+  preview <- if (type == "qualitative") {
+    swatches <- paste0(
+      '<span class="palette-swatch" style="background:',
+      colors,
+      '" title="',
+      seq_along(colors),
+      ": ",
+      colors,
+      '"></span>',
+      collapse = ""
+    )
+    paste0('<div class="palette-swatches">', swatches, "</div>")
+  } else {
+    paste0(
+      '<div class="palette-gradient" style="background:linear-gradient(90deg,',
+      paste(colors, collapse = ","),
+      ')"></div>'
+    )
+  }
+  paste0(
+    '<article class="palette-card">',
+    '<div class="palette-id"><strong class="palette-heading"><code>',
+    id,
+    "</code></strong>",
+    '<span class="palette-badge">', type, "</span></div>",
+    '<div class="palette-meta">',
+    metadata$source[[1L]], " · ",
+    if (type == "qualitative") paste0(metadata$max_n[[1L]], " colors · ") else "",
+    metadata$status[[1L]],
+    "<br>", gsub(",", " · ", metadata$intended_use[[1L]]),
+    "</div>",
+    preview,
+    "</article>"
+  )
+}
+
+palette_section <- function(title, types) {
+  section <- info$palette_id[info$palette_type %in% types]
+  cat(
+    "<h2>", title, "</h2>",
+    '<div class="palette-grid">',
+    paste(vapply(section, palette_card, character(1)), collapse = ""),
+    "</div>",
+    sep = ""
+  )
+}
+```
+
+```{r qualitative, results='asis'}
+palette_section("Qualitative palettes", "qualitative")
+```
+
+Qualitative palettes are fixed sequences. scChromatic does not interpolate
+them by default; request `extend = "generate"` only when more colors are
+needed.
+
+```{r sequential, results='asis'}
+palette_section("Sequential palettes", "sequential")
+```
+
+```{r diverging, results='asis'}
+palette_section("Diverging palettes", "diverging")
+```
+
+For signed values, pass the data midpoint to the scale so rescaling is
+centered correctly:
+
+```{r signed-example, echo=TRUE}
+scale_color_sc_c("archr_coolwarm", midpoint = 0)
+```
+
+High-cardinality palettes are perceptually optimized or compatibility
+collections, not guarantees of universal color-vision-deficiency safety. Use
+`sc_palette_audit()` and combine color with labels, shapes, facets, or other
+encodings when distinctions matter.

@@ -13,11 +13,11 @@ assignments.
 
 ```r
 # install.packages("pak")
-pak::pak("TODO/scChromatic")
+pak::pak("xie186/scChromatic")
 ```
 
-The repository metadata contains TODO author and URL placeholders that must be
-replaced before release.
+The repository metadata contains TODO author placeholders that must be replaced
+before release.
 
 ## Example dataset
 

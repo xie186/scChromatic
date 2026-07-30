@@ -3,5 +3,6 @@ bibentry(
   title = "scChromatic: Reproducible Color Systems for Single-Cell Data Visualization",
   author = person("TODO", "Author"),
   year = "2026",
-  note = "R package version 0.1.0; TODO: replace author and repository details."
+  url = "https://github.com/xie186/scChromatic",
+  note = "R package version 0.1.0; TODO: replace author details."
 )

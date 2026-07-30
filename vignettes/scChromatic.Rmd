@@ -10,7 +10,7 @@ vignette: >
 ```{r setup}
 library(scChromatic)
 library(ggplot2)
-set.seed(1)
+data(sc_example)
 ```
 
 ## Palette discovery
@@ -32,20 +32,52 @@ sc_palette("tol_muted", 6)
 sc_pal("chromatic")(6)
 ```
 
-## Synthetic single-cell embedding
+## Example single-cell dataset
+
+`sc_example` is deterministic and synthetic. Its columns represent the color
+semantics commonly encountered in single-cell figures.
 
 ```{r}
-n <- 800
-cell_types <- c("B", "T", "NK", "Mono")
-umap <- data.frame(
-  UMAP1 = rnorm(n) + rep(c(-2, 2, -1, 1), each = n / 4),
-  UMAP2 = rnorm(n) + rep(c(1, 1, -2, -1), each = n / 4),
-  cell_type = rep(cell_types, each = n / 4)
+dim(sc_example)
+head(sc_example)
+```
+
+## Persistent cell identities
+
+```{r}
+cell_map <- sc_color_map(sc_example$cell_type, palette = "chromatic")
+
+ggplot(sc_example, aes(UMAP1, UMAP2, color = cell_type)) +
+  geom_point(size = 0.5) +
+  scale_color_sc_map(cell_map)
+```
+
+The same map is reused after filtering, so the three retained identities keep
+their original colors.
+
+```{r}
+stimulated <- subset(
+  sc_example,
+  condition == "Stimulated" & cell_type %in% c("CD4 T", "NK", "Monocyte")
 )
 
-ggplot(umap, aes(UMAP1, UMAP2, color = cell_type)) +
+ggplot(stimulated, aes(UMAP1, UMAP2, color = cell_type)) +
+  geom_point(size = 0.7) +
+  scale_color_sc_map(cell_map)
+```
+
+## Samples and conditions
+
+```{r}
+sample_map <- sc_color_map(sc_example$sample, palette = "tol_bright")
+
+ggplot(sc_example, aes(UMAP1, UMAP2, color = sample)) +
   geom_point(size = 0.5) +
-  scale_color_sc_d("chromatic")
+  scale_color_sc_map(sample_map)
+
+ggplot(sc_example, aes(UMAP1, UMAP2, color = condition)) +
+  geom_point(size = 0.5) +
+  scale_color_sc_d("tol_medium_contrast")
 ```
 
 ## ArchR palettes
@@ -62,8 +94,7 @@ pal_archr("stallion", selection = "priority")(8)
 ## Continuous expression
 
 ```{r}
-umap$expression <- pmax(0, umap$UMAP1 + rnorm(n))
-ggplot(umap, aes(UMAP1, UMAP2, color = expression)) +
+ggplot(sc_example, aes(UMAP1, UMAP2, color = MS4A1)) +
   geom_point(size = 0.5) +
   scale_color_sc_c("viridis")
 ```
@@ -73,8 +104,29 @@ ggplot(umap, aes(UMAP1, UMAP2, color = expression)) +
 `midpoint = 0` changes data rescaling, not merely the middle displayed color.
 
 ```{r}
-umap$score <- umap$UMAP1 * umap$UMAP2
-ggplot(umap, aes(UMAP1, UMAP2, color = score)) +
+ggplot(sc_example, aes(UMAP1, UMAP2, color = signed_score)) +
   geom_point(size = 0.5) +
   scale_color_sc_c("archr_coolwarm", midpoint = 0)
+```
+
+## Parent lineage and child subtype colors
+
+```{r}
+lineage_map <- sc_hierarchy_map(sc_example$lineage, sc_example$cell_type)
+
+ggplot(sc_example, aes(UMAP1, UMAP2, color = cell_type)) +
+  geom_point(size = 0.5) +
+  scale_color_sc_map(lineage_map)
+```
+
+## Pseudotime and QC
+
+```{r}
+ggplot(sc_example, aes(UMAP1, UMAP2, color = pseudotime)) +
+  geom_point(size = 0.5) +
+  scale_color_sc_c("cividis")
+
+ggplot(sc_example, aes(UMAP1, UMAP2, color = percent_mito)) +
+  geom_point(size = 0.5) +
+  scale_color_sc_c("magma")
 ```
