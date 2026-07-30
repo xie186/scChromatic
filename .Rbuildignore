@@ -1,0 +1,7 @@
+^scChromatic\.Rproj$
+^\.Rproj\.user$
+^data-raw$
+^\.github$
+^cran-comments\.md$
+^README\.Rmd$
+^CITATION\.cff$

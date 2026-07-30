@@ -1,0 +1,30 @@
+test_that("discrete scales and aliases use the same palettes", {
+  color <- scale_color_sc_d("okabe_ito")
+  colour <- scale_colour_sc_d("okabe_ito")
+  fill <- scale_fill_sc_d("okabe_ito")
+  expect_s3_class(color, "ScaleDiscrete")
+  expect_identical(color$palette(4), colour$palette(4))
+  expect_identical(color$palette(4), fill$palette(4))
+})
+
+test_that("mapping scales retain exact named values", {
+  map <- sc_color_map(c("B", "T", "NK"))
+  color <- scale_color_sc_map(map)
+  colour <- scale_colour_sc_map(map)
+  fill <- scale_fill_sc_map(map)
+  expect_identical(color$palette(3), colour$palette(3))
+  expect_identical(unname(color$palette(3)), unname(fill$palette(3)))
+  expect_identical(color$palette(3), as_named_colors(map))
+})
+
+test_that("continuous scales center midpoint in data space", {
+  color <- scale_color_sc_c("archr_coolwarm", midpoint = 0)
+  colour <- scale_colour_sc_c("archr_coolwarm", midpoint = 0)
+  fill <- scale_fill_sc_c("archr_coolwarm", midpoint = 0)
+  values <- c(-1, 0, 9)
+  expected <- scales::rescale_mid(values, from = c(-1, 9), mid = 0)
+  expect_equal(color$rescaler(values, from = c(-1, 9)), expected)
+  expect_equal(colour$rescaler(values, from = c(-1, 9)), expected)
+  expect_equal(fill$rescaler(values, from = c(-1, 9)), expected)
+  expect_equal(color$rescaler(0, from = c(-1, 9)), 0.5)
+})

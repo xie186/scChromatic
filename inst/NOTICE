@@ -1,0 +1,98 @@
+scChromatic third-party palette notice
+======================================
+
+This file documents provenance; it is not legal advice and does not claim that
+the package-level GPL license automatically resolves every upstream palette's
+copyright or licensing terms. Entries marked provenance_review in
+palette-provenance.csv should be reviewed before redistribution in contexts
+with additional licensing requirements.
+
+ggsci
+-----
+
+The package organization and scales-compatible interface were informed by
+ggsci (https://github.com/nanxstats/ggsci), Copyright Nan Xiao and
+contributors, licensed GPL (>= 3). scChromatic reimplements its interfaces for
+persistent single-cell color systems; no ggsci palette vectors are included.
+
+ArchR
+-----
+
+The archr_* vectors are frozen from GreenleafLab/ArchR, R/ColorPalettes.R,
+commit 6feec354ad6c8052ddbc4626a2ca2d858ed465bf:
+https://raw.githubusercontent.com/GreenleafLab/ArchR/6feec354ad6c8052ddbc4626a2ca2d858ed465bf/R/ColorPalettes.R
+
+ArchR is distributed under the MIT License. ArchR explicitly describes
+ArchRPalettes as a collection containing both original and borrowed palettes.
+Accordingly, scChromatic does not claim that every archr_* palette was designed
+by ArchR. Source comments identify zissou, darjeeling, and rushmore with
+wesanderson; sambaNight and solarExtra with buencolors. The ColorBrewer-like
+whitePurple, whiteBlue, and greenBlue sequences retain provenance_review status.
+
+Okabe-Ito
+----------
+
+The Okabe-Ito color universal design palette is documented by Masataka Okabe
+and Kei Ito at https://jfly.uni-koeln.de/color/. The fixed hexadecimal values
+are reproduced with attribution.
+
+Paul Tol
+--------
+
+Tol bright, vibrant, muted, and medium-contrast schemes are from Paul Tol,
+"Colour Schemes", https://personal.sron.nl/~pault/. The source permits free
+personal and commercial use with attribution; consult the current source terms.
+
+Glasbey
+-------
+
+The Glasbey palette is attributed to Glasbey CA, van der Heijden GWAM, Toh VFK,
+and Gray AJ (2007), "Colour Displays for Categorical Images", Color Research
+and Application 32:304-309, https://doi.org/10.1002/col.20327. The registry
+retains provenance_review status for the distributed hexadecimal transcription.
+
+Polychrome
+----------
+
+The 36-color palette is attributed to the Polychrome R package and Coombes KR,
+Brock G, Abrams ZB, and Abruzzo LV (2019), "Polychrome: Creating and Assessing
+Qualitative Palettes with Many Colors", Journal of Statistical Software 90,
+Code Snippet 1, https://doi.org/10.18637/jss.v090.c01. Polychrome is GPL-2.
+
+dittoSeq
+--------
+
+ditto40 reproduces the fixed colors identified in dittoSeq's dittoColors()
+source as of dittoSeq v0.2.10:
+https://github.com/dtm2451/dittoSeq/blob/master/R/dittoColors.R
+
+dittoSeq attributes its base colors to Wong's color-vision-deficiency-aware
+palette. Only entries 1-7 are described as the strongest red-green
+color-vision-deficiency-aware subset. Entries 8-40 are grey plus lighter and
+darker extensions and are not described here as fully color-blind safe.
+
+viridisLite
+-----------
+
+viridis, cividis, and magma anchors are generated at package-data build time
+with viridisLite (MIT), https://sjmgarnier.github.io/viridisLite/. The original
+matplotlib colormaps are by Nathaniel Smith, Stefan van der Walt, and Eric
+Firing; cividis has separate scientific-map attribution documented upstream.
+
+scico
+-----
+
+scico_batlow, scico_lajolla, scico_vik, and scico_broc are interoperability
+registry entries. Their values are provided only at runtime by the optional
+scico package (MIT), https://github.com/thomasp85/scico, using Fabio Crameri's
+Scientific colour maps. Consult the Scientific colour maps terms and cite
+Crameri, Shephard, and Heron (2020), Nature Communications 11:5444.
+
+Generated scChromatic palettes
+------------------------------
+
+chromatic is generated for scChromatic and frozen as a nested, deterministic
+40-color sequence under GPL (>= 3). Runtime qualitative extension also belongs
+to scChromatic. These colors are perceptually optimized and audited against
+normal, deutan, protan, and tritan simulations; they are not claimed to be
+universally color-blind safe.

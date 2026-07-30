@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use scChromatic, please cite it using the metadata below."
+title: "scChromatic: Reproducible Color Systems for Single-Cell Data Visualization"
+version: 0.1.0
+type: software
+authors:
+  - family-names: "Author"
+    given-names: "TODO"
+    email: "TODO@example.org"
+    affiliation: "TODO"
+repository-code: "https://github.com/TODO/scChromatic"
+license: GPL-3.0-or-later
+date-released: 2026-07-30

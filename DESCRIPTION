@@ -1,0 +1,39 @@
+Package: scChromatic
+Title: Reproducible Color Systems for Single-Cell Data Visualization
+Version: 0.1.0
+Authors@R: 
+    person("TODO", "Author", email = "TODO@example.org",
+           role = c("aut", "cre"),
+           comment = "TODO: replace with package author details")
+Description: Reproducible, provenance-aware, and accessible color systems for
+    single-cell data visualization. Persistent mappings keep labels stable
+    across subsets and reordered factors, while palette diagnostics and
+    recommendations support categorical annotations, expression, signed
+    scores, pseudotime, quality-control metrics, and heatmaps.
+License: GPL (>= 3) + file LICENSE
+Depends:
+    R (>= 4.2.0)
+Imports:
+    cli,
+    colorspace,
+    farver,
+    ggplot2 (>= 3.5.0),
+    scales,
+    viridisLite
+Suggests:
+    ComplexHeatmap,
+    jsonlite,
+    knitr,
+    pkgdown,
+    rmarkdown,
+    scico,
+    SeuratObject,
+    SingleCellExperiment,
+    testthat (>= 3.0.0),
+    vdiffr,
+    yaml
+VignetteBuilder: knitr
+Config/testthat/edition: 3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+Config/roxygen2/version: 8.0.0

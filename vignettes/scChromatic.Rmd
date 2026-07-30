@@ -1,0 +1,80 @@
+---
+title: "scChromatic"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{scChromatic}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup}
+library(scChromatic)
+library(ggplot2)
+set.seed(1)
+```
+
+## Palette discovery
+
+The registry separates palette type, intended use, provenance, capacity, and
+status.
+
+```{r}
+head(sc_palette_names(type = "qualitative"))
+sc_palette_info("archr_stallion")
+sc_palette_recommend(12, use = "cell_identity")
+```
+
+Raw colors are available as vectors, while `sc_pal()` returns a
+scales-compatible closure.
+
+```{r}
+sc_palette("tol_muted", 6)
+sc_pal("chromatic")(6)
+```
+
+## Synthetic single-cell embedding
+
+```{r}
+n <- 800
+cell_types <- c("B", "T", "NK", "Mono")
+umap <- data.frame(
+  UMAP1 = rnorm(n) + rep(c(-2, 2, -1, 1), each = n / 4),
+  UMAP2 = rnorm(n) + rep(c(1, 1, -2, -1), each = n / 4),
+  cell_type = rep(cell_types, each = n / 4)
+)
+
+ggplot(umap, aes(UMAP1, UMAP2, color = cell_type)) +
+  geom_point(size = 0.5) +
+  scale_color_sc_d("chromatic")
+```
+
+## ArchR palettes
+
+ArchR values are frozen from commit
+`6feec354ad6c8052ddbc4626a2ca2d858ed465bf`. Choose source order for literal
+upstream order or priority order for nested subsets.
+
+```{r}
+sc_palette("archr_stallion", 8, selection = "source")
+pal_archr("stallion", selection = "priority")(8)
+```
+
+## Continuous expression
+
+```{r}
+umap$expression <- pmax(0, umap$UMAP1 + rnorm(n))
+ggplot(umap, aes(UMAP1, UMAP2, color = expression)) +
+  geom_point(size = 0.5) +
+  scale_color_sc_c("viridis")
+```
+
+## Signed scores centered at zero
+
+`midpoint = 0` changes data rescaling, not merely the middle displayed color.
+
+```{r}
+umap$score <- umap$UMAP1 * umap$UMAP2
+ggplot(umap, aes(UMAP1, UMAP2, color = score)) +
+  geom_point(size = 0.5) +
+  scale_color_sc_c("archr_coolwarm", midpoint = 0)
+```
