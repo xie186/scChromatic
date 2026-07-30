@@ -1,0 +1,135 @@
+:root {
+  --sc-ink: #1d2638;
+  --sc-muted: #667085;
+  --sc-border: #d9deea;
+  --sc-surface: #f7f8fb;
+}
+
+body {
+  color: var(--sc-ink);
+}
+
+.template-home .page-header {
+  border-bottom: 0;
+}
+
+.palette-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 0.75rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.palette-summary > div {
+  padding: 1rem;
+  background: var(--sc-surface);
+  border: 1px solid var(--sc-border);
+  border-radius: 0.65rem;
+}
+
+.palette-summary strong {
+  display: block;
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.palette-summary span,
+.palette-meta {
+  color: var(--sc-muted);
+  font-size: 0.86rem;
+}
+
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+  gap: 1rem;
+  margin: 1rem 0 2.5rem;
+}
+
+.palette-card {
+  min-width: 0;
+  padding: 1rem;
+  background: #fff;
+  border: 1px solid var(--sc-border);
+  border-radius: 0.7rem;
+  box-shadow: 0 0.2rem 0.8rem rgb(29 38 56 / 6%);
+}
+
+.palette-heading {
+  display: block;
+  margin: 0 0 0.2rem;
+  font-size: 1rem;
+}
+
+.palette-card code {
+  color: var(--sc-ink);
+}
+
+.palette-meta {
+  min-height: 2.6rem;
+  margin-bottom: 0.7rem;
+}
+
+.palette-swatches {
+  display: flex;
+  min-height: 3.2rem;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgb(29 38 56 / 12%);
+  border-radius: 0.45rem;
+}
+
+.palette-swatch {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.palette-gradient {
+  height: 3.2rem;
+  border: 1px solid rgb(29 38 56 / 12%);
+  border-radius: 0.45rem;
+}
+
+.palette-unavailable {
+  display: grid;
+  min-height: 3.2rem;
+  place-items: center;
+  padding: 0.5rem;
+  color: var(--sc-muted);
+  font-size: 0.8rem;
+  text-align: center;
+  background: var(--sc-surface);
+  border: 1px dashed var(--sc-border);
+  border-radius: 0.45rem;
+}
+
+.palette-id {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.7rem;
+}
+
+.palette-badge {
+  flex: none;
+  padding: 0.15rem 0.45rem;
+  color: #475d8f;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  background: #edf0f7;
+  border-radius: 999px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --sc-ink: #edf0f7;
+    --sc-muted: #b8c0d4;
+    --sc-border: #3b465f;
+    --sc-surface: #202a3d;
+  }
+
+  .palette-card {
+    background: #182133;
+  }
+}

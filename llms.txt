@@ -1,0 +1,226 @@
+# scChromatic
+
+Reproducible, provenance-aware color systems for single-cell data
+visualization.
+
+## Why single-cell analyses need persistent color mappings
+
+Palette calls assign colors by position. After a subset or factor
+reorder, the same cell type can silently receive a different color.
+[`sc_color_map()`](https://xie186.github.io/scChromatic/reference/sc_color_map.md)
+stores a named label-to-color contract once, so every downstream figure
+reuses the same assignments.
+
+## Installation
+
+``` r
+
+# install.packages("pak")
+pak::pak("xie186/scChromatic")
+```
+
+The repository metadata contains TODO author placeholders that must be
+replaced before release.
+
+## Example dataset
+
+`sc_example` is a deterministic synthetic PBMC-like dataset with 720
+cells. It contains a UMAP-like embedding plus cell identity, parent
+lineage, sample, condition, marker expression, signed score, pseudotime,
+and QC columns.
+
+``` r
+
+data(sc_example)
+dim(sc_example)
+head(sc_example[c("cell_type", "sample", "condition", "MS4A1")])
+```
+
+## Quick start
+
+``` r
+
+library(scChromatic)
+library(ggplot2)
+
+data(sc_example)
+cell_types <- levels(sc_example$cell_type)
+cell_map <- sc_color_map(sc_example$cell_type, palette = "chromatic")
+as_named_colors(cell_map)
+
+ggplot(sc_example, aes(UMAP1, UMAP2, color = cell_type)) +
+  geom_point(size = 0.7) +
+  scale_color_sc_map(cell_map)
+```
+
+## Stable colors across subsets
+
+``` r
+
+full_colors <- as_named_colors(cell_map)[cell_types]
+stimulated <- subset(
+  sc_example,
+  condition == "Stimulated" & cell_type %in% c("CD4 T", "NK", "Monocyte")
+)
+subset_colors <- as_named_colors(cell_map)[levels(droplevels(stimulated$cell_type))]
+stopifnot(identical(subset_colors, full_colors[names(subset_colors)]))
+
+ggplot(stimulated, aes(UMAP1, UMAP2, color = cell_type)) +
+  geom_point(size = 0.7) +
+  scale_color_sc_map(cell_map)
+```
+
+## ArchR palettes
+
+Thirty palettes are frozen from ArchR commit
+`6feec354ad6c8052ddbc4626a2ca2d858ed465bf`. Literal upstream order and
+the separate nested priority order are both available.
+
+``` r
+
+sc_palette("archr_stallion", 8, selection = "source")
+pal_archr("stallion")(8)
+```
+
+## Continuous expression and signed scores
+
+``` r
+
+ggplot(sc_example, aes(UMAP1, UMAP2, color = MS4A1)) +
+  geom_point() +
+  scale_color_sc_c("viridis")
+
+ggplot(sc_example, aes(UMAP1, UMAP2, color = signed_score)) +
+  geom_point() +
+  scale_color_sc_c("archr_coolwarm", midpoint = 0)
+```
+
+## Lineages, pseudotime, and QC
+
+``` r
+
+lineage_map <- sc_hierarchy_map(sc_example$lineage, sc_example$cell_type)
+
+ggplot(sc_example, aes(UMAP1, UMAP2, color = cell_type)) +
+  geom_point(size = 0.7) +
+  scale_color_sc_map(lineage_map)
+
+ggplot(sc_example, aes(UMAP1, UMAP2, color = pseudotime)) +
+  geom_point(size = 0.7) +
+  scale_color_sc_c("cividis")
+```
+
+## Accessibility auditing
+
+``` r
+
+sc_palette_audit("chromatic", cvd = c("none", "deutan", "protan", "tritan"))
+sc_palette_plot("okabe_ito", view = "both", cvd = c("none", "deutan"))
+sc_palette_recommend(12, use = "cell_identity", geometry = "point")
+```
+
+Audit metrics diagnose color separation and background contrast; they
+are not a guarantee that every viewer or plotting geometry can
+distinguish every color.
+
+## Palette provenance
+
+[`sc_palette_info()`](https://xie186.github.io/scChromatic/reference/sc_palette_info.md)
+exposes capacity, intended use, source URL, exact source commit where
+known, citation, license, derivation status, and frozen audit metrics.
+The full registry is installed at `extdata/palette-provenance.csv`;
+`NOTICE` records borrowed-palette disclosures and unresolved review
+items.
+
+## Interoperability
+
+[`as_named_colors()`](https://xie186.github.io/scChromatic/reference/as_named_colors.md)
+returns the ordinary named vectors expected by Seurat,
+SingleCellExperiment metadata workflows, ArchR plotting arguments, and
+ComplexHeatmap annotations. These frameworks remain optional. scico
+palettes are also optional and produce an installation hint only when
+requested. \# scChromatic
+
+# Package index
+
+## Palette discovery and access
+
+Retrieve registered colors, metadata, and scales-compatible closures.
+
+- [`sc_palette()`](https://xie186.github.io/scChromatic/reference/sc_palette.md)
+  : Retrieve colors from a registered palette
+- [`sc_pal()`](https://xie186.github.io/scChromatic/reference/sc_pal.md)
+  : Create a scales-compatible scChromatic palette
+- [`pal_archr()`](https://xie186.github.io/scChromatic/reference/pal_archr.md)
+  : Create a scales-compatible ArchR palette
+- [`sc_palette_names()`](https://xie186.github.io/scChromatic/reference/sc_palette_names.md)
+  : List registered palette IDs
+- [`sc_palette_info()`](https://xie186.github.io/scChromatic/reference/sc_palette_info.md)
+  : Inspect palette metadata and provenance
+- [`sc_palette_generate()`](https://xie186.github.io/scChromatic/reference/sc_palette_generate.md)
+  : Generate a deterministic qualitative color sequence
+
+## Persistent mappings
+
+Keep labels stable across subsets, reorderings, and related lineages.
+
+- [`sc_color_map()`](https://xie186.github.io/scChromatic/reference/sc_color_map.md)
+  : Create a persistent label-to-color mapping
+- [`update_sc_color_map()`](https://xie186.github.io/scChromatic/reference/update_sc_color_map.md)
+  : Update a persistent color map
+- [`as_named_colors()`](https://xie186.github.io/scChromatic/reference/as_named_colors.md)
+  : Extract named colors from a persistent map
+- [`write_sc_color_map()`](https://xie186.github.io/scChromatic/reference/write_sc_color_map.md)
+  : Write a persistent color map
+- [`read_sc_color_map()`](https://xie186.github.io/scChromatic/reference/read_sc_color_map.md)
+  : Read a persistent color map
+- [`sc_hierarchy_map()`](https://xie186.github.io/scChromatic/reference/sc_hierarchy_map.md)
+  : Create a hierarchy-aware color map
+- [`sc_highlight_map()`](https://xie186.github.io/scChromatic/reference/sc_highlight_map.md)
+  : Create a focus-versus-other color map
+
+## ggplot2 scales
+
+- [`scale_color_sc_d()`](https://xie186.github.io/scChromatic/reference/scale_color_sc_d.md)
+  [`scale_colour_sc_d()`](https://xie186.github.io/scChromatic/reference/scale_color_sc_d.md)
+  [`scale_fill_sc_d()`](https://xie186.github.io/scChromatic/reference/scale_color_sc_d.md)
+  : Discrete scChromatic color scale
+- [`scale_color_sc_c()`](https://xie186.github.io/scChromatic/reference/scale_color_sc_c.md)
+  [`scale_colour_sc_c()`](https://xie186.github.io/scChromatic/reference/scale_color_sc_c.md)
+  [`scale_fill_sc_c()`](https://xie186.github.io/scChromatic/reference/scale_color_sc_c.md)
+  : Continuous scChromatic color scale
+- [`scale_color_sc_map()`](https://xie186.github.io/scChromatic/reference/scale_color_sc_map.md)
+  [`scale_colour_sc_map()`](https://xie186.github.io/scChromatic/reference/scale_color_sc_map.md)
+  [`scale_fill_sc_map()`](https://xie186.github.io/scChromatic/reference/scale_color_sc_map.md)
+  : Manual ggplot2 scales from a persistent color map
+
+## Diagnostics and recommendations
+
+- [`sc_palette_audit()`](https://xie186.github.io/scChromatic/reference/sc_palette_audit.md)
+  : Audit palette separation and background contrast
+- [`sc_palette_recommend()`](https://xie186.github.io/scChromatic/reference/sc_palette_recommend.md)
+  : Recommend palettes from transparent registry rules
+- [`sc_palette_plot()`](https://xie186.github.io/scChromatic/reference/sc_palette_plot.md)
+  : Plot palette swatches or dense point previews
+
+## Example data
+
+- [`sc_example`](https://xie186.github.io/scChromatic/reference/sc_example.md)
+  : Synthetic PBMC-like single-cell example data
+
+# Articles
+
+### Explore scChromatic
+
+- [Palette
+  gallery](https://xie186.github.io/scChromatic/articles/palette-gallery.md):
+
+  Every color option registered in scChromatic
+
+- [scChromatic](https://xie186.github.io/scChromatic/articles/scChromatic.md):
+
+- [Stable color
+  maps](https://xie186.github.io/scChromatic/articles/stable-color-maps.md):
+
+- [Palette
+  accessibility](https://xie186.github.io/scChromatic/articles/palette-accessibility.md):
