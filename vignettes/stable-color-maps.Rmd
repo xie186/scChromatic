@@ -39,6 +39,30 @@ reordered <- factor(labels_full, levels = rev(labels_full))
 as_named_colors(map)[levels(reordered)]
 ```
 
+## Align colors for AnnData
+
+AnnData stores categorical colors positionally in
+`.uns['<category>_colors']`; that vector must use the same order as the
+corresponding categorical levels. Keep the mapping named in R, then select it
+in factor-level order immediately before writing it to AnnData.
+
+```{r}
+cell_type <- factor(labels_full, levels = c("T", "NK", "B", "Mono"))
+ann_data_colors <- as_named_colors(map)[levels(cell_type)]
+ann_data_colors
+```
+
+`unname(ann_data_colors)` can be written to `.uns['cell_type_colors']` with
+zellkonverter, reticulate, or another AnnData interface. If levels are reordered,
+repeat the indexed `as_named_colors(map)[levels(cell_type)]` lookup rather than
+reusing a positional vector. This keeps the AnnData colors aligned without
+adding an AnnData dependency to scChromatic.
+
+CELLXGENE also uses the cyclic `d3_rainbow` scheme as a categorical fallback,
+but those assignments change with the category count and order. For that
+reason, `d3_rainbow` is a compatibility palette and is intentionally unavailable
+to `sc_color_map()`; use a fixed qualitative palette for persistent mappings.
+
 ## Add a new annotation
 
 ```{r}

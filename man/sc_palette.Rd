@@ -40,7 +40,9 @@ A character vector of hexadecimal colors.
 Fixed qualitative palettes are truncated but never interpolated. Use
 \code{extend = "generate"} to deterministically append colors while preserving
 all selected registered colors. Continuous palettes preserve their registered
-anchors at the native length and otherwise interpolate in Lab space.
+anchors at the native length and otherwise interpolate in Lab space. The
+cyclic \code{d3_rainbow} compatibility palette is sampled directly at \code{i / n}, so
+its colors intentionally change when \code{n} changes.
 }
 \examples{
 sc_palette("okabe_ito", 4)

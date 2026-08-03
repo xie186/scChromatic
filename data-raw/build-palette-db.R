@@ -1,4 +1,5 @@
 source("data-raw/palettes-archr.R")
+source("R/palette-d3.R")
 source("data-raw/palettes-core.R")
 
 normalize_hex <- function(x) {
@@ -51,7 +52,10 @@ for (source_name in names(archr_ids)) {
 }
 for (id in names(core_palettes)) {
   value <- normalize_hex(core_palettes[[id]])
-  colors[[id]] <- list(source = value, priority = value)
+  colors[[id]] <- list(
+    source = value,
+    priority = if (id == "d3_cool") rev(value) else value
+  )
 }
 
 meta_row <- function(
@@ -190,6 +194,46 @@ core_specs <- list(
       "blue is negative, neutral is zero, and red is positive."
     )
   ),
+  d3_rainbow = list(
+    "D3 Scale Chromatic", "cyclic",
+    "cell_identity,sample,condition,lineage,heatmap_annotation",
+    paste0(
+      "https://github.com/d3/d3-scale-chromatic/blob/",
+      "05e76dafaa89059153e177a4f57d9af985ba49a8/",
+      "src/sequential-multi/rainbow.js"
+    ),
+    paste(
+      "Bostock, d3-scale-chromatic 1.5.0 less-angry rainbow;",
+      "CELLXGENE categorical color compatibility."
+    ),
+    "BSD-3-Clause (d3-scale-chromatic); CELLXGENE behavior referenced under MIT",
+    TRUE, "No source CVD-safety claim.",
+    paste(
+      "Dynamic compatibility palette sampled at t = 0:(n - 1) / n;",
+      "the stored 200-color reference is for audit only. CELLXGENE behavior",
+      "verified at commit 76a39fcf92da57c9e4fd59831ad805a3b007da8c.",
+      "Cyclic order is not nested, so assignments change when n changes."
+    )
+  ),
+  d3_cool = list(
+    "D3 Scale Chromatic", "sequential", "expression,pseudotime,qc",
+    paste0(
+      "https://github.com/d3/d3-scale-chromatic/blob/",
+      "05e76dafaa89059153e177a4f57d9af985ba49a8/",
+      "src/sequential-multi/rainbow.js"
+    ),
+    paste(
+      "Bostock, d3-scale-chromatic 1.5.0; Niccoli perceptual rainbow;",
+      "CELLXGENE continuous color compatibility."
+    ),
+    "BSD-3-Clause (d3-scale-chromatic); CELLXGENE behavior referenced under MIT",
+    TRUE, "No source CVD-safety claim.",
+    paste(
+      "Exact 100 source bins sampled at t = 0:99 / 100; priority order is",
+      "reversed to match CELLXGENE low-to-high data mapping at commit",
+      "76a39fcf92da57c9e4fd59831ad805a3b007da8c."
+    )
+  ),
   viridis = list(
     "viridisLite", "sequential", "expression,pseudotime,qc",
     "https://sjmgarnier.github.io/viridisLite/", "Garnier et al., viridisLite",
@@ -208,18 +252,50 @@ core_specs <- list(
 )
 core_meta <- do.call(rbind, lapply(names(core_specs), function(id) {
   spec <- core_specs[[id]]
+  source_palette <- switch(
+    id,
+    d3_rainbow = "interpolateRainbow",
+    d3_cool = "interpolateCool",
+    id
+  )
   meta_row(
-    id, spec[[1L]], id, spec[[2L]],
-    if (spec[[2L]] == "qualitative") length(core_palettes[[id]]) else 256L,
+    id, spec[[1L]], source_palette, spec[[2L]],
+    if (id == "d3_rainbow") {
+      200L
+    } else if (id == "d3_cool") {
+      100L
+    } else if (spec[[2L]] == "qualitative") {
+      length(core_palettes[[id]])
+    } else {
+      256L
+    },
     spec[[3L]], source_url = spec[[4L]], citation = spec[[5L]],
     license = spec[[6L]], derived = spec[[7L]], source_cvd_claim = spec[[8L]],
     notes = spec[[9L]],
+    source_commit = if (id %in% c("d3_rainbow", "d3_cool")) {
+      "05e76dafaa89059153e177a4f57d9af985ba49a8"
+    } else {
+      NA_character_
+    },
+    source_order = if (id == "d3_rainbow") {
+      "dynamic D3 samples t = 0:(n - 1) / n; 200-color audit reference stored"
+    } else if (id == "d3_cool") {
+      "100 D3 interpolateCool source bins sampled at t = 0:99 / 100"
+    } else {
+      "literal vector order in internal palette database"
+    },
     priority_order = if (id == "chromatic") {
       "frozen nested maximin order; each prefix is stable"
+    } else if (id == "d3_rainbow") {
+      "same dynamic D3 sample order as source"
+    } else if (id == "d3_cool") {
+      "reverse source order to match CELLXGENE low-to-high data mapping"
     } else {
       "same as source order"
     },
-    status = if (id %in% c("glasbey32", "polychrome36")) {
+    status = if (id %in% c("d3_rainbow", "d3_cool")) {
+      "compatibility"
+    } else if (id %in% c("glasbey32", "polychrome36")) {
       "provenance_review"
     } else {
       "recommended"
@@ -269,7 +345,7 @@ audit_matrix <- do.call(rbind, audits)
 meta$audit_min_cie2000 <- audit_matrix[, 1L]
 meta$audit_min_contrast_light <- audit_matrix[, 2L]
 meta$audit_min_contrast_dark <- audit_matrix[, 3L]
-meta$audit_date <- "2026-07-30"
+meta$audit_date <- "2026-08-03"
 
 sc_palette_db <- list(meta = meta, colors = colors)
 save(sc_palette_db, file = "R/sysdata.rda", compress = "xz", version = 3)

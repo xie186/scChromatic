@@ -61,6 +61,8 @@ core_palettes <- list(
     "#0055A3", "#4674B0", "#7A94C0", "#A5B4D1", "#CDD4E2", "#F1F1F1",
     "#E4CFCF", "#D4A9AA", "#C28284", "#AC5A5D", "#942E34"
   ),
+  d3_rainbow = .sc_d3_rainbow(200L),
+  d3_cool = .sc_d3_cool((0:99) / 100),
   viridis = stats::setNames(viridisLite::viridis(11), seq_len(11)),
   cividis = stats::setNames(viridisLite::cividis(11), seq_len(11)),
   magma = stats::setNames(viridisLite::magma(11), seq_len(11))

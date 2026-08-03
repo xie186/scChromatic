@@ -3,7 +3,9 @@
 #' Fixed qualitative palettes are truncated but never interpolated. Use
 #' `extend = "generate"` to deterministically append colors while preserving
 #' all selected registered colors. Continuous palettes preserve their registered
-#' anchors at the native length and otherwise interpolate in Lab space.
+#' anchors at the native length and otherwise interpolate in Lab space. The
+#' cyclic `d3_rainbow` compatibility palette is sampled directly at `i / n`, so
+#' its colors intentionally change when `n` changes.
 #'
 #' @param palette Palette ID. See [sc_palette_names()].
 #' @param n Number of colors; defaults to the registered palette capacity.
@@ -38,7 +40,9 @@ sc_palette <- function(palette, n = NULL, alpha = 1, reverse = FALSE,
     n <- row$max_n[[1L]]
   }
 
-  if (startsWith(id, "scico_")) {
+  if (id == "d3_rainbow") {
+    colors <- .sc_d3_rainbow(n)
+  } else if (startsWith(id, "scico_")) {
     if (!requireNamespace("scico", quietly = TRUE)) {
       .sc_abort(c(
         "Palette {.val {id}} requires the optional {.pkg scico} package.",

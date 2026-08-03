@@ -4,7 +4,8 @@
   if (row$palette_type[[1L]] == "qualitative") {
     .sc_abort("Continuous scales require a sequential, diverging, or cyclic palette.")
   }
-  colors <- sc_palette(palette, n = 256, alpha = alpha, reverse = reverse)
+  n <- if (row$palette_id[[1L]] == "d3_cool") row$max_n[[1L]] else 256L
+  colors <- sc_palette(palette, n = n, alpha = alpha, reverse = reverse)
   rescaler <- if (is.null(midpoint)) {
     scales::rescale
   } else {

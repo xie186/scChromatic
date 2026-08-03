@@ -29,6 +29,67 @@ Known borrowed entries and entries requiring provenance review are retained
 only in the excluded data-raw source snapshot; they are not registered or
 distributed in the installed package.
 
+D3 Scale Chromatic and CELLXGENE compatibility
+-----------------------------------------------
+
+d3_rainbow and d3_cool reimplement the interpolateRainbow and interpolateCool
+formulas from d3-scale-chromatic v1.5.0, commit
+05e76dafaa89059153e177a4f57d9af985ba49a8:
+https://github.com/d3/d3-scale-chromatic/blob/05e76dafaa89059153e177a4f57d9af985ba49a8/src/sequential-multi/rainbow.js
+
+d3-scale-chromatic attributes interpolateCool to Matteo Niccoli's perceptual
+rainbow. interpolateRainbow combines D3's warm and cool ranges as its cyclic
+"less-angry rainbow". The d3_cool source vector contains the exact 100 bins at
+t = 0:99 / 100; its priority order is reversed to reproduce CELLXGENE's
+low-to-high continuous-data mapping. d3_rainbow dynamically uses
+t = 0:(n - 1) / n, with a 200-color reference retained for registry audits.
+The RGB conversion also follows d3-color v1.0.3 and d3-interpolate v1.1.6,
+the versions pinned by CELLXGENE for this implementation; both are distributed
+under the same BSD-3-Clause terms reproduced below.
+
+The usage semantics are documented by CELLXGENE colorHelpers.js at commit
+76a39fcf92da57c9e4fd59831ad805a3b007da8c:
+https://github.com/chanzuckerberg/cellxgene/blob/76a39fcf92da57c9e4fd59831ad805a3b007da8c/client/src/util/stateManager/colorHelpers.js
+
+CELLXGENE is Copyright (c) 2017-2026 Chan Zuckerberg Initiative and is
+distributed under the MIT License. No CELLXGENE source code is copied here;
+the reference documents compatibility behavior and does not imply endorsement.
+CZ CELLXGENE, CZ CELLXGENE DISCOVER, and CZ CELLXGENE ANNOTATE are trademarks
+of the Chan Zuckerberg Initiative.
+
+The following BSD 3-Clause notice applies to the D3-derived formulas:
+
+Copyright 2010-2018 Mike Bostock
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of the author nor the names of contributors may be used to
+  endorse or promote products derived from this software without specific prior
+  written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+The d3-scale-chromatic distribution also includes a separate Apache-2.0 notice
+for ColorBrewer assets. d3_rainbow and d3_cool do not use ColorBrewer assets.
+
 Okabe-Ito
 ----------
 

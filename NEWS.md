@@ -15,3 +15,8 @@
   retained compatibility colors remain available through explicit `archr_*` IDs.
 * Adds `chromatic_balance`, a package-owned diverging HCL palette for signed
   scores centered at zero.
+* Adds `d3_rainbow` and `d3_cool` as explicit CELLXGENE compatibility palettes.
+  The cyclic rainbow reproduces count- and order-dependent categorical colors
+  and is excluded from persistent `sc_color_map()` assignments; the cool scale
+  includes CELLXGENE's exact 100 source bins and offers smooth continuous-scale
+  compatibility in the same low-to-high direction.
