@@ -16,10 +16,12 @@ Useful links:
 
 ## Author
 
-**Maintainer**: TODO Author <TODO@example.org> (TODO: replace with
-package author details)
+**Maintainer**: Shaojun Xie <xies4@nih.gov>
+([ORCID](https://orcid.org/0000-0002-6719-9814)) (Affiliation: FNLCR,
+Alternate email: xieshaojun0526@gmail.com)
 
 Authors:
 
-- TODO Author <TODO@example.org> (TODO: replace with package author
-  details)
+- Shaojun Xie <xies4@nih.gov>
+  ([ORCID](https://orcid.org/0000-0002-6719-9814)) (Affiliation: FNLCR,
+  Alternate email: xieshaojun0526@gmail.com)

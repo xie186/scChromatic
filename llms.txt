@@ -19,9 +19,6 @@ reuses the same assignments.
 pak::pak("xie186/scChromatic")
 ```
 
-The repository metadata contains TODO author placeholders that must be
-replaced before release.
-
 ## Example dataset
 
 `sc_example` is a deterministic synthetic PBMC-like dataset with 720
