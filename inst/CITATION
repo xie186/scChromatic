@@ -1,8 +1,12 @@
 bibentry(
   bibtype = "Manual",
   title = "scChromatic: Reproducible Color Systems for Single-Cell Data Visualization",
-  author = person("TODO", "Author"),
+  author = person(
+    "Shaojun", "Xie",
+    email = "xies4@nih.gov",
+    comment = c(ORCID = "0000-0002-6719-9814")
+  ),
   year = "2026",
   url = "https://github.com/xie186/scChromatic",
-  note = "R package version 0.1.0; TODO: replace author details."
+  note = "R package version 0.1.0."
 )

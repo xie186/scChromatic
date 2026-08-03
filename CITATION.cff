@@ -4,10 +4,11 @@ title: "scChromatic: Reproducible Color Systems for Single-Cell Data Visualizati
 version: 0.1.0
 type: software
 authors:
-  - family-names: "Author"
-    given-names: "TODO"
-    email: "TODO@example.org"
-    affiliation: "TODO"
+  - family-names: "Xie"
+    given-names: "Shaojun"
+    email: "xies4@nih.gov"
+    affiliation: "FNLCR"
+    orcid: "https://orcid.org/0000-0002-6719-9814"
 repository-code: "https://github.com/xie186/scChromatic"
 license: GPL-3.0-or-later
 date-released: 2026-07-30

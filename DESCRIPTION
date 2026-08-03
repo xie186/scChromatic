@@ -2,9 +2,13 @@ Package: scChromatic
 Title: Reproducible Color Systems for Single-Cell Data Visualization
 Version: 0.1.0
 Authors@R: 
-    person("TODO", "Author", email = "TODO@example.org",
+    person("Shaojun", "Xie", email = "xies4@nih.gov",
            role = c("aut", "cre"),
-           comment = "TODO: replace with package author details")
+           comment = c(
+               ORCID = "0000-0002-6719-9814",
+               Affiliation = "FNLCR",
+               "Alternate email" = "xieshaojun0526@gmail.com"
+           ))
 Description: Reproducible, provenance-aware, and accessible color systems for
     single-cell data visualization. Persistent mappings keep labels stable
     across subsets and reordered factors, while palette diagnostics and

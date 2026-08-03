@@ -20,11 +20,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: TODO Author \email{TODO@example.org} (TODO: replace with package author details)
+\strong{Maintainer}: Shaojun Xie \email{xies4@nih.gov} (\href{https://orcid.org/0000-0002-6719-9814}{ORCID}) (Affiliation: FNLCR, Alternate email: xieshaojun0526@gmail.com)
 
 Authors:
 \itemize{
-  \item TODO Author \email{TODO@example.org} (TODO: replace with package author details)
+  \item Shaojun Xie \email{xies4@nih.gov} (\href{https://orcid.org/0000-0002-6719-9814}{ORCID}) (Affiliation: FNLCR, Alternate email: xieshaojun0526@gmail.com)
 }
 
 }
