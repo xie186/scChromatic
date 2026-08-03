@@ -81,59 +81,49 @@
 capacity, and status.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/sc_palette_names.html">sc_palette_names</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"qualitative"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "archr_stallion"  "archr_stallion2" "archr_calm"      "archr_kelly"    </span></span>
-<span><span class="co">## [5] "archr_bear"      "archr_iron_man"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "okabe_ito"           "tol_bright"          "tol_vibrant"        </span></span>
+<span><span class="co">## [4] "tol_muted"           "tol_medium_contrast" "glasbey32"</span></span></code></pre>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/sc_palette_info.html">sc_palette_info</a></span><span class="op">(</span><span class="st">"archr_stallion"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##       palette_id source source_palette palette_type max_n</span></span>
-<span><span class="co">## 1 archr_stallion  ArchR       stallion  qualitative    20</span></span>
-<span><span class="co">##                                                intended_use</span></span>
-<span><span class="co">## 1 cell_identity,sample,condition,lineage,heatmap_annotation</span></span>
-<span><span class="co">##   recommended_geometry recommended_background        status</span></span>
-<span><span class="co">## 1      point,fill,line             light,dark compatibility</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/sc_palette_info.html">sc_palette_info</a></span><span class="op">(</span><span class="st">"chromatic"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##   palette_id      source source_palette palette_type max_n</span></span>
+<span><span class="co">## 9  chromatic scChromatic      chromatic  qualitative    40</span></span>
+<span><span class="co">##                                      intended_use recommended_geometry</span></span>
+<span><span class="co">## 9 cell_identity,sample,lineage,heatmap_annotation      point,fill,line</span></span>
+<span><span class="co">##   recommended_background      status</span></span>
+<span><span class="co">## 9             light,dark recommended</span></span>
 <span><span class="co">##                                        source_order</span></span>
-<span><span class="co">## 1 literal vector order in internal palette database</span></span>
-<span><span class="co">##                                                  priority_order</span></span>
-<span><span class="co">## 1 ascending numeric source labels used by ArchR paletteDiscrete</span></span>
-<span><span class="co">##                                                                                                        source_url</span></span>
-<span><span class="co">## 1 https://raw.githubusercontent.com/GreenleafLab/ArchR/6feec354ad6c8052ddbc4626a2ca2d858ed465bf/R/ColorPalettes.R</span></span>
-<span><span class="co">##                              source_commit</span></span>
-<span><span class="co">## 1 6feec354ad6c8052ddbc4626a2ca2d858ed465bf</span></span>
-<span><span class="co">##                                                            citation</span></span>
-<span><span class="co">## 1 Granja et al. (2021), Nature Genetics 53:403-411; ArchR software.</span></span>
-<span><span class="co">##                                                          license derived</span></span>
-<span><span class="co">## 1 MIT (ArchR code); individual borrowed-palette terms may differ   FALSE</span></span>
-<span><span class="co">##   source_cvd_claim</span></span>
-<span><span class="co">## 1             &lt;NA&gt;</span></span>
+<span><span class="co">## 9 literal vector order in internal palette database</span></span>
+<span><span class="co">##                                       priority_order</span></span>
+<span><span class="co">## 9 frozen nested maximin order; each prefix is stable</span></span>
+<span><span class="co">##                              source_url source_commit</span></span>
+<span><span class="co">## 9 https://github.com/xie186/scChromatic          &lt;NA&gt;</span></span>
+<span><span class="co">##                      citation    license derived</span></span>
+<span><span class="co">## 9 scChromatic package authors GPL (&gt;= 3)    TRUE</span></span>
+<span><span class="co">##                                                     source_cvd_claim</span></span>
+<span><span class="co">## 9 Perceptually optimized and audited; no universal CVD-safety claim.</span></span>
 <span><span class="co">##                                                                          notes</span></span>
-<span><span class="co">## 1 ArchR describes its collection as containing original and borrowed palettes.</span></span>
+<span><span class="co">## 9 Frozen nested maximin sequence generated in HCL with normal/CVD diagnostics.</span></span>
 <span><span class="co">##   audit_min_cie2000 audit_min_contrast_light audit_min_contrast_dark audit_date</span></span>
-<span><span class="co">## 1          8.347344                 1.278781                1.396645 2026-07-30</span></span></code></pre>
+<span><span class="co">## 9           6.44697                 1.736383                2.677194 2026-07-30</span></span></code></pre>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sc_palette_recommend.html">sc_palette_recommend</a></span><span class="op">(</span><span class="fl">12</span>, use <span class="op">=</span> <span class="st">"cell_identity"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##        palette_id</span></span>
-<span><span class="co">## 12      chromatic</span></span>
-<span><span class="co">## 11        ditto40</span></span>
-<span><span class="co">## 6  archr_iron_man</span></span>
-<span><span class="co">## 5      archr_bear</span></span>
-<span><span class="co">## 7    archr_circus</span></span>
-<span><span class="co">##                                                                            reason</span></span>
-<span><span class="co">## 12   qualitative; registered for this use; recommended; sufficient fixed capacity</span></span>
-<span><span class="co">## 11   qualitative; registered for this use; recommended; sufficient fixed capacity</span></span>
-<span><span class="co">## 6  qualitative; registered for this use; compatibility; sufficient fixed capacity</span></span>
-<span><span class="co">## 5  qualitative; registered for this use; compatibility; sufficient fixed capacity</span></span>
-<span><span class="co">## 7  qualitative; registered for this use; compatibility; sufficient fixed capacity</span></span>
-<span><span class="co">##    capacity        status min_cie2000    score</span></span>
-<span><span class="co">## 12       40   recommended   10.877739 81.87774</span></span>
-<span><span class="co">## 11       40   recommended    2.000239 73.00024</span></span>
-<span><span class="co">## 6        15 compatibility    6.353537 62.35354</span></span>
-<span><span class="co">## 5        16 compatibility    4.654995 60.65500</span></span>
-<span><span class="co">## 7        15 compatibility    3.478137 59.47814</span></span></code></pre>
+<pre><code><span><span class="co">##                                                 palette_id</span></span>
+<span><span class="co">## cell_identity,sample,lineage,heatmap_annotation  chromatic</span></span>
+<span><span class="co">## cell_identity,sample,heatmap_annotation            ditto40</span></span>
+<span><span class="co">##                                                                                                                       reason</span></span>
+<span><span class="co">## cell_identity,sample,lineage,heatmap_annotation qualitative; registered for this use; recommended; sufficient fixed capacity</span></span>
+<span><span class="co">## cell_identity,sample,heatmap_annotation         qualitative; registered for this use; recommended; sufficient fixed capacity</span></span>
+<span><span class="co">##                                                 capacity      status</span></span>
+<span><span class="co">## cell_identity,sample,lineage,heatmap_annotation       40 recommended</span></span>
+<span><span class="co">## cell_identity,sample,heatmap_annotation               40 recommended</span></span>
+<span><span class="co">##                                                 min_cie2000    score</span></span>
+<span><span class="co">## cell_identity,sample,lineage,heatmap_annotation   10.877739 81.87774</span></span>
+<span><span class="co">## cell_identity,sample,heatmap_annotation            2.000239 73.00024</span></span></code></pre>
 <p>Raw colors are available as vectors, while <code><a href="../reference/sc_pal.html">sc_pal()</a></code>
 returns a scales-compatible closure.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/sc_palette.html">sc_palette</a></span><span class="op">(</span><span class="st">"tol_muted"</span>, <span class="fl">6</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "#CC6677" "#332288" "#DDCC77" "#117733" "#88CCEE" "#882255"</span></span></code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/sc_palette.html">sc_palette</a></span><span class="op">(</span><span class="st">"chromatic"</span>, <span class="fl">6</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "#475D8F" "#E3B54E" "#00DADF" "#765A11" "#009685" "#9C8CFB"</span></span></code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sc_pal.html">sc_pal</a></span><span class="op">(</span><span class="st">"chromatic"</span><span class="op">)</span><span class="op">(</span><span class="fl">6</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "#475D8F" "#E3B54E" "#00DADF" "#765A11" "#009685" "#9C8CFB"</span></span></code></pre>
@@ -191,7 +181,7 @@ identities keep their original colors.</p>
 <h2 id="samples-and-conditions">Samples and conditions<a class="anchor" aria-label="anchor" href="#samples-and-conditions"></a>
 </h2>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sample_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sc_color_map.html">sc_color_map</a></span><span class="op">(</span><span class="va">sc_example</span><span class="op">$</span><span class="va">sample</span>, palette <span class="op">=</span> <span class="st">"tol_bright"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">sample_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sc_color_map.html">sc_color_map</a></span><span class="op">(</span><span class="va">sc_example</span><span class="op">$</span><span class="va">sample</span>, palette <span class="op">=</span> <span class="st">"chromatic"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sc_example</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">UMAP1</span>, <span class="va">UMAP2</span>, color <span class="op">=</span> <span class="va">sample</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
@@ -200,69 +190,53 @@ identities keep their original colors.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sc_example</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">UMAP1</span>, <span class="va">UMAP2</span>, color <span class="op">=</span> <span class="va">condition</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="../reference/scale_color_sc_d.html">scale_color_sc_d</a></span><span class="op">(</span><span class="st">"tol_medium_contrast"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/scale_color_sc_d.html">scale_color_sc_d</a></span><span class="op">(</span><span class="st">"chromatic"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="scChromatic_files/figure-html/unnamed-chunk-6-2.png" class="r-plt" alt="" width="700"></p>
-</div>
-<div class="section level2">
-<h2 id="archr-palettes">ArchR palettes<a class="anchor" aria-label="anchor" href="#archr-palettes"></a>
-</h2>
-<p>ArchR values are frozen from commit
-<code>6feec354ad6c8052ddbc4626a2ca2d858ed465bf</code>. Choose source
-order for literal upstream order or priority order for nested
-subsets.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/sc_palette.html">sc_palette</a></span><span class="op">(</span><span class="st">"archr_stallion"</span>, <span class="fl">8</span>, selection <span class="op">=</span> <span class="st">"source"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "#D51F26" "#272E6A" "#208A42" "#89288F" "#F47D2B" "#FEE500" "#8A9FD1"</span></span>
-<span><span class="co">## [8] "#C06CAB"</span></span></code></pre>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pal_archr.html">pal_archr</a></span><span class="op">(</span><span class="st">"stallion"</span>, selection <span class="op">=</span> <span class="st">"priority"</span><span class="op">)</span><span class="op">(</span><span class="fl">8</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "#D51F26" "#272E6A" "#208A42" "#89288F" "#F47D2B" "#FEE500" "#8A9FD1"</span></span>
-<span><span class="co">## [8] "#C06CAB"</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="continuous-expression">Continuous expression<a class="anchor" aria-label="anchor" href="#continuous-expression"></a>
 </h2>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sc_example</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">UMAP1</span>, <span class="va">UMAP2</span>, color <span class="op">=</span> <span class="va">MS4A1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/scale_color_sc_c.html">scale_color_sc_c</a></span><span class="op">(</span><span class="st">"viridis"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scChromatic_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="700"></p>
+<p><img src="scChromatic_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="signed-scores-centered-at-zero">Signed scores centered at zero<a class="anchor" aria-label="anchor" href="#signed-scores-centered-at-zero"></a>
 </h2>
 <p><code>midpoint = 0</code> changes data rescaling, not merely the
 middle displayed color.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sc_example</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">UMAP1</span>, <span class="va">UMAP2</span>, color <span class="op">=</span> <span class="va">signed_score</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="../reference/scale_color_sc_c.html">scale_color_sc_c</a></span><span class="op">(</span><span class="st">"archr_coolwarm"</span>, midpoint <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scChromatic_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="700"></p>
+<span>  <span class="fu"><a href="../reference/scale_color_sc_c.html">scale_color_sc_c</a></span><span class="op">(</span><span class="st">"chromatic_balance"</span>, midpoint <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
+<p><img src="scChromatic_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="parent-lineage-and-child-subtype-colors">Parent lineage and child subtype colors<a class="anchor" aria-label="anchor" href="#parent-lineage-and-child-subtype-colors"></a>
 </h2>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lineage_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sc_hierarchy_map.html">sc_hierarchy_map</a></span><span class="op">(</span><span class="va">sc_example</span><span class="op">$</span><span class="va">lineage</span>, <span class="va">sc_example</span><span class="op">$</span><span class="va">cell_type</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sc_example</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">UMAP1</span>, <span class="va">UMAP2</span>, color <span class="op">=</span> <span class="va">cell_type</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/scale_color_sc_map.html">scale_color_sc_map</a></span><span class="op">(</span><span class="va">lineage_map</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scChromatic_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="700"></p>
+<p><img src="scChromatic_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="pseudotime-and-qc">Pseudotime and QC<a class="anchor" aria-label="anchor" href="#pseudotime-and-qc"></a>
 </h2>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sc_example</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">UMAP1</span>, <span class="va">UMAP2</span>, color <span class="op">=</span> <span class="va">pseudotime</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/scale_color_sc_c.html">scale_color_sc_c</a></span><span class="op">(</span><span class="st">"cividis"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scChromatic_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="700"></p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<p><img src="scChromatic_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="700"></p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sc_example</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">UMAP1</span>, <span class="va">UMAP2</span>, color <span class="op">=</span> <span class="va">percent_mito</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="../reference/scale_color_sc_c.html">scale_color_sc_c</a></span><span class="op">(</span><span class="st">"magma"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scChromatic_files/figure-html/unnamed-chunk-11-2.png" class="r-plt" alt="" width="700"></p>
+<span>  <span class="fu"><a href="../reference/scale_color_sc_c.html">scale_color_sc_c</a></span><span class="op">(</span><span class="st">"viridis"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="scChromatic_files/figure-html/unnamed-chunk-10-2.png" class="r-plt" alt="" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

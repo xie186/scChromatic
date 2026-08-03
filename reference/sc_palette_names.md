@@ -34,12 +34,11 @@ A character vector of palette IDs.
 
 ``` r
 sc_palette_names(type = "qualitative")
-#>  [1] "archr_stallion"      "archr_stallion2"     "archr_calm"         
-#>  [4] "archr_kelly"         "archr_bear"          "archr_iron_man"     
-#>  [7] "archr_circus"        "archr_paired"        "archr_grove"        
-#> [10] "archr_summer_night"  "archr_zissou"        "archr_darjeeling"   
-#> [13] "archr_rushmore"      "archr_captain"       "okabe_ito"          
-#> [16] "tol_bright"          "tol_vibrant"         "tol_muted"          
-#> [19] "tol_medium_contrast" "glasbey32"           "polychrome36"       
-#> [22] "ditto40"             "chromatic"          
+#>  [1] "okabe_ito"           "tol_bright"          "tol_vibrant"        
+#>  [4] "tol_muted"           "tol_medium_contrast" "glasbey32"          
+#>  [7] "polychrome36"        "ditto40"             "chromatic"          
+#> [10] "archr_stallion"      "archr_stallion2"     "archr_calm"         
+#> [13] "archr_kelly"         "archr_bear"          "archr_iron_man"     
+#> [16] "archr_circus"        "archr_paired"        "archr_grove"        
+#> [19] "archr_summer_night"  "archr_captain"      
 ```

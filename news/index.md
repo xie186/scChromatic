@@ -10,3 +10,12 @@
 - Adds `sc_example`, a deterministic synthetic PBMC-like dataset
   demonstrating identity, lineage, sample, condition, expression,
   signed-score, pseudotime, and QC color semantics.
+- Reframes ArchR-derived palettes as an explicitly named compatibility
+  collection, removes unresolved ArchR provenance entries, and
+  prioritizes framework-neutral palettes throughout the API
+  documentation and website.
+- Removes the ArchR-specific `pal_archr()` helper and unprefixed palette
+  aliases; retained compatibility colors remain available through
+  explicit `archr_*` IDs.
+- Adds `chromatic_balance`, a package-owned diverging HCL palette for
+  signed scores centered at zero.

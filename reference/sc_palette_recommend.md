@@ -1,8 +1,10 @@
 # Recommend palettes from transparent registry rules
 
 Ranking uses palette type, intended-use metadata, capacity, status,
-background guidance, and measured CIE2000 separation. No learned model
-is involved.
+background guidance, and measured CIE2000 separation. Registered
+`recommended` palettes are preferred as a group; compatibility
+collections are considered only when no recommended palette fits. No
+learned model is involved.
 
 ## Usage
 
@@ -52,22 +54,19 @@ A data frame of ranked palettes and reasons.
 
 ``` r
 sc_palette_recommend(8, use = "cell_identity")
-#>        palette_id
-#> 15      chromatic
-#> 11      tol_muted
-#> 14        ditto40
-#> 10      okabe_ito
-#> 1  archr_stallion
-#>                                                                            reason
-#> 15   qualitative; registered for this use; recommended; sufficient fixed capacity
-#> 11   qualitative; registered for this use; recommended; sufficient fixed capacity
-#> 14   qualitative; registered for this use; recommended; sufficient fixed capacity
-#> 10   qualitative; registered for this use; recommended; sufficient fixed capacity
-#> 1  qualitative; registered for this use; compatibility; sufficient fixed capacity
-#>    capacity        status min_cie2000    score
-#> 15       40   recommended   12.380832 83.38083
-#> 11        9   recommended   11.825943 82.82594
-#> 14       40   recommended   11.133033 82.13303
-#> 10        8   recommended   11.133033 82.13303
-#> 1        20 compatibility    7.688475 63.68848
+#>   palette_id
+#> 4  chromatic
+#> 2  tol_muted
+#> 3    ditto40
+#> 1  okabe_ito
+#>                                                                         reason
+#> 4 qualitative; registered for this use; recommended; sufficient fixed capacity
+#> 2 qualitative; registered for this use; recommended; sufficient fixed capacity
+#> 3 qualitative; registered for this use; recommended; sufficient fixed capacity
+#> 1 qualitative; registered for this use; recommended; sufficient fixed capacity
+#>   capacity      status min_cie2000    score
+#> 4       40 recommended    12.38083 83.38083
+#> 2        9 recommended    11.82594 82.82594
+#> 3       40 recommended    11.13303 82.13303
+#> 1        8 recommended    11.13303 82.13303
 ```

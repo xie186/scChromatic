@@ -44,6 +44,9 @@
 <ul><li>Initial release with persistent color maps, hierarchy-aware mappings, qualitative and continuous scales, deterministic palette extension, accessibility diagnostics, and provenance metadata.</li>
 <li>Includes palettes frozen from ArchR commit <code>6feec354ad6c8052ddbc4626a2ca2d858ed465bf</code>.</li>
 <li>Adds <code>sc_example</code>, a deterministic synthetic PBMC-like dataset demonstrating identity, lineage, sample, condition, expression, signed-score, pseudotime, and QC color semantics.</li>
+<li>Reframes ArchR-derived palettes as an explicitly named compatibility collection, removes unresolved ArchR provenance entries, and prioritizes framework-neutral palettes throughout the API documentation and website.</li>
+<li>Removes the ArchR-specific <code>pal_archr()</code> helper and unprefixed palette aliases; retained compatibility colors remain available through explicit <code>archr_*</code> IDs.</li>
+<li>Adds <code>chromatic_balance</code>, a package-owned diverging HCL palette for signed scores centered at zero.</li>
 </ul></div>
   </main></div>
 

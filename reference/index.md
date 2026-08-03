@@ -8,8 +8,6 @@ Retrieve registered colors, metadata, and scales-compatible closures.
   : Retrieve colors from a registered palette
 - [`sc_pal()`](https://xie186.github.io/scChromatic/reference/sc_pal.md)
   : Create a scales-compatible scChromatic palette
-- [`pal_archr()`](https://xie186.github.io/scChromatic/reference/pal_archr.md)
-  : Create a scales-compatible ArchR palette
 - [`sc_palette_names()`](https://xie186.github.io/scChromatic/reference/sc_palette_names.md)
   : List registered palette IDs
 - [`sc_palette_info()`](https://xie186.github.io/scChromatic/reference/sc_palette_info.md)

@@ -2,8 +2,9 @@
 
 Fixed qualitative palettes are truncated but never interpolated. Use
 `extend = "generate"` to deterministically append colors while
-preserving all selected registered colors. Continuous palettes are
-interpolated in Lab space.
+preserving all selected registered colors. Continuous palettes preserve
+their registered anchors at the native length and otherwise interpolate
+in Lab space.
 
 ## Usage
 
@@ -64,6 +65,7 @@ A character vector of hexadecimal colors.
 ``` r
 sc_palette("okabe_ito", 4)
 #> [1] "#E69F00" "#56B4E9" "#009E73" "#F0E442"
-sc_palette("archr_stallion", 6, selection = "source")
-#> [1] "#D51F26" "#272E6A" "#208A42" "#89288F" "#F47D2B" "#FEE500"
+sc_palette("chromatic_balance", 9)
+#> [1] "#0054A3" "#547BB4" "#8FA3C8" "#C3CBDD" "#F1F1F1" "#E0C5C5" "#CB9596"
+#> [8] "#B16466" "#932D33"
 ```

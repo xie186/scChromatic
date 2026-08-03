@@ -117,29 +117,21 @@
 <span>  <span class="fu"><a href="reference/scale_color_sc_map.html">scale_color_sc_map</a></span><span class="op">(</span><span class="va">cell_map</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="archr-palettes">ArchR palettes<a class="anchor" aria-label="anchor" href="#archr-palettes"></a>
-</h2>
-<p>Thirty palettes are frozen from ArchR commit <code>6feec354ad6c8052ddbc4626a2ca2d858ed465bf</code>. Literal upstream order and the separate nested priority order are both available.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/sc_palette.html">sc_palette</a></span><span class="op">(</span><span class="st">"archr_stallion"</span>, <span class="fl">8</span>, selection <span class="op">=</span> <span class="st">"source"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/pal_archr.html">pal_archr</a></span><span class="op">(</span><span class="st">"stallion"</span><span class="op">)</span><span class="op">(</span><span class="fl">8</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
 <h2 id="continuous-expression-and-signed-scores">Continuous expression and signed scores<a class="anchor" aria-label="anchor" href="#continuous-expression-and-signed-scores"></a>
 </h2>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sc_example</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">UMAP1</span>, <span class="va">UMAP2</span>, color <span class="op">=</span> <span class="va">MS4A1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="reference/scale_color_sc_c.html">scale_color_sc_c</a></span><span class="op">(</span><span class="st">"viridis"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sc_example</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">UMAP1</span>, <span class="va">UMAP2</span>, color <span class="op">=</span> <span class="va">signed_score</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/scale_color_sc_c.html">scale_color_sc_c</a></span><span class="op">(</span><span class="st">"archr_coolwarm"</span>, midpoint <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="reference/scale_color_sc_c.html">scale_color_sc_c</a></span><span class="op">(</span><span class="st">"chromatic_balance"</span>, midpoint <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="lineages-pseudotime-and-qc">Lineages, pseudotime, and QC<a class="anchor" aria-label="anchor" href="#lineages-pseudotime-and-qc"></a>
 </h2>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lineage_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sc_hierarchy_map.html">sc_hierarchy_map</a></span><span class="op">(</span><span class="va">sc_example</span><span class="op">$</span><span class="va">lineage</span>, <span class="va">sc_example</span><span class="op">$</span><span class="va">cell_type</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sc_example</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">UMAP1</span>, <span class="va">UMAP2</span>, color <span class="op">=</span> <span class="va">cell_type</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -153,7 +145,7 @@
 <div class="section level2">
 <h2 id="accessibility-auditing">Accessibility auditing<a class="anchor" aria-label="anchor" href="#accessibility-auditing"></a>
 </h2>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/sc_palette_audit.html">sc_palette_audit</a></span><span class="op">(</span><span class="st">"chromatic"</span>, cvd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"deutan"</span>, <span class="st">"protan"</span>, <span class="st">"tritan"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/sc_palette_plot.html">sc_palette_plot</a></span><span class="op">(</span><span class="st">"okabe_ito"</span>, view <span class="op">=</span> <span class="st">"both"</span>, cvd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"deutan"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/sc_palette_recommend.html">sc_palette_recommend</a></span><span class="op">(</span><span class="fl">12</span>, use <span class="op">=</span> <span class="st">"cell_identity"</span>, geometry <span class="op">=</span> <span class="st">"point"</span><span class="op">)</span></span></code></pre></div>
@@ -167,7 +159,7 @@
 <div class="section level2">
 <h2 id="interoperability">Interoperability<a class="anchor" aria-label="anchor" href="#interoperability"></a>
 </h2>
-<p><code><a href="reference/as_named_colors.html">as_named_colors()</a></code> returns the ordinary named vectors expected by Seurat, SingleCellExperiment metadata workflows, ArchR plotting arguments, and ComplexHeatmap annotations. These frameworks remain optional. scico palettes are also optional and produce an installation hint only when requested. # scChromatic</p>
+<p><code><a href="reference/as_named_colors.html">as_named_colors()</a></code> returns the ordinary named vectors expected by Seurat, SingleCellExperiment metadata workflows, ArchR plotting arguments, and ComplexHeatmap annotations. These frameworks remain optional. Frozen ArchR compatibility colors remain available under explicit <code>archr_*</code> palette IDs; scico palettes are also optional and produce an installation hint only when requested.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

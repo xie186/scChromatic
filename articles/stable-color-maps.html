@@ -78,10 +78,10 @@
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">labels_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B"</span>, <span class="st">"T"</span>, <span class="st">"NK"</span>, <span class="st">"Mono"</span><span class="op">)</span></span>
-<span><span class="va">map</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sc_color_map.html">sc_color_map</a></span><span class="op">(</span><span class="va">labels_full</span>, palette <span class="op">=</span> <span class="st">"archr_stallion"</span><span class="op">)</span></span>
+<span><span class="va">map</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sc_color_map.html">sc_color_map</a></span><span class="op">(</span><span class="va">labels_full</span>, palette <span class="op">=</span> <span class="st">"chromatic"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/as_named_colors.html">as_named_colors</a></span><span class="op">(</span><span class="va">map</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##         B      Mono        NK         T </span></span>
-<span><span class="co">## "#D51F26" "#272E6A" "#208A42" "#89288F"</span></span></code></pre>
+<span><span class="co">## "#475D8F" "#E3B54E" "#00DADF" "#765A11"</span></span></code></pre>
 <p>Subsets select names from the same object; they never rerun
 positional palette assignment.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -96,7 +96,7 @@ positional palette assignment.</p>
 <code class="sourceCode R"><span><span class="va">reordered</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">labels_full</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="va">labels_full</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/as_named_colors.html">as_named_colors</a></span><span class="op">(</span><span class="va">map</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">reordered</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">##      Mono        NK         T         B </span></span>
-<span><span class="co">## "#272E6A" "#208A42" "#89288F" "#D51F26"</span></span></code></pre>
+<span><span class="co">## "#E3B54E" "#00DADF" "#765A11" "#475D8F"</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="add-a-new-annotation">Add a new annotation<a class="anchor" aria-label="anchor" href="#add-a-new-annotation"></a>
@@ -137,6 +137,9 @@ It can be passed to Seurat manual scales, SingleCellExperiment plotting
 code, ArchR color arguments, or
 <code><a href="https://rdrr.io/pkg/ComplexHeatmap/man/HeatmapAnnotation.html" class="external-link">ComplexHeatmap::HeatmapAnnotation()</a></code> without loading any of
 those frameworks in scChromatic.</p>
+<p>Frozen ArchR compatibility colors remain available under explicit
+<code>archr_*</code> palette IDs, but stable mappings do not depend on
+them.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

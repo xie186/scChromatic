@@ -11,12 +11,12 @@ library(ggplot2)
 ``` r
 
 labels_full <- c("B", "T", "NK", "Mono")
-map <- sc_color_map(labels_full, palette = "archr_stallion")
+map <- sc_color_map(labels_full, palette = "chromatic")
 as_named_colors(map)
 ```
 
     ##         B      Mono        NK         T 
-    ## "#D51F26" "#272E6A" "#208A42" "#89288F"
+    ## "#475D8F" "#E3B54E" "#00DADF" "#765A11"
 
 Subsets select names from the same object; they never rerun positional
 palette assignment.
@@ -40,7 +40,7 @@ as_named_colors(map)[levels(reordered)]
 ```
 
     ##      Mono        NK         T         B 
-    ## "#272E6A" "#208A42" "#89288F" "#D51F26"
+    ## "#E3B54E" "#00DADF" "#765A11" "#475D8F"
 
 ## Add a new annotation
 
@@ -87,3 +87,6 @@ passed to Seurat manual scales, SingleCellExperiment plotting code,
 ArchR color arguments, or
 [`ComplexHeatmap::HeatmapAnnotation()`](https://rdrr.io/pkg/ComplexHeatmap/man/HeatmapAnnotation.html)
 without loading any of those frameworks in scChromatic.
+
+Frozen ArchR compatibility colors remain available under explicit
+`archr_*` palette IDs, but stable mappings do not depend on them.

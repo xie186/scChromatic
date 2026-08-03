@@ -67,18 +67,6 @@ ggplot(stimulated, aes(UMAP1, UMAP2, color = cell_type)) +
   scale_color_sc_map(cell_map)
 ```
 
-## ArchR palettes
-
-Thirty palettes are frozen from ArchR commit
-`6feec354ad6c8052ddbc4626a2ca2d858ed465bf`. Literal upstream order and
-the separate nested priority order are both available.
-
-``` r
-
-sc_palette("archr_stallion", 8, selection = "source")
-pal_archr("stallion")(8)
-```
-
 ## Continuous expression and signed scores
 
 ``` r
@@ -89,7 +77,7 @@ ggplot(sc_example, aes(UMAP1, UMAP2, color = MS4A1)) +
 
 ggplot(sc_example, aes(UMAP1, UMAP2, color = signed_score)) +
   geom_point() +
-  scale_color_sc_c("archr_coolwarm", midpoint = 0)
+  scale_color_sc_c("chromatic_balance", midpoint = 0)
 ```
 
 ## Lineages, pseudotime, and QC
@@ -134,6 +122,7 @@ items.
 [`as_named_colors()`](https://xie186.github.io/scChromatic/reference/as_named_colors.md)
 returns the ordinary named vectors expected by Seurat,
 SingleCellExperiment metadata workflows, ArchR plotting arguments, and
-ComplexHeatmap annotations. These frameworks remain optional. scico
-palettes are also optional and produce an installation hint only when
-requested. \# scChromatic
+ComplexHeatmap annotations. These frameworks remain optional. Frozen
+ArchR compatibility colors remain available under explicit `archr_*`
+palette IDs; scico palettes are also optional and produce an
+installation hint only when requested.
