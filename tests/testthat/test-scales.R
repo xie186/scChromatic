@@ -18,9 +18,9 @@ test_that("mapping scales retain exact named values", {
 })
 
 test_that("continuous scales center midpoint in data space", {
-  color <- scale_color_sc_c("archr_coolwarm", midpoint = 0)
-  colour <- scale_colour_sc_c("archr_coolwarm", midpoint = 0)
-  fill <- scale_fill_sc_c("archr_coolwarm", midpoint = 0)
+  color <- scale_color_sc_c("chromatic_balance", midpoint = 0)
+  colour <- scale_colour_sc_c("chromatic_balance", midpoint = 0)
+  fill <- scale_fill_sc_c("chromatic_balance", midpoint = 0)
   values <- c(-1, 0, 9)
   expected <- scales::rescale_mid(values, from = c(-1, 9), mid = 0)
   expect_equal(color$rescaler(values, from = c(-1, 9)), expected)

@@ -59,7 +59,6 @@ reference:
   contents:
   - sc_palette
   - sc_pal
-  - pal_archr
   - sc_palette_names
   - sc_palette_info
   - sc_palette_generate

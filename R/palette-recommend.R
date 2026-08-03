@@ -17,7 +17,9 @@
 #' Recommend palettes from transparent registry rules
 #'
 #' Ranking uses palette type, intended-use metadata, capacity, status,
-#' background guidance, and measured CIE2000 separation. No learned model is
+#' background guidance, and measured CIE2000 separation. Registered
+#' `recommended` palettes are preferred as a group; compatibility collections
+#' are considered only when no recommended palette fits. No learned model is
 #' involved.
 #'
 #' @param n Number of categories or gradient anchors needed.
@@ -54,6 +56,9 @@ sc_palette_recommend <- function(
   }
   if (!nrow(meta)) {
     return(data.frame())
+  }
+  if (any(meta$status == "recommended")) {
+    meta <- meta[meta$status == "recommended", , drop = FALSE]
   }
   status_score <- c(recommended = 30, compatibility = 15, experimental = 5,
                     provenance_review = 0)

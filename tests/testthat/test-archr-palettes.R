@@ -50,9 +50,6 @@ archr_expected <- list(
     "#2A7185", "#A64027", "#FBDF72", "#60824F", "#9CDFF0", "#022336",
     "#725CA5"
   ),
-  archr_zissou = c("#3B9AB2", "#78B7C5", "#EBCC2A", "#E1AF00", "#F21A00"),
-  archr_darjeeling = c("#FF0000", "#00A08A", "#F2AD00", "#F98400", "#5BBCD6"),
-  archr_rushmore = c("#E1BD6D", "#EABE94", "#0B775E", "#35274A", "#F2300F"),
   archr_captain = c("#BEBEBE", "#A1CDE1", "#12477C", "#EC9274", "#67001E"),
   archr_horizon = c(
     "#000075", "#2E00FF", "#9408F7", "#C729D6", "#FA4AB5", "#FF6A95",
@@ -66,28 +63,8 @@ archr_expected <- list(
     "#352A86", "#343DAE", "#0262E0", "#1389D2", "#2DB7A3", "#A5BE6A",
     "#F8BA43", "#F6DA23", "#F8FA0D"
   ),
-  archr_samba_night = c(
-    "#1873CC", "#1798E5", "#00BFFF", "#4AC596", "#00CC00", "#A2E700",
-    "#FFFF00", "#FFD200", "#FFA500"
-  ),
-  archr_solar_extra = c(
-    "#3361A5", "#248AF3", "#14B3FF", "#88CEEF", "#C1D5DC", "#EAD397",
-    "#FDB31A", "#E42A2A", "#A31D1D"
-  ),
-  archr_white_purple = c(
-    "#F7FCFD", "#E0ECF4", "#BFD3E6", "#9EBCDA", "#8C96C6", "#8C6BB1",
-    "#88419D", "#810F7C", "#4D004B"
-  ),
-  archr_white_blue = c(
-    "#FFF7FB", "#ECE7F2", "#D0D1E6", "#A6BDDB", "#74A9CF", "#3690C0",
-    "#0570B0", "#045A8D", "#023858"
-  ),
   archr_white_red = c("#FFFFFF", "#FF0000"),
   archr_comet = c("#E6E7E8", "#3A97FF", "#8816A7", "#000000"),
-  archr_green_blue = c(
-    "#E0F3DB", "#CCEBC5", "#A8DDB5", "#4EB3D3", "#2B8CBE", "#0868AC",
-    "#084081"
-  ),
   archr_beach = c("#87D2DB", "#5BB1CB", "#4F66AF", "#F15F30", "#F7962E", "#FCEE2B"),
   archr_coolwarm = c("#4858A7", "#788FC8", "#D6DAE1", "#F49B7C", "#B51F29"),
   archr_fireworks = c("#FFFFFF", "#2488F0", "#7F3F98", "#E22929", "#FCB31A"),
@@ -111,15 +88,13 @@ test_that("all ArchR source vectors match the frozen commit", {
   }
 })
 
-test_that("ArchR helper resolves original names and selection", {
+test_that("ArchR compatibility palettes require explicit IDs", {
   expect_identical(
-    pal_archr("stallion", selection = "source")(8),
+    sc_pal("archr_stallion", selection = "source")(8),
     sc_palette("archr_stallion", 8, selection = "source")
   )
-  expect_identical(
-    pal_archr("ironMan", selection = "priority")(15),
-    sc_palette("archr_iron_man", 15, selection = "priority")
-  )
+  expect_error(sc_palette("stallion", 8), "Unknown palette")
+  expect_error(sc_palette("coolwarm", 8), "Unknown palette")
 })
 
 test_that("continuous ArchR priority order preserves the source gradient", {

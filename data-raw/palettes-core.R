@@ -57,6 +57,10 @@ core_palettes <- list(
     "#3E7ADB", "#FEA67F", "#D4BC00", "#3085A2", "#E4814A", "#B96637",
     "#006C7C", "#AE6876", "#00B86B", "#A019B0"
   ),
+  chromatic_balance = c(
+    "#0055A3", "#4674B0", "#7A94C0", "#A5B4D1", "#CDD4E2", "#F1F1F1",
+    "#E4CFCF", "#D4A9AA", "#C28284", "#AC5A5D", "#942E34"
+  ),
   viridis = stats::setNames(viridisLite::viridis(11), seq_len(11)),
   cividis = stats::setNames(viridisLite::cividis(11), seq_len(11)),
   magma = stats::setNames(viridisLite::magma(11), seq_len(11))

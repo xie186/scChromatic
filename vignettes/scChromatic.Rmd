@@ -20,7 +20,7 @@ status.
 
 ```{r}
 head(sc_palette_names(type = "qualitative"))
-sc_palette_info("archr_stallion")
+sc_palette_info("chromatic")
 sc_palette_recommend(12, use = "cell_identity")
 ```
 
@@ -28,7 +28,7 @@ Raw colors are available as vectors, while `sc_pal()` returns a
 scales-compatible closure.
 
 ```{r}
-sc_palette("tol_muted", 6)
+sc_palette("chromatic", 6)
 sc_pal("chromatic")(6)
 ```
 
@@ -69,7 +69,7 @@ ggplot(stimulated, aes(UMAP1, UMAP2, color = cell_type)) +
 ## Samples and conditions
 
 ```{r}
-sample_map <- sc_color_map(sc_example$sample, palette = "tol_bright")
+sample_map <- sc_color_map(sc_example$sample, palette = "chromatic")
 
 ggplot(sc_example, aes(UMAP1, UMAP2, color = sample)) +
   geom_point(size = 0.5) +
@@ -77,18 +77,7 @@ ggplot(sc_example, aes(UMAP1, UMAP2, color = sample)) +
 
 ggplot(sc_example, aes(UMAP1, UMAP2, color = condition)) +
   geom_point(size = 0.5) +
-  scale_color_sc_d("tol_medium_contrast")
-```
-
-## ArchR palettes
-
-ArchR values are frozen from commit
-`6feec354ad6c8052ddbc4626a2ca2d858ed465bf`. Choose source order for literal
-upstream order or priority order for nested subsets.
-
-```{r}
-sc_palette("archr_stallion", 8, selection = "source")
-pal_archr("stallion", selection = "priority")(8)
+  scale_color_sc_d("chromatic")
 ```
 
 ## Continuous expression
@@ -106,7 +95,7 @@ ggplot(sc_example, aes(UMAP1, UMAP2, color = MS4A1)) +
 ```{r}
 ggplot(sc_example, aes(UMAP1, UMAP2, color = signed_score)) +
   geom_point(size = 0.5) +
-  scale_color_sc_c("archr_coolwarm", midpoint = 0)
+  scale_color_sc_c("chromatic_balance", midpoint = 0)
 ```
 
 ## Parent lineage and child subtype colors
@@ -128,5 +117,5 @@ ggplot(sc_example, aes(UMAP1, UMAP2, color = pseudotime)) +
 
 ggplot(sc_example, aes(UMAP1, UMAP2, color = percent_mito)) +
   geom_point(size = 0.5) +
-  scale_color_sc_c("magma")
+  scale_color_sc_c("viridis")
 ```

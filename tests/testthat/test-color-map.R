@@ -12,7 +12,7 @@ test_that("factors use declared levels including unused levels", {
 
 test_that("subsets and updates preserve assignments", {
   labels_full <- c("B", "T", "NK", "Mono")
-  map <- sc_color_map(labels_full, palette = "archr_stallion")
+  map <- sc_color_map(labels_full, palette = "chromatic")
 
   labels_subset <- c("T", "NK")
   subset_colors <- as_named_colors(map)[labels_subset]

@@ -15,7 +15,9 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
 This gallery is generated from the package's offline registry, so it stays in
 sync with the colors returned by `sc_palette()`. Hover over a qualitative
-swatch to see its hexadecimal value.
+swatch to see its hexadecimal value. Status groups put recommended starting
+points first while keeping compatibility and provenance-review collections
+visible.
 
 ```{r summary, results='asis'}
 ids <- sc_palette_names()
@@ -105,8 +107,8 @@ palette_card <- function(id) {
   )
 }
 
-palette_section <- function(title, types) {
-  section <- info$palette_id[info$palette_type %in% types]
+palette_section <- function(title, statuses) {
+  section <- info$palette_id[info$status %in% statuses]
   cat(
     "<h2>", title, "</h2>",
     '<div class="palette-grid">',
@@ -117,27 +119,33 @@ palette_section <- function(title, types) {
 }
 ```
 
-```{r qualitative, results='asis'}
-palette_section("Qualitative palettes", "qualitative")
+```{r recommended, results='asis'}
+palette_section("Recommended palettes", "recommended")
 ```
 
-Qualitative palettes are fixed sequences. scChromatic does not interpolate
-them by default; request `extend = "generate"` only when more colors are
-needed.
+These palettes are the primary framework-neutral starting points. Qualitative
+palettes are fixed sequences; request `extend = "generate"` only when more
+colors are needed.
 
-```{r sequential, results='asis'}
-palette_section("Sequential palettes", "sequential")
+```{r compatibility, results='asis'}
+palette_section("Compatibility collections", "compatibility")
 ```
 
-```{r diverging, results='asis'}
-palette_section("Diverging palettes", "diverging")
+Compatibility palettes preserve explicitly named external collections,
+including frozen `archr_*` colors and optional `scico_*` palettes.
+
+```{r provenance-review, results='asis'}
+palette_section("Provenance review", "provenance_review")
 ```
+
+These palettes remain visible for reproducibility while their original source
+or licensing details receive additional review.
 
 For signed values, pass the data midpoint to the scale so rescaling is
 centered correctly:
 
 ```{r signed-example, echo=TRUE}
-scale_color_sc_c("archr_coolwarm", midpoint = 0)
+scale_color_sc_c("chromatic_balance", midpoint = 0)
 ```
 
 High-cardinality palettes are perceptually optimized or compatibility

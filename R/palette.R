@@ -2,8 +2,8 @@
 #'
 #' Fixed qualitative palettes are truncated but never interpolated. Use
 #' `extend = "generate"` to deterministically append colors while preserving
-#' all selected registered colors. Continuous palettes are interpolated in Lab
-#' space.
+#' all selected registered colors. Continuous palettes preserve their registered
+#' anchors at the native length and otherwise interpolate in Lab space.
 #'
 #' @param palette Palette ID. See [sc_palette_names()].
 #' @param n Number of colors; defaults to the registered palette capacity.
@@ -18,7 +18,7 @@
 #' @export
 #' @examples
 #' sc_palette("okabe_ito", 4)
-#' sc_palette("archr_stallion", 6, selection = "source")
+#' sc_palette("chromatic_balance", 9)
 sc_palette <- function(palette, n = NULL, alpha = 1, reverse = FALSE,
                        selection = c("priority", "source"),
                        extend = c("error", "generate"),
@@ -67,7 +67,7 @@ sc_palette <- function(palette, n = NULL, alpha = 1, reverse = FALSE,
       } else {
         colors <- colors[seq_len(n)]
       }
-    } else {
+    } else if (n != length(colors)) {
       colors <- grDevices::colorRampPalette(colors, space = "Lab")(n)
     }
   }
@@ -134,7 +134,7 @@ sc_palette_names <- function(type = NULL, use = NULL, source = NULL, status = NU
 #' @return A one-row data frame with registry and audit metadata.
 #' @export
 #' @examples
-#' sc_palette_info("archr_stallion")
+#' sc_palette_info("chromatic_balance")
 sc_palette_info <- function(palette) {
   .sc_palette_row(palette)
 }

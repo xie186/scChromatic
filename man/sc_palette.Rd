@@ -39,10 +39,10 @@ A character vector of hexadecimal colors.
 \description{
 Fixed qualitative palettes are truncated but never interpolated. Use
 \code{extend = "generate"} to deterministically append colors while preserving
-all selected registered colors. Continuous palettes are interpolated in Lab
-space.
+all selected registered colors. Continuous palettes preserve their registered
+anchors at the native length and otherwise interpolate in Lab space.
 }
 \examples{
 sc_palette("okabe_ito", 4)
-sc_palette("archr_stallion", 6, selection = "source")
+sc_palette("chromatic_balance", 9)
 }

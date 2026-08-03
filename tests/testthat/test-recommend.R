@@ -12,6 +12,9 @@ test_that("recommendations enforce purpose-specific palette types", {
   expect_true(all(vapply(identity$palette_id, function(id) {
     sc_palette_info(id)$palette_type == "qualitative"
   }, logical(1))))
+  expect_identical(signed$palette_id[[1L]], "chromatic_balance")
+  expect_false(any(startsWith(identity$palette_id, "archr_")))
+  expect_false(any(startsWith(expression$palette_id, "archr_")))
 })
 
 test_that("highlight maps preserve a named mapping", {

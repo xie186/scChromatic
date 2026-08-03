@@ -17,6 +17,18 @@ test_that("provenance registry includes required fields", {
     sc_palette_info("chromatic")$source_url,
     "https://github.com/xie186/scChromatic"
   )
+  expect_identical(
+    sc_palette_info("chromatic_balance")$source,
+    "scChromatic"
+  )
+  removed <- paste0(
+    "archr_",
+    c(
+      "zissou", "darjeeling", "rushmore", "samba_night", "solar_extra",
+      "white_purple", "white_blue", "green_blue"
+    )
+  )
+  expect_false(any(removed %in% sc_palette_names()))
 })
 
 test_that("optional single-cell frameworks are not runtime dependencies", {

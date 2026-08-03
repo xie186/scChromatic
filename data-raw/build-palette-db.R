@@ -24,20 +24,12 @@ archr_ids <- c(
   paired = "archr_paired",
   grove = "archr_grove",
   summerNight = "archr_summer_night",
-  zissou = "archr_zissou",
-  darjeeling = "archr_darjeeling",
-  rushmore = "archr_rushmore",
   captain = "archr_captain",
   horizon = "archr_horizon",
   horizonExtra = "archr_horizon_extra",
   blueYellow = "archr_blue_yellow",
-  sambaNight = "archr_samba_night",
-  solarExtra = "archr_solar_extra",
-  whitePurple = "archr_white_purple",
-  whiteBlue = "archr_white_blue",
   whiteRed = "archr_white_red",
   comet = "archr_comet",
-  greenBlue = "archr_green_blue",
   beach = "archr_beach",
   coolwarm = "archr_coolwarm",
   fireworks = "archr_fireworks",
@@ -101,7 +93,6 @@ archr_url <- paste0(
 archr_meta <- do.call(rbind, lapply(names(archr_ids), function(source_name) {
   id <- unname(archr_ids[[source_name]])
   discrete <- source_name %in% archr_discrete
-  borrowed <- source_name %in% names(archr_borrowed_notes)
   meta_row(
     id, "ArchR", source_name,
     if (discrete) "qualitative" else if (source_name %in% c(
@@ -113,17 +104,13 @@ archr_meta <- do.call(rbind, lapply(names(archr_ids), function(source_name) {
     } else {
       "expression,pseudotime,qc"
     },
-    status = if (borrowed) "provenance_review" else "compatibility",
+    status = "compatibility",
     source_url = archr_url,
     source_commit = "6feec354ad6c8052ddbc4626a2ca2d858ed465bf",
     citation = "Granja et al. (2021), Nature Genetics 53:403-411; ArchR software.",
     license = "MIT (ArchR code); individual borrowed-palette terms may differ",
     derived = FALSE,
-    notes = if (borrowed) {
-      unname(archr_borrowed_notes[[source_name]])
-    } else {
-      "ArchR describes its collection as containing original and borrowed palettes."
-    },
+    notes = "Frozen compatibility palette; original source terms should be reviewed for redistribution.",
     priority_order = if (discrete) {
       "ascending numeric source labels used by ArchR paletteDiscrete"
     } else {
@@ -192,6 +179,17 @@ core_specs <- list(
     "Perceptually optimized and audited; no universal CVD-safety claim.",
     "Frozen nested maximin sequence generated in HCL with normal/CVD diagnostics."
   ),
+  chromatic_balance = list(
+    "scChromatic", "diverging", "signed_score",
+    "https://github.com/xie186/scChromatic",
+    "Zeileis et al. (2020), Journal of Statistical Software 96:1",
+    "GPL (>= 3)", TRUE,
+    "Audited under common CVD simulations; no universal CVD-safety claim.",
+    paste(
+      "Frozen HCL-derived anchors generated with colorspace::diverging_hcl;",
+      "blue is negative, neutral is zero, and red is positive."
+    )
+  ),
   viridis = list(
     "viridisLite", "sequential", "expression,pseudotime,qc",
     "https://sjmgarnier.github.io/viridisLite/", "Garnier et al., viridisLite",
@@ -250,7 +248,7 @@ scico_meta <- do.call(rbind, lapply(scico_ids, function(id) {
   )
 }))
 
-meta <- rbind(archr_meta, core_meta, scico_meta)
+meta <- rbind(core_meta, scico_meta, archr_meta)
 
 audit_values <- function(value) {
   value <- unique(unname(value))

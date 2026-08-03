@@ -18,16 +18,16 @@ persistent single-cell color systems; no ggsci palette vectors are included.
 ArchR
 -----
 
-The archr_* vectors are frozen from GreenleafLab/ArchR, R/ColorPalettes.R,
+The installed archr_* compatibility vectors are frozen from
+GreenleafLab/ArchR, R/ColorPalettes.R,
 commit 6feec354ad6c8052ddbc4626a2ca2d858ed465bf:
 https://raw.githubusercontent.com/GreenleafLab/ArchR/6feec354ad6c8052ddbc4626a2ca2d858ed465bf/R/ColorPalettes.R
 
 ArchR is distributed under the MIT License. ArchR explicitly describes
 ArchRPalettes as a collection containing both original and borrowed palettes.
-Accordingly, scChromatic does not claim that every archr_* palette was designed
-by ArchR. Source comments identify zissou, darjeeling, and rushmore with
-wesanderson; sambaNight and solarExtra with buencolors. The ColorBrewer-like
-whitePurple, whiteBlue, and greenBlue sequences retain provenance_review status.
+Known borrowed entries and entries requiring provenance review are retained
+only in the excluded data-raw source snapshot; they are not registered or
+distributed in the installed package.
 
 Okabe-Ito
 ----------
@@ -96,3 +96,9 @@ chromatic is generated for scChromatic and frozen as a nested, deterministic
 to scChromatic. These colors are perceptually optimized and audited against
 normal, deutan, protan, and tritan simulations; they are not claimed to be
 universally color-blind safe.
+
+chromatic_balance is a frozen 11-anchor diverging HCL palette generated with
+colorspace::diverging_hcl() using hues 250 and 10, chroma 75, luminance 35 to
+95, and power 1.1. It uses a neutral midpoint and was audited under normal,
+deutan, protan, and tritan simulations. The colorspace package is BSD-3-Clause;
+see Zeileis et al. (2020), Journal of Statistical Software 96(1):1-49.

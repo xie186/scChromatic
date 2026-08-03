@@ -32,7 +32,9 @@ A data frame of ranked palettes and reasons.
 }
 \description{
 Ranking uses palette type, intended-use metadata, capacity, status,
-background guidance, and measured CIE2000 separation. No learned model is
+background guidance, and measured CIE2000 separation. Registered
+\code{recommended} palettes are preferred as a group; compatibility collections
+are considered only when no recommended palette fits. No learned model is
 involved.
 }
 \examples{

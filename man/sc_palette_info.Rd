@@ -16,5 +16,5 @@ A one-row data frame with registry and audit metadata.
 Inspect palette metadata and provenance
 }
 \examples{
-sc_palette_info("archr_stallion")
+sc_palette_info("chromatic_balance")
 }

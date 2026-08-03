@@ -129,49 +129,5 @@
   id <- tolower(gsub("([a-z0-9])([A-Z])", "\\1_\\2", palette))
   id <- gsub("[^a-z0-9]+", "_", id)
   id <- gsub("^_|_$", "", id)
-  aliases <- c(
-    stallion = "archr_stallion",
-    stallion2 = "archr_stallion2",
-    calm = "archr_calm",
-    kelly = "archr_kelly",
-    bear = "archr_bear",
-    ironman = "archr_iron_man",
-    iron_man = "archr_iron_man",
-    circus = "archr_circus",
-    paired = "archr_paired",
-    grove = "archr_grove",
-    summernight = "archr_summer_night",
-    summer_night = "archr_summer_night",
-    zissou = "archr_zissou",
-    darjeeling = "archr_darjeeling",
-    rushmore = "archr_rushmore",
-    captain = "archr_captain",
-    horizon = "archr_horizon",
-    horizonextra = "archr_horizon_extra",
-    horizon_extra = "archr_horizon_extra",
-    blueyellow = "archr_blue_yellow",
-    blue_yellow = "archr_blue_yellow",
-    sambanight = "archr_samba_night",
-    samba_night = "archr_samba_night",
-    solarextra = "archr_solar_extra",
-    solar_extra = "archr_solar_extra",
-    whitepurple = "archr_white_purple",
-    white_purple = "archr_white_purple",
-    whiteblue = "archr_white_blue",
-    white_blue = "archr_white_blue",
-    whitered = "archr_white_red",
-    white_red = "archr_white_red",
-    comet = "archr_comet",
-    greenblue = "archr_green_blue",
-    green_blue = "archr_green_blue",
-    beach = "archr_beach",
-    coolwarm = "archr_coolwarm",
-    fireworks = "archr_fireworks",
-    greymagma = "archr_grey_magma",
-    grey_magma = "archr_grey_magma",
-    fireworks2 = "archr_fireworks2",
-    purpleorange = "archr_purple_orange",
-    purple_orange = "archr_purple_orange"
-  )
-  if (id %in% names(aliases)) unname(aliases[[id]]) else id
+  id
 }

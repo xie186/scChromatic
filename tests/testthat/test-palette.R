@@ -1,7 +1,7 @@
 test_that("registry entries and colors are valid", {
   ids <- sc_palette_names()
   expect_identical(anyDuplicated(ids), 0L)
-  expect_true(length(ids) >= 46)
+  expect_true(length(ids) >= 38)
 
   for (id in ids[!startsWith(ids, "scico_")]) {
     info <- sc_palette_info(id)
@@ -42,7 +42,17 @@ test_that("qualitative extension is explicit, deterministic, and preserving", {
 
 test_that("continuous palettes interpolate to exactly n colors", {
   expect_length(sc_palette("viridis", 17), 17)
-  expect_length(sc_palette("archr_coolwarm", 101), 101)
+  expect_length(sc_palette("chromatic_balance", 101), 101)
+})
+
+test_that("continuous palettes preserve their registered anchors", {
+  expect_identical(
+    sc_palette("chromatic_balance", 11),
+    c(
+      "#0055A3", "#4674B0", "#7A94C0", "#A5B4D1", "#CDD4E2", "#F1F1F1",
+      "#E4CFCF", "#D4A9AA", "#C28284", "#AC5A5D", "#942E34"
+    )
+  )
 })
 
 test_that("chromatic is frozen and nested", {
