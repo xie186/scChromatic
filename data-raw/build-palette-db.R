@@ -1,5 +1,28 @@
-source("data-raw/palettes-archr.R")
+source("R/utils.R")
+source("R/palette-generate.R")
 source("R/palette-d3.R")
+
+build_versions <- c(
+  colorspace = "2.1.3",
+  farver = "2.1.2",
+  viridisLite = "0.4.3",
+  scico = "1.5.0"
+)
+for (package in names(build_versions)) {
+  expected <- unname(build_versions[[package]])
+  if (!requireNamespace(package, quietly = TRUE)) {
+    stop("Build requires ", package, " ", expected, "; it is not installed.", call. = FALSE)
+  }
+  installed <- as.character(utils::packageVersion(package))
+  if (!identical(installed, expected)) {
+    stop(
+      "Build requires ", package, " ", expected, "; found ", installed, ".",
+      call. = FALSE
+    )
+  }
+}
+
+source("data-raw/generate-owned-palettes.R")
 source("data-raw/palettes-core.R")
 
 normalize_hex <- function(x) {
@@ -14,55 +37,33 @@ normalize_hex <- function(x) {
   out
 }
 
-archr_ids <- c(
-  stallion = "archr_stallion",
-  stallion2 = "archr_stallion2",
-  calm = "archr_calm",
-  kelly = "archr_kelly",
-  bear = "archr_bear",
-  ironMan = "archr_iron_man",
-  circus = "archr_circus",
-  paired = "archr_paired",
-  grove = "archr_grove",
-  summerNight = "archr_summer_night",
-  captain = "archr_captain",
-  horizon = "archr_horizon",
-  horizonExtra = "archr_horizon_extra",
-  blueYellow = "archr_blue_yellow",
-  whiteRed = "archr_white_red",
-  comet = "archr_comet",
-  beach = "archr_beach",
-  coolwarm = "archr_coolwarm",
-  fireworks = "archr_fireworks",
-  greyMagma = "archr_grey_magma",
-  fireworks2 = "archr_fireworks2",
-  purpleOrange = "archr_purple_orange"
-)
-
 colors <- list()
-for (source_name in names(archr_ids)) {
-  id <- unname(archr_ids[[source_name]])
-  source_colors <- normalize_hex(archr_palettes[[source_name]])
-  priority <- if (source_name %in% archr_discrete) {
-    source_colors[order(as.integer(names(source_colors)))]
-  } else {
-    source_colors
-  }
-  colors[[id]] <- list(source = source_colors, priority = priority)
-}
 for (id in names(core_palettes)) {
   value <- normalize_hex(core_palettes[[id]])
-  colors[[id]] <- list(
-    source = value,
-    priority = if (id == "d3_cool") rev(value) else value
+  priority <- switch(
+    id,
+    okabe_ito = value[c(2:8, 1)],
+    tol_medium_contrast = value[c(3, 6, 1, 5, 4, 2)],
+    glasbey32 = value[c(2:32, 1)],
+    d3_cool = rev(value),
+    value
   )
+  entry <- list(
+    source = value,
+    priority = priority
+  )
+  if (id %in% names(provider_interpolation_luts)) {
+    entry$interpolation <- normalize_hex(provider_interpolation_luts[[id]])
+  }
+  colors[[id]] <- entry
 }
 
 meta_row <- function(
     palette_id, source, source_palette, palette_type, max_n, intended_use,
     recommended_geometry = "point,fill,line",
     recommended_background = "light,dark", status = "recommended",
-    source_url = NA_character_, source_commit = NA_character_,
+    source_url = NA_character_, source_version = NA_character_,
+    source_commit = NA_character_, source_sha256 = NA_character_,
     citation = NA_character_, license = NA_character_, derived = FALSE,
     source_cvd_claim = NA_character_, notes = "",
     source_order = "literal vector order in internal palette database",
@@ -80,7 +81,9 @@ meta_row <- function(
     source_order = source_order,
     priority_order = priority_order,
     source_url = source_url,
+    source_version = source_version,
     source_commit = source_commit,
+    source_sha256 = source_sha256,
     citation = citation,
     license = license,
     derived = derived,
@@ -90,89 +93,74 @@ meta_row <- function(
   )
 }
 
-archr_url <- paste0(
-  "https://raw.githubusercontent.com/GreenleafLab/ArchR/",
-  "6feec354ad6c8052ddbc4626a2ca2d858ed465bf/R/ColorPalettes.R"
-)
-archr_meta <- do.call(rbind, lapply(names(archr_ids), function(source_name) {
-  id <- unname(archr_ids[[source_name]])
-  discrete <- source_name %in% archr_discrete
-  meta_row(
-    id, "ArchR", source_name,
-    if (discrete) "qualitative" else if (source_name %in% c(
-      "coolwarm", "fireworks", "fireworks2"
-    )) "diverging" else "sequential",
-    if (discrete) length(archr_palettes[[source_name]]) else 256L,
-    if (discrete) {
-      "cell_identity,sample,condition,lineage,heatmap_annotation"
-    } else {
-      "expression,pseudotime,qc"
-    },
-    status = "compatibility",
-    source_url = archr_url,
-    source_commit = "6feec354ad6c8052ddbc4626a2ca2d858ed465bf",
-    citation = "Granja et al. (2021), Nature Genetics 53:403-411; ArchR software.",
-    license = "MIT (ArchR code); individual borrowed-palette terms may differ",
-    derived = FALSE,
-    notes = "Frozen compatibility palette; original source terms should be reviewed for redistribution.",
-    priority_order = if (discrete) {
-      "ascending numeric source labels used by ArchR paletteDiscrete"
-    } else {
-      "same as source order to preserve the continuous gradient"
-    }
-  )
-}))
-
 core_specs <- list(
   okabe_ito = list(
-    "Okabe-Ito", "qualitative", "cell_identity,sample,condition,highlight",
-    "https://jfly.uni-koeln.de/color/", "Okabe and Ito color universal design palette",
-    "Publicly documented palette", FALSE,
-    "Designed for common forms of color-vision deficiency.", "paired contrast"
+    "khroma", "qualitative", "cell_identity,sample,condition,highlight",
+    "https://cran.r-project.org/src/contrib/khroma_1.17.0.tar.gz",
+    "Okabe and Ito color universal design palette; khroma 1.17.0",
+    "GPL (>= 3) (khroma 1.17.0)", TRUE,
+    "Designed for common forms of color-vision deficiency.",
+    "Black is moved from first to last in priority order; paired contrast."
   ),
   tol_bright = list(
-    "Paul Tol", "qualitative", "cell_identity,sample,condition,highlight",
-    "https://personal.sron.nl/~pault/", "Paul Tol colour schemes",
-    "Free for personal and commercial use with attribution", FALSE,
+    "khroma", "qualitative", "cell_identity,sample,condition,highlight",
+    "https://cran.r-project.org/src/contrib/khroma_1.17.0.tar.gz",
+    "Paul Tol colour schemes; khroma 1.17.0",
+    "GPL (>= 3) (khroma 1.17.0)", FALSE,
     "Designed with color-vision deficiencies in mind.", "paired contrast"
   ),
   tol_vibrant = list(
-    "Paul Tol", "qualitative", "cell_identity,sample,condition,highlight",
-    "https://personal.sron.nl/~pault/", "Paul Tol colour schemes",
-    "Free for personal and commercial use with attribution", FALSE,
+    "khroma", "qualitative", "cell_identity,sample,condition,highlight",
+    "https://cran.r-project.org/src/contrib/khroma_1.17.0.tar.gz",
+    "Paul Tol colour schemes; khroma 1.17.0",
+    "GPL (>= 3) (khroma 1.17.0)", FALSE,
     "Designed with color-vision deficiencies in mind.", ""
   ),
   tol_muted = list(
-    "Paul Tol", "qualitative", "cell_identity,sample,lineage,heatmap_annotation",
-    "https://personal.sron.nl/~pault/", "Paul Tol colour schemes",
-    "Free for personal and commercial use with attribution", FALSE,
+    "khroma", "qualitative", "cell_identity,sample,lineage,heatmap_annotation",
+    "https://cran.r-project.org/src/contrib/khroma_1.17.0.tar.gz",
+    "Paul Tol colour schemes; khroma 1.17.0",
+    "GPL (>= 3) (khroma 1.17.0)", FALSE,
     "Designed with color-vision deficiencies in mind.", ""
   ),
   tol_medium_contrast = list(
-    "Paul Tol", "qualitative", "condition,sample,highlight",
-    "https://personal.sron.nl/~pault/", "Paul Tol colour schemes",
-    "Free for personal and commercial use with attribution", FALSE,
-    "Designed with color-vision deficiencies in mind.", "paired contrast"
+    "khroma", "qualitative", "condition,sample,highlight",
+    "https://cran.r-project.org/src/contrib/khroma_1.17.0.tar.gz",
+    "Paul Tol colour schemes; khroma 1.17.0",
+    "GPL (>= 3) (khroma 1.17.0)", TRUE,
+    "Designed for medium-contrast color pairs.",
+    "Priority order is rearranged for adjacent light/dark pair contrast."
   ),
   glasbey32 = list(
-    "Glasbey et al.", "qualitative", "cell_identity,sample,heatmap_annotation",
-    "https://doi.org/10.1002/col.20327",
-    "Glasbey et al. (2007), Color Research and Application 32:304-309",
-    "Palette provenance review", FALSE, "No universal CVD-safety claim.",
-    "High-cardinality; perceptual distinction decreases as n grows."
+    "Polychrome", "qualitative", "cell_identity,sample,heatmap_annotation",
+    "https://cran.r-project.org/src/contrib/Polychrome_1.6.1.tar.gz",
+    paste(
+      "Glasbey et al. (2007), Color Research and Application 32:304-309;",
+      "Polychrome 1.6.1"
+    ),
+    "Apache-2.0 (Polychrome 1.6.1)", TRUE,
+    "No universal CVD-safety claim.",
+    paste(
+      "Exact Polychrome glasbey object; white is moved from first to last in",
+      "priority order. High-cardinality distinction decreases as n grows."
+    )
   ),
   polychrome36 = list(
     "Polychrome", "qualitative", "cell_identity,sample,heatmap_annotation",
-    "https://doi.org/10.18637/jss.v090.c01",
-    "Coombes et al. (2019), Journal of Statistical Software 90, Code Snippet 1",
-    "GPL-2", FALSE, "No universal CVD-safety claim.",
-    "High-cardinality; combine color with redundant encodings."
+    "https://cran.r-project.org/src/contrib/Polychrome_1.6.1.tar.gz",
+    paste(
+      "Coombes et al. (2019), Journal of Statistical Software 90, Code Snippet 1;",
+      "Polychrome 1.6.1"
+    ),
+    "Apache-2.0 (Polychrome 1.6.1)", FALSE,
+    "No universal CVD-safety claim.",
+    "Exact Polychrome palette36 object; combine color with redundant encodings."
   ),
   ditto40 = list(
     "dittoSeq", "qualitative", "cell_identity,sample,heatmap_annotation",
-    "https://github.com/dtm2451/dittoSeq/blob/master/R/dittoColors.R",
-    "Bunis et al. (2020), Bioinformatics 36:5535-5536",
-    "MIT", TRUE,
+    "https://bioconductor.org/packages/3.23/bioc/src/contrib/dittoSeq_1.24.0.tar.gz",
+    "Bunis et al. (2020), Bioinformatics 36:5535-5536; dittoSeq 1.24.0",
+    "MIT (dittoSeq 1.24.0)", FALSE,
     "Only the first seven are the strongest red-green CVD-aware subset.",
     "Entries 8-40 are grey and lighter/darker extensions; not fully CVD safe."
   ),
@@ -236,24 +224,38 @@ core_specs <- list(
   ),
   viridis = list(
     "viridisLite", "sequential", "expression,pseudotime,qc",
-    "https://sjmgarnier.github.io/viridisLite/", "Garnier et al., viridisLite",
-    "MIT", FALSE, "Designed to remain legible under common CVD simulations.", ""
+    "https://cran.r-project.org/src/contrib/viridisLite_0.4.3.tar.gz",
+    "Garnier et al., viridisLite 0.4.3",
+    "MIT (viridisLite 0.4.3)", FALSE,
+    "Designed to remain legible under common CVD simulations.", ""
   ),
   cividis = list(
     "viridisLite", "sequential", "expression,pseudotime,qc",
-    "https://sjmgarnier.github.io/viridisLite/", "Garnier et al., viridisLite",
-    "MIT", FALSE, "Optimized for common CVD and grayscale viewing.", ""
+    "https://cran.r-project.org/src/contrib/viridisLite_0.4.3.tar.gz",
+    "Garnier et al., viridisLite 0.4.3; Nunez, Anderton, and Renslow (2018)",
+    "MIT (viridisLite 0.4.3)", FALSE,
+    "Optimized for common CVD and grayscale viewing.", ""
   ),
   magma = list(
     "viridisLite", "sequential", "expression,pseudotime,qc",
-    "https://sjmgarnier.github.io/viridisLite/", "Garnier et al., viridisLite",
-    "MIT", FALSE, "Designed to remain legible under common CVD simulations.", ""
+    "https://cran.r-project.org/src/contrib/viridisLite_0.4.3.tar.gz",
+    "Garnier et al., viridisLite 0.4.3",
+    "MIT (viridisLite 0.4.3)", FALSE,
+    "Designed to remain legible under common CVD simulations.", ""
   )
 )
 core_meta <- do.call(rbind, lapply(names(core_specs), function(id) {
   spec <- core_specs[[id]]
   source_palette <- switch(
     id,
+    okabe_ito = "okabeito",
+    tol_bright = "bright",
+    tol_vibrant = "vibrant",
+    tol_muted = "muted",
+    tol_medium_contrast = "mediumcontrast",
+    glasbey32 = "glasbey",
+    polychrome36 = "palette36",
+    ditto40 = "dittoColors",
     d3_rainbow = "interpolateRainbow",
     d3_cool = "interpolateCool",
     id
@@ -272,6 +274,36 @@ core_meta <- do.call(rbind, lapply(names(core_specs), function(id) {
     spec[[3L]], source_url = spec[[4L]], citation = spec[[5L]],
     license = spec[[6L]], derived = spec[[7L]], source_cvd_claim = spec[[8L]],
     notes = spec[[9L]],
+    source_version = if (id %in% c(
+      "okabe_ito", "tol_bright", "tol_vibrant", "tol_muted",
+      "tol_medium_contrast"
+    )) {
+      "khroma 1.17.0"
+    } else if (id %in% c("glasbey32", "polychrome36")) {
+      "Polychrome 1.6.1"
+    } else if (id == "ditto40") {
+      "dittoSeq 1.24.0"
+    } else if (id %in% c("viridis", "cividis", "magma")) {
+      "viridisLite 0.4.3"
+    } else if (id %in% c("d3_rainbow", "d3_cool")) {
+      "d3-scale-chromatic 1.5.0"
+    } else {
+      NA_character_
+    },
+    source_sha256 = if (id %in% c(
+      "okabe_ito", "tol_bright", "tol_vibrant", "tol_muted",
+      "tol_medium_contrast"
+    )) {
+      "40ba0f49e19710453fce918d1e036c4fcb6c7d3a70186236b8ad6b9f777c180f"
+    } else if (id %in% c("glasbey32", "polychrome36")) {
+      "4213cfb6247b58153d3668ea09a2691e99939cb2618ba322c80f95894acac58c"
+    } else if (id == "ditto40") {
+      "5c08274913e93158a9660507d50f5e79d4facbe01ab745e4fee0cd703e13454e"
+    } else if (id %in% c("viridis", "cividis", "magma")) {
+      "433be9bde66234dc76301fb4ffbbc9fc74bab5c14f4548d8ef2fc0065e121ef5"
+    } else {
+      NA_character_
+    },
     source_commit = if (id %in% c("d3_rainbow", "d3_cool")) {
       "05e76dafaa89059153e177a4f57d9af985ba49a8"
     } else {
@@ -281,6 +313,15 @@ core_meta <- do.call(rbind, lapply(names(core_specs), function(id) {
       "dynamic D3 samples t = 0:(n - 1) / n; 200-color audit reference stored"
     } else if (id == "d3_cool") {
       "100 D3 interpolateCool source bins sampled at t = 0:99 / 100"
+    } else if (id %in% c(
+      "okabe_ito", "tol_bright", "tol_vibrant", "tol_muted",
+      "tol_medium_contrast", "glasbey32", "polychrome36", "ditto40"
+    )) {
+      "exact hexadecimal order of the pinned package object"
+    } else if (id %in% c("chromatic", "chromatic_balance")) {
+      "deterministically regenerated by data-raw/generate-owned-palettes.R"
+    } else if (id %in% c("viridis", "cividis", "magma")) {
+      "exact 256-color LUT generated by the pinned viridisLite function"
     } else {
       "literal vector order in internal palette database"
     },
@@ -290,13 +331,19 @@ core_meta <- do.call(rbind, lapply(names(core_specs), function(id) {
       "same dynamic D3 sample order as source"
     } else if (id == "d3_cool") {
       "reverse source order to match CELLXGENE low-to-high data mapping"
+    } else if (id == "okabe_ito") {
+      "source order with black moved from first to last"
+    } else if (id == "tol_medium_contrast") {
+      "source colors reordered into adjacent light/dark contrast pairs"
+    } else if (id == "glasbey32") {
+      "source order with white moved from first to last"
     } else {
       "same as source order"
     },
     status = if (id %in% c("d3_rainbow", "d3_cool")) {
       "compatibility"
     } else if (id %in% c("glasbey32", "polychrome36")) {
-      "provenance_review"
+      "compatibility"
     } else {
       "recommended"
     }
@@ -314,38 +361,98 @@ scico_meta <- do.call(rbind, lapply(scico_ids, function(id) {
       "expression,pseudotime,qc"
     },
     status = "compatibility",
-    source_url = "https://github.com/thomasp85/scico",
+    source_url = "https://cran.r-project.org/src/contrib/scico_1.5.0.tar.gz",
+    source_version = "scico 1.5.0; Scientific colour maps 7.0.1",
+    source_sha256 = "647121b3f64118b162a35f9709a301f696239e9a707a04559c0368617c01c9b0",
     citation = "Crameri, Shephard and Heron (2020), Nature Communications 11:5444",
-    license = "MIT (scico package); Scientific colour maps terms apply",
+    license = "MIT (scico 1.5.0); CC BY 4.0 (Scientific colour maps)",
     source_cvd_claim = "Scientific colour maps are perceptually uniform and CVD-aware.",
-    notes = "Optional runtime interoperability; requires the suggested scico package.",
-    source_order = "provided at runtime by the optional scico package",
+    notes = paste(
+      "Exact unmodified 256-color LUT generated by scico 1.5.0 and bundled",
+      "for dependency-free, reproducible interoperability."
+    ),
+    source_order = "exact 256-color LUT generated by pinned scico 1.5.0",
     priority_order = "same as source order"
   )
 }))
 
-meta <- rbind(core_meta, scico_meta, archr_meta)
+meta <- rbind(core_meta, scico_meta)
 
-audit_values <- function(value) {
-  value <- unique(unname(value))
+required_text <- c(
+  "palette_id", "source", "source_palette", "source_url", "citation", "license"
+)
+for (field in required_text) {
+  if (anyNA(meta[[field]]) || any(!nzchar(meta[[field]]))) {
+    stop("Registry field ", field, " must be complete for every palette.", call. = FALSE)
+  }
+}
+if (anyDuplicated(meta$palette_id)) {
+  stop("Registry palette IDs must be unique.", call. = FALSE)
+}
+if (any(meta$status == "provenance_review")) {
+  stop("Unresolved provenance_review rows cannot be shipped.", call. = FALSE)
+}
+has_commit <- !is.na(meta$source_commit) & nzchar(meta$source_commit)
+has_archive <- !is.na(meta$source_sha256) & nzchar(meta$source_sha256)
+third_party <- meta$source != "scChromatic"
+if (any(third_party & !(has_commit | has_archive))) {
+  stop("Every third-party palette requires a source commit or archive hash.", call. = FALSE)
+}
+if (any(has_archive & !grepl("^[0-9a-f]{64}$", meta$source_sha256))) {
+  stop("Registry source_sha256 values must be lowercase SHA-256 hashes.", call. = FALSE)
+}
+
+min_cie2000 <- function(value) {
   rgb <- farver::decode_colour(value, to = "rgb")
   distances <- farver::compare_colour(rgb, rgb, from_space = "rgb", method = "cie2000")
   d <- distances[upper.tri(distances)]
+  if (length(d)) min(d) else NA_real_
+}
+
+audit_values <- function(value) {
+  value <- unname(value)
   c(
-    min_cie2000 = if (length(d)) min(d) else NA_real_,
+    min_cie2000 = min_cie2000(value),
+    min_cie2000_deutan = min_cie2000(colorspace::deutan(value)),
+    min_cie2000_protan = min_cie2000(colorspace::protan(value)),
+    min_cie2000_tritan = min_cie2000(colorspace::tritan(value)),
     min_contrast_light = min(colorspace::contrast_ratio(value, "#FFFFFF")),
     min_contrast_dark = min(colorspace::contrast_ratio(value, "#1A1A1A"))
   )
 }
-audits <- lapply(meta$palette_id, function(id) {
-  if (startsWith(id, "scico_")) return(rep(NA_real_, 3L))
-  audit_values(colors[[id]]$priority)
-})
+audit_inputs <- stats::setNames(lapply(meta$palette_id, function(id) {
+  colors[[id]]$priority
+}), meta$palette_id)
+audits <- lapply(audit_inputs, audit_values)
 audit_matrix <- do.call(rbind, audits)
 meta$audit_min_cie2000 <- audit_matrix[, 1L]
-meta$audit_min_contrast_light <- audit_matrix[, 2L]
-meta$audit_min_contrast_dark <- audit_matrix[, 3L]
-meta$audit_date <- "2026-08-03"
+meta$audit_min_cie2000_deutan <- audit_matrix[, 2L]
+meta$audit_min_cie2000_protan <- audit_matrix[, 3L]
+meta$audit_min_cie2000_tritan <- audit_matrix[, 4L]
+meta$audit_min_contrast_light <- audit_matrix[, 5L]
+meta$audit_min_contrast_dark <- audit_matrix[, 6L]
+meta$audit_n <- lengths(audit_inputs)
+meta$audit_basis <- "stored priority-order reference vector"
+meta$audit_method <- paste0(
+  "CIEDE2000 via farver ", utils::packageVersion("farver"),
+  "; CVD simulation via colorspace ", utils::packageVersion("colorspace")
+)
+meta$audit_date <- "2026-08-04"
+
+expected_columns <- c(
+  "palette_id", "source", "source_palette", "palette_type", "max_n",
+  "intended_use", "recommended_geometry", "recommended_background", "status",
+  "source_order", "priority_order", "source_url", "source_version",
+  "source_commit", "source_sha256", "citation", "license", "derived",
+  "source_cvd_claim", "notes", "audit_min_cie2000",
+  "audit_min_cie2000_deutan", "audit_min_cie2000_protan",
+  "audit_min_cie2000_tritan", "audit_min_contrast_light",
+  "audit_min_contrast_dark", "audit_n", "audit_basis", "audit_method",
+  "audit_date"
+)
+if (!identical(names(meta), expected_columns)) {
+  stop("Registry columns or ordering changed unexpectedly.", call. = FALSE)
+}
 
 sc_palette_db <- list(meta = meta, colors = colors)
 save(sc_palette_db, file = "R/sysdata.rda", compress = "xz", version = 3)

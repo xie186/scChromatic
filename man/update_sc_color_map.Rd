@@ -11,13 +11,17 @@ update_sc_color_map(map, labels, extend = c("generate", "error"))
 
 \item{labels}{Labels to add; prior assignments are never changed.}
 
-\item{extend}{Generate or error when palette capacity is exceeded.}
+\item{extend}{Generate or error when capacity is exceeded.}
 }
 \value{
-An updated \code{sc_color_map}.
+An updated \code{sc_color_map} using the same schema and metadata.
 }
 \description{
-Update a persistent color map
+Existing assignments and all map metadata are preserved. Registered maps
+reuse their qualitative palette; external and derived maps are extended from
+their stored colors and therefore do not need a palette-registry entry.
+Hierarchy maps must instead be extended with \code{\link[=sc_hierarchy_map]{sc_hierarchy_map()}} so every
+new child has a parent.
 }
 \examples{
 map <- sc_color_map(c("B", "T"))

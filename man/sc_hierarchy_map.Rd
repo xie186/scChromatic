@@ -2,7 +2,7 @@
 % Please edit documentation in R/hierarchy-map.R
 \name{sc_hierarchy_map}
 \alias{sc_hierarchy_map}
-\title{Create a hierarchy-aware color map}
+\title{Create or extend a hierarchy-aware color map}
 \usage{
 sc_hierarchy_map(
   parent,
@@ -10,7 +10,8 @@ sc_hierarchy_map(
   parent_palette = "tol_muted",
   separation = c("balanced", "between_lineage", "within_lineage"),
   background = c("light", "dark"),
-  na.value = "#BDBDBD"
+  na.value = "#BDBDBD",
+  existing = NULL
 )
 }
 \arguments{
@@ -26,17 +27,30 @@ separation.}
 \item{background}{Light or dark background.}
 
 \item{na.value}{Missing-value color.}
+
+\item{existing}{Optional \code{sc_color_map} previously returned by
+\code{sc_hierarchy_map()}. Existing parents, anchors, children, colors, and map
+metadata are retained.}
 }
 \value{
-An \code{sc_color_map} with a named \code{parent} field.
+An \code{sc_color_map} with named \code{parent} and \code{parent_anchors} fields.
 }
 \description{
 Child labels receive controlled lightness and chroma variants of distinct
-parent anchor hues.
+parent anchor hues. Pass a prior hierarchy map through \code{existing} when the
+taxonomy grows: its parent anchors and every established child assignment
+are retained exactly, while only new parents and children receive colors.
+}
+\details{
+Each child has one canonical parent in this lightweight hierarchy model.
+Alternative names or identifiers can be retained in the map's optional
+\code{aliases} metadata and survive serialization, but multiple-parent ontology
+graphs are outside this constructor's scope.
 }
 \examples{
-sc_hierarchy_map(
+map <- sc_hierarchy_map(
   parent = c("Lymphoid", "Lymphoid", "Myeloid"),
   child = c("B", "T", "Mono")
 )
+sc_hierarchy_map("Lymphoid", "NK", existing = map)
 }

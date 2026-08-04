@@ -14,7 +14,7 @@ Description: Reproducible, provenance-aware, and accessible color systems for
     across subsets and reordered factors, while palette diagnostics and
     recommendations support categorical annotations, expression, signed
     scores, pseudotime, quality-control metrics, and heatmaps.
-License: GPL (>= 3) + file LICENSE
+License: GPL (>= 3)
 URL: https://xie186.github.io/scChromatic/, https://github.com/xie186/scChromatic
 BugReports: https://github.com/xie186/scChromatic/issues
 Depends:
@@ -24,23 +24,15 @@ Imports:
     colorspace,
     farver,
     ggplot2 (>= 3.5.0),
-    scales,
-    viridisLite
-Suggests:
-    ComplexHeatmap,
     jsonlite,
+    scales
+Suggests:
     knitr,
     pkgdown,
     rmarkdown,
-    scico,
-    SeuratObject,
-    SingleCellExperiment,
-    testthat (>= 3.0.0),
-    vdiffr,
-    yaml
+    testthat (>= 3.0.0)
 Config/Needs/website:
-    pkgdown,
-    scico
+    pkgdown
 VignetteBuilder: knitr
 LazyData: true
 Config/testthat/edition: 3

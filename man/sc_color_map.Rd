@@ -15,7 +15,7 @@ sc_color_map(
 )
 }
 \arguments{
-\item{labels}{Character or factor labels.}
+\item{labels}{One or more non-missing, non-empty character or factor labels.}
 
 \item{palette}{Registered qualitative palette ID or \code{"auto"}.}
 
@@ -30,13 +30,16 @@ sc_color_map(
 \item{na.value}{Color used for missing labels.}
 }
 \value{
-An object of class \code{sc_color_map}.
+An object of class \code{sc_color_map} using the current versioned map
+schema.
 }
 \description{
 Character labels use natural ordering by default. For factors,
 \code{order = "factor"} includes all declared levels, including unused levels.
 Existing assignments are retained exactly and new labels receive unused
-colors deterministically.
+colors deterministically. Supplying an existing map with \code{palette = "auto"}
+also preserves its schema metadata and does not require its palette to be
+registered.
 }
 \examples{
 map <- sc_color_map(c("B", "T", "NK", "Mono"))

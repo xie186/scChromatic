@@ -1,3 +1,14 @@
+.sc_interpolate_provider_lut <- function(id, n) {
+  colors <- .sc_db()$colors[[id]]$interpolation
+  ramp <- grDevices::colorRamp(colors, space = "Lab", interpolate = "spline")
+  rgb <- ramp(seq(0, 1, length.out = n))
+  if (startsWith(id, "scico_")) {
+    grDevices::rgb(rgb[, 1L], rgb[, 2L], rgb[, 3L], maxColorValue = 255)
+  } else {
+    grDevices::rgb(rgb[, 1L] / 255, rgb[, 2L] / 255, rgb[, 3L] / 255, alpha = 1)
+  }
+}
+
 #' Retrieve colors from a registered palette
 #'
 #' Fixed qualitative palettes are truncated but never interpolated. Use
@@ -42,21 +53,6 @@ sc_palette <- function(palette, n = NULL, alpha = 1, reverse = FALSE,
 
   if (id == "d3_rainbow") {
     colors <- .sc_d3_rainbow(n)
-  } else if (startsWith(id, "scico_")) {
-    if (!requireNamespace("scico", quietly = TRUE)) {
-      .sc_abort(c(
-        "Palette {.val {id}} requires the optional {.pkg scico} package.",
-        "i" = "Install it with {.code install.packages(\"scico\")}."
-      ))
-    }
-    colors <- scico::scico(n, palette = sub("^scico_", "", id))
-  } else if (id %in% c("viridis", "cividis", "magma")) {
-    colors <- switch(
-      id,
-      viridis = viridisLite::viridis(n),
-      cividis = viridisLite::cividis(n),
-      magma = viridisLite::magma(n)
-    )
   } else {
     colors <- .sc_palette_colors(id, selection)
     if (type == "qualitative") {
@@ -72,7 +68,14 @@ sc_palette <- function(palette, n = NULL, alpha = 1, reverse = FALSE,
         colors <- colors[seq_len(n)]
       }
     } else if (n != length(colors)) {
-      colors <- grDevices::colorRampPalette(colors, space = "Lab")(n)
+      if (id %in% c(
+        "viridis", "cividis", "magma", "scico_batlow", "scico_lajolla",
+        "scico_vik", "scico_broc"
+      )) {
+        colors <- .sc_interpolate_provider_lut(id, n)
+      } else {
+        colors <- grDevices::colorRampPalette(colors, space = "Lab")(n)
+      }
     }
   }
 

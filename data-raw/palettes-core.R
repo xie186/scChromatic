@@ -1,10 +1,12 @@
-# Provenance-tracked fixed palettes. Keep literal vectors frozen so releases
-# are reproducible. See inst/NOTICE and palette-registry.csv.
+# Provenance-tracked palettes. Third-party vectors are exact transcriptions of
+# the pinned sources recorded in inst/NOTICE. Package-owned vectors are rebuilt
+# deterministically by generate-owned-palettes.R.
 core_palettes <- list(
   okabe_ito = c(
-    orange = "#E69F00", sky_blue = "#56B4E9", bluish_green = "#009E73",
+    black = "#000000", orange = "#E69F00", sky_blue = "#56B4E9",
+    bluish_green = "#009E73",
     yellow = "#F0E442", blue = "#0072B2", vermillion = "#D55E00",
-    reddish_purple = "#CC79A7", black = "#000000"
+    reddish_purple = "#CC79A7"
   ),
   tol_bright = c(
     blue = "#4477AA", red = "#EE6677", green = "#228833", yellow = "#CCBB44",
@@ -20,16 +22,16 @@ core_palettes <- list(
     purple = "#AA4499"
   ),
   tol_medium_contrast = c(
-    light_blue = "#6699CC", dark_blue = "#004488", light_yellow = "#EECC66",
-    dark_red = "#994455", dark_yellow = "#997700", light_red = "#EE99AA"
+    light_yellow = "#EECC66", light_red = "#EE99AA", light_blue = "#6699CC",
+    dark_yellow = "#997700", dark_red = "#994455", dark_blue = "#004488"
   ),
   glasbey32 = c(
-    "#0000FF", "#FF0000", "#00FF00", "#000033", "#FF00B6", "#005300",
-    "#FFD300", "#009FFF", "#9A4D42", "#00FFBE", "#783FC1", "#1F9698",
-    "#FFACFD", "#B1CC71", "#F1085C", "#FE8F42", "#DD00FF", "#201A01",
-    "#720055", "#766C95", "#02AD24", "#C8FF00", "#886C00", "#FFB79F",
-    "#858567", "#A10300", "#14F9FF", "#00479E", "#DC5E93", "#93D4FF",
-    "#004CFF", "#F2F3F4"
+    "#FFFFFF", "#0000FF", "#FF0000", "#00FF00", "#000033", "#FF00B6",
+    "#005300", "#FFD300", "#009FFF", "#9A4D42", "#00FFBE", "#783FC1",
+    "#1F9698", "#FFACFD", "#B1CC71", "#F1085C", "#FE8F42", "#DD00FF",
+    "#201A01", "#720055", "#766C95", "#02AD24", "#C8FF00", "#886C00",
+    "#FFB79F", "#858567", "#A10300", "#14F9FF", "#00479E", "#DC5E93",
+    "#93D4FF", "#004CFF"
   ),
   polychrome36 = c(
     "#5A5156", "#E4E1E3", "#F6222E", "#FE00FA", "#16FF32", "#3283FE",
@@ -48,22 +50,35 @@ core_palettes <- list(
     "#E0AFCA", "#A3A3A3", "#8A5F00", "#1674A9", "#005F45", "#AA9F0D",
     "#00446B", "#803800", "#8D3666", "#3D3D3D"
   ),
-  chromatic = c(
-    "#475D8F", "#E3B54E", "#00DADF", "#765A11", "#009685", "#9C8CFB",
-    "#D14D70", "#8C7D00", "#EA74A9", "#007C4D", "#7D73BD", "#A99C5D",
-    "#89CA98", "#C69400", "#8F4667", "#00AFB3", "#98BAFF", "#B30089",
-    "#5F4AC2", "#5A8849", "#A5679C", "#ECA7D1", "#C484D1", "#5AD27C",
-    "#1D6C36", "#CE8795", "#68A977", "#A03F37", "#BE52B1", "#2A8C65",
-    "#3E7ADB", "#FEA67F", "#D4BC00", "#3085A2", "#E4814A", "#B96637",
-    "#006C7C", "#AE6876", "#00B86B", "#A019B0"
-  ),
-  chromatic_balance = c(
-    "#0055A3", "#4674B0", "#7A94C0", "#A5B4D1", "#CDD4E2", "#F1F1F1",
-    "#E4CFCF", "#D4A9AA", "#C28284", "#AC5A5D", "#942E34"
-  ),
+  chromatic = scchromatic_owned_palettes$chromatic,
+  chromatic_balance = scchromatic_owned_palettes$chromatic_balance,
   d3_rainbow = .sc_d3_rainbow(200L),
   d3_cool = .sc_d3_cool((0:99) / 100),
-  viridis = stats::setNames(viridisLite::viridis(11), seq_len(11)),
-  cividis = stats::setNames(viridisLite::cividis(11), seq_len(11)),
-  magma = stats::setNames(viridisLite::magma(11), seq_len(11))
+  viridis = viridisLite::viridis(256L),
+  cividis = viridisLite::cividis(256L),
+  magma = viridisLite::magma(256L),
+  scico_batlow = scico::scico(256L, palette = "batlow"),
+  scico_lajolla = scico::scico(256L, palette = "lajolla"),
+  scico_vik = scico::scico(256L, palette = "vik"),
+  scico_broc = scico::scico(256L, palette = "broc")
+)
+
+viridis_lut <- function(option) {
+  map <- viridisLite::viridis.map[viridisLite::viridis.map$opt == option, ]
+  grDevices::rgb(map$R, map$G, map$B)
+}
+
+scico_lut <- function(palette) {
+  map <- scico::scico_palette_data(palette)
+  grDevices::rgb(map$r, map$g, map$b)
+}
+
+provider_interpolation_luts <- list(
+  viridis = viridis_lut("D"),
+  cividis = viridis_lut("E"),
+  magma = viridis_lut("A"),
+  scico_batlow = scico_lut("batlow"),
+  scico_lajolla = scico_lut("lajolla"),
+  scico_vik = scico_lut("vik"),
+  scico_broc = scico_lut("broc")
 )

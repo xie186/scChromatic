@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://xie186.github.io/scChromatic/schema/sc-color-map.schema.json",
+  "title": "scChromatic color map",
+  "description": "Version 1 interchange schema for persistent scChromatic label-to-color maps.",
+  "type": "object",
+  "required": [
+    "schema",
+    "schema_version",
+    "map_type",
+    "palette",
+    "background",
+    "package_version",
+    "na_value",
+    "mapping"
+  ],
+  "properties": {
+    "schema": { "const": "scChromatic.color-map" },
+    "schema_version": { "const": 1 },
+    "map_type": {
+      "enum": ["registered", "external", "derived", "hierarchy", "highlight"]
+    },
+    "palette": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Registered ID or an external/derived descriptor; registry membership is not required."
+    },
+    "background": { "enum": ["light", "dark"] },
+    "package_version": { "type": "string", "minLength": 1 },
+    "na_value": { "$ref": "#/$defs/hexColor" },
+    "mapping": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/mappingRecord" }
+    },
+    "provenance": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "parent": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/parentRecord" }
+    },
+    "parent_anchors": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/anchorRecord" }
+    },
+    "parent_palette": { "type": "string", "minLength": 1 },
+    "separation": {
+      "enum": ["balanced", "between_lineage", "within_lineage"]
+    },
+    "focus": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "focus_palette": { "type": "string", "minLength": 1 },
+    "other": { "$ref": "#/$defs/hexColor" },
+    "aliases": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/aliasRecord" }
+    },
+    "locks": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/lockRecord" }
+    },
+    "history": { "type": ["array", "object"] },
+    "context": { "type": ["array", "object"] },
+    "seed": { "type": "number" },
+    "metadata": { "type": ["array", "object"] },
+    "extensions": {
+      "type": "object",
+      "description": "Additional JSON-native, method-specific map fields."
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": { "map_type": { "const": "hierarchy" } }
+      },
+      "then": {
+        "required": ["parent", "parent_anchors", "parent_palette", "separation"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "map_type": { "const": "highlight" } }
+      },
+      "then": {
+        "required": ["focus", "focus_palette", "other"]
+      }
+    }
+  ],
+  "$defs": {
+    "hexColor": {
+      "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$"
+    },
+    "mappingRecord": {
+      "type": "object",
+      "required": ["label", "color"],
+      "properties": {
+        "label": { "type": "string", "minLength": 1 },
+        "color": { "$ref": "#/$defs/hexColor" }
+      },
+      "additionalProperties": false
+    },
+    "parentRecord": {
+      "type": "object",
+      "required": ["label", "parent"],
+      "properties": {
+        "label": { "type": "string", "minLength": 1 },
+        "parent": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "anchorRecord": {
+      "type": "object",
+      "required": ["parent", "color"],
+      "properties": {
+        "parent": { "type": "string", "minLength": 1 },
+        "color": { "$ref": "#/$defs/hexColor" }
+      },
+      "additionalProperties": false
+    },
+    "aliasRecord": {
+      "type": "object",
+      "required": ["alias", "label"],
+      "properties": {
+        "alias": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "lockRecord": {
+      "type": "object",
+      "required": ["label", "locked"],
+      "properties": {
+        "label": { "type": "string", "minLength": 1 },
+        "locked": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -17,6 +17,28 @@ test_that("recommendations enforce purpose-specific palette types", {
   expect_false(any(startsWith(expression$palette_id, "archr_")))
 })
 
+test_that("qualitative recommendations abstain when separation is inadequate", {
+  expect_warning(
+    result <- sc_palette_recommend(
+      40, use = "cell_identity", min_cie2000 = 5
+    ),
+    "No registered qualitative palette"
+  )
+  expect_identical(nrow(result), 0L)
+  expect_identical(
+    names(result),
+    c("palette_id", "reason", "capacity", "status", "min_cie2000", "score")
+  )
+
+  best_effort <- sc_palette_recommend(40, use = "cell_identity")
+  expect_gt(nrow(best_effort), 0L)
+})
+
+test_that("separation threshold validation is explicit", {
+  expect_error(sc_palette_recommend(8, min_cie2000 = -1), "non-negative")
+  expect_error(sc_palette_recommend(8, min_cie2000 = Inf), "finite")
+})
+
 test_that("highlight maps preserve a named mapping", {
   map <- sc_highlight_map(
     c("B", "T", "NK", "Mono"), focus = c("B", "NK"), other = "grey85"

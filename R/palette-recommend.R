@@ -19,8 +19,9 @@
 #' Ranking uses palette type, intended-use metadata, capacity, status,
 #' background guidance, and measured CIE2000 separation. Registered
 #' `recommended` palettes are preferred as a group; compatibility collections
-#' are considered only when no recommended palette fits. No learned model is
-#' involved.
+#' are considered only when no recommended palette meets the qualitative
+#' separation screen. No learned model is involved. The screen is a pragmatic
+#' diagnostic, not a universal perceptual pass/fail threshold.
 #'
 #' @param n Number of categories or gradient anchors needed.
 #' @param use Single-cell visualization purpose.
@@ -28,6 +29,11 @@
 #' @param background Light or dark background.
 #' @param cvd Include normal/CVD minimum separation in ranking.
 #' @param top Maximum rows to return.
+#' @param min_cie2000 Minimum worst-vision CIE2000 separation required for a
+#'   qualitative recommendation. The default `0` requests a best-effort
+#'   ranking without imposing an unvalidated perceptual pass/fail cutoff. This
+#'   screen is not applied to continuous palettes, where neighboring gradient
+#'   anchors are intentionally similar.
 #' @return A data frame of ranked palettes and reasons.
 #' @export
 #' @examples
@@ -41,24 +47,27 @@ sc_palette_recommend <- function(
     geometry = c("point", "fill", "line"),
     background = c("light", "dark"),
     cvd = TRUE,
-    top = 5) {
+    top = 5,
+    min_cie2000 = 0) {
   n <- .sc_validate_n(n, allow_null = FALSE)
   use <- match.arg(use)
   geometry <- match.arg(geometry)
   background <- match.arg(background)
   cvd <- .sc_validate_flag(cvd, "cvd")
   top <- .sc_validate_n(top, allow_null = FALSE)
+  if (!is.numeric(min_cie2000) || length(min_cie2000) != 1L ||
+      !is.finite(min_cie2000) || min_cie2000 < 0) {
+    .sc_abort("{.arg min_cie2000} must be a non-negative finite number.")
+  }
   wanted_type <- .sc_use_type(use)
   meta <- .sc_db()$meta
   meta <- meta[meta$palette_type == wanted_type, , drop = FALSE]
+  meta <- meta[meta$status != "provenance_review", , drop = FALSE]
   if (wanted_type == "qualitative") {
     meta <- meta[meta$max_n >= n | meta$palette_id == "chromatic", , drop = FALSE]
   }
   if (!nrow(meta)) {
     return(data.frame())
-  }
-  if (any(meta$status == "recommended")) {
-    meta <- meta[meta$status == "recommended", , drop = FALSE]
   }
   status_score <- c(recommended = 30, compatibility = 15, experimental = 5,
                     provenance_review = 0)
@@ -80,8 +89,6 @@ sc_palette_recommend <- function(
   }
   min_distance <- rep(NA_real_, nrow(meta))
   for (i in seq_len(nrow(meta))) {
-    if (startsWith(meta$palette_id[[i]], "scico_") &&
-        !requireNamespace("scico", quietly = TRUE)) next
     count <- if (wanted_type == "qualitative") n else min(meta$max_n[[i]], 9L)
     colors <- tryCatch(
       sc_palette(
@@ -98,7 +105,10 @@ sc_palette_recommend <- function(
       background = if (background == "light") "#FFFFFF" else "#1A1A1A",
       cvd = modes
     )
-    min_distance[[i]] <- min(audit$vision$min_distance, na.rm = TRUE)
+    distances <- audit$vision$min_distance
+    if (any(is.finite(distances))) {
+      min_distance[[i]] <- min(distances[is.finite(distances)])
+    }
   }
   score <- score + ifelse(is.finite(min_distance), pmin(min_distance, 20), 0)
   reason <- paste0(
@@ -116,6 +126,21 @@ sc_palette_recommend <- function(
     score = score,
     stringsAsFactors = FALSE
   )
+  if (wanted_type == "qualitative" && n > 1L) {
+    adequate <- is.finite(out$min_cie2000) & out$min_cie2000 >= min_cie2000
+    if (!any(adequate)) {
+      .sc_warn(c(
+        "No registered qualitative palette meets the requested separation screen.",
+        "i" = "Requested {n} categories with minimum worst-vision CIE2000 distance {min_cie2000}.",
+        "i" = "Reduce {.arg n}, add shape or pattern encoding, or set {.code min_cie2000 = 0} for a best-effort ranking."
+      ))
+      return(out[0L, , drop = FALSE])
+    }
+    out <- out[adequate, , drop = FALSE]
+  }
+  if (any(out$status == "recommended")) {
+    out <- out[out$status == "recommended", , drop = FALSE]
+  }
   out <- out[order(-out$score, -out$capacity, out$palette_id), , drop = FALSE]
   utils::head(out, top)
 }

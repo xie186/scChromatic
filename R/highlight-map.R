@@ -5,7 +5,8 @@
 #' @param focus_palette Qualitative palette for focused labels.
 #' @param other Muted color for nonfocused labels.
 #' @param background Light or dark background.
-#' @return An `sc_color_map`.
+#' @return An `sc_color_map` whose focus and muted-color metadata are retained
+#'   by JSON and CSV serialization.
 #' @export
 #' @examples
 #' sc_highlight_map(c("B", "T", "NK"), focus = c("B", "NK"))
@@ -28,10 +29,10 @@ sc_highlight_map <- function(labels, focus, focus_palette = "okabe_ito",
   row <- .sc_palette_row(focus_palette)
   .sc_new_map(
     colors, paste0("highlight:", .sc_palette_id(focus_palette)), background, other,
-    provenance = row[, c(
-      "source", "source_palette", "source_url", "source_commit",
-      "citation", "license"
-    ), drop = FALSE],
-    focus = focus
+    map_type = "highlight",
+    provenance = .sc_map_provenance(row),
+    focus = focus,
+    focus_palette = .sc_palette_id(focus_palette),
+    other = .sc_hex(other)
   )
 }

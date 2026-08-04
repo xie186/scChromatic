@@ -9,14 +9,17 @@ write_sc_color_map(map, path)
 \arguments{
 \item{map}{An \code{sc_color_map}.}
 
-\item{path}{Output path.}
+\item{path}{Output \code{.json} or \code{.csv} path.}
 }
 \value{
 \code{path}, invisibly.
 }
 \description{
-JSON is used for a \code{.json} path when jsonlite is installed; otherwise a
-transparent two-column CSV is written.
+JSON files follow the installed \code{sc-color-map.schema.json} schema. CSV files
+keep transparent \code{label} and \code{color} rows and store the same complete,
+schema-versioned JSON payload in one metadata row, so neither format loses
+hierarchy, focus, provenance, locks, aliases, history, context, seed, or
+future JSON-compatible metadata fields.
 }
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}

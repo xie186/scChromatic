@@ -1,11 +1,34 @@
 scChromatic third-party palette notice
 ======================================
 
-This file documents provenance; it is not legal advice and does not claim that
-the package-level GPL license automatically resolves every upstream palette's
-copyright or licensing terms. Entries marked provenance_review in
-palette-provenance.csv should be reviewed before redistribution in contexts
-with additional licensing requirements.
+scChromatic package code and package-owned palettes are free software: you may
+redistribute and/or modify them under GNU GPL version 3 or (at your option) any
+later version. See the repository's top-level LICENSE file or
+https://www.gnu.org/licenses/gpl-3.0.txt for the complete GPL-3.0 terms.
+Third-party materials retain the licenses and attribution requirements
+identified below.
+
+This file documents the provenance and license basis for third-party palette
+data and compatibility formulas distributed by scChromatic. Exact package
+versions and source artifacts are also recorded in palette-provenance.csv.
+
+Pinned source archive SHA-256 checksums
+---------------------------------------
+
+khroma_1.17.0.tar.gz
+40ba0f49e19710453fce918d1e036c4fcb6c7d3a70186236b8ad6b9f777c180f
+
+Polychrome_1.6.1.tar.gz
+4213cfb6247b58153d3668ea09a2691e99939cb2618ba322c80f95894acac58c
+
+dittoSeq_1.24.0.tar.gz
+5c08274913e93158a9660507d50f5e79d4facbe01ab745e4fee0cd703e13454e
+
+viridisLite_0.4.3.tar.gz
+433be9bde66234dc76301fb4ffbbc9fc74bab5c14f4548d8ef2fc0065e121ef5
+
+scico_1.5.0.tar.gz
+647121b3f64118b162a35f9709a301f696239e9a707a04559c0368617c01c9b0
 
 ggsci
 -----
@@ -18,16 +41,14 @@ persistent single-cell color systems; no ggsci palette vectors are included.
 ArchR
 -----
 
-The installed archr_* compatibility vectors are frozen from
-GreenleafLab/ArchR, R/ColorPalettes.R,
-commit 6feec354ad6c8052ddbc4626a2ca2d858ed465bf:
+Earlier development versions evaluated palettes in GreenleafLab/ArchR,
+R/ColorPalettes.R, commit 6feec354ad6c8052ddbc4626a2ca2d858ed465bf:
 https://raw.githubusercontent.com/GreenleafLab/ArchR/6feec354ad6c8052ddbc4626a2ca2d858ed465bf/R/ColorPalettes.R
 
-ArchR is distributed under the MIT License. ArchR explicitly describes
-ArchRPalettes as a collection containing both original and borrowed palettes.
-Known borrowed entries and entries requiring provenance review are retained
-only in the excluded data-raw source snapshot; they are not registered or
-distributed in the installed package.
+ArchR describes that collection as containing both original and borrowed
+palettes, without row-level licensing for every vector. No ArchR palette vector
+or source snapshot is retained in this repository or distributed by the
+package.
 
 D3 Scale Chromatic and CELLXGENE compatibility
 -----------------------------------------------
@@ -94,71 +115,140 @@ Okabe-Ito
 ----------
 
 The Okabe-Ito color universal design palette is documented by Masataka Okabe
-and Kei Ito at https://jfly.uni-koeln.de/color/. The fixed hexadecimal values
-are reproduced with attribution.
+and Kei Ito at https://jfly.uni-koeln.de/color/. The distributed vector is the
+exact `okabeito` object from khroma 1.17.0, with black moved to the end only in
+scChromatic's priority order. khroma 1.17.0 is distributed under GPL (>= 3):
+https://cran.r-project.org/src/contrib/khroma_1.17.0.tar.gz
 
 Paul Tol
 --------
 
 Tol bright, vibrant, muted, and medium-contrast schemes are from Paul Tol,
-"Colour Schemes", https://personal.sron.nl/~pault/. The source permits free
-personal and commercial use with attribution; consult the current source terms.
+"Colour Schemes", https://sronpersonalpages.nl/~pault/. The distributed
+vectors are exact `bright`, `vibrant`, `muted`, and `mediumcontrast` objects
+from khroma 1.17.0, which is distributed under GPL (>= 3):
+https://cran.r-project.org/src/contrib/khroma_1.17.0.tar.gz
+
+Only scChromatic's priority order for `tol_medium_contrast` is rearranged, to
+place intended light/dark contrast pairs next to one another.
 
 Glasbey
 -------
 
 The Glasbey palette is attributed to Glasbey CA, van der Heijden GWAM, Toh VFK,
 and Gray AJ (2007), "Colour Displays for Categorical Images", Color Research
-and Application 32:304-309, https://doi.org/10.1002/col.20327. The registry
-retains provenance_review status for the distributed hexadecimal transcription.
+and Application 32:304-309, https://doi.org/10.1002/col.20327. The distributed
+vector is the exact `glasbey` object from Polychrome 1.6.1. White is moved from
+first to last only in scChromatic's priority order.
 
 Polychrome
 ----------
 
-The 36-color palette is attributed to the Polychrome R package and Coombes KR,
+The 32-color Glasbey and 36-color palette vectors are distributed in the
+Polychrome 1.6.1 source package under Apache License 2.0:
+https://cran.r-project.org/src/contrib/Polychrome_1.6.1.tar.gz
+
+The 36-color `palette36` object is attributed to Coombes KR,
 Brock G, Abrams ZB, and Abruzzo LV (2019), "Polychrome: Creating and Assessing
 Qualitative Palettes with Many Colors", Journal of Statistical Software 90,
-Code Snippet 1, https://doi.org/10.18637/jss.v090.c01. Polychrome is GPL-2.
+Code Snippet 1, https://doi.org/10.18637/jss.v090.c01. The Apache License 2.0
+text is installed with scChromatic at `licenses/Apache-2.0.txt`.
 
 dittoSeq
 --------
 
-ditto40 reproduces the fixed colors identified in dittoSeq's dittoColors()
-source as of dittoSeq v0.2.10:
-https://github.com/dtm2451/dittoSeq/blob/master/R/dittoColors.R
+ditto40 reproduces the first 40 fixed colors returned by `dittoColors()` in the
+official dittoSeq 1.24.0 Bioconductor source package:
+https://bioconductor.org/packages/3.23/bioc/src/contrib/dittoSeq_1.24.0.tar.gz
 
 dittoSeq attributes its base colors to Wong's color-vision-deficiency-aware
 palette. Only entries 1-7 are described as the strongest red-green
 color-vision-deficiency-aware subset. Entries 8-40 are grey plus lighter and
 darker extensions and are not described here as fully color-blind safe.
 
+dittoSeq is distributed under the following MIT terms:
+
+Copyright (c) 2019 Daniel Gary Bunis and The Regents of the University of
+California
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
 viridisLite
 -----------
 
-viridis, cividis, and magma anchors are generated at package-data build time
-with viridisLite (MIT), https://sjmgarnier.github.io/viridisLite/. The original
-matplotlib colormaps are by Nathaniel Smith, Stefan van der Walt, and Eric
-Firing; cividis has separate scientific-map attribution documented upstream.
+The exact 256-color viridis, cividis, and magma lookup tables are generated at
+package-data build time with viridisLite 0.4.3 (MIT) and bundled so runtime
+results do not depend on the installed viridisLite version:
+https://cran.r-project.org/src/contrib/viridisLite_0.4.3.tar.gz
+
+The original matplotlib colormaps are by Nathaniel Smith, Stefan van der Walt,
+and Eric Firing. cividis is by Jamie R. Nunez, Christopher R. Anderton, and
+Ryan S. Renslow; its scientific attribution is documented upstream.
+
+viridisLite is distributed under the following MIT terms:
+
+Copyright (c) 2015 Simon Garnier
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 scico
 -----
 
 scico_batlow, scico_lajolla, scico_vik, and scico_broc are interoperability
-registry entries. Their values are provided only at runtime by the optional
-scico package (MIT), https://github.com/thomasp85/scico, using Fabio Crameri's
-Scientific colour maps. Consult the Scientific colour maps terms and cite
-Crameri, Shephard, and Heron (2020), Nature Communications 11:5444.
+registry entries. scChromatic bundles the exact, unmodified 256-color
+hexadecimal lookup tables returned by scico 1.5.0 (MIT), using Fabio Crameri's
+Scientific colour maps 7.0.1 under CC BY 4.0:
+https://cran.r-project.org/src/contrib/scico_1.5.0.tar.gz
+
+The source lookup-table order and hexadecimal values are unchanged. Requests
+for other output lengths are interpolated from these bundled tables and are
+therefore adaptations by scChromatic. Attribute Fabio Crameri, cite Crameri,
+Shephard, and Heron (2020), Nature Communications 11:5444, and link Scientific
+colour maps 7.0.1 at https://doi.org/10.5281/zenodo.5501399. The complete CC BY
+4.0 terms are installed at `licenses/CC-BY-4.0.txt`.
 
 Generated scChromatic palettes
 ------------------------------
 
-chromatic is generated for scChromatic and frozen as a nested, deterministic
-40-color sequence under GPL (>= 3). Runtime qualitative extension also belongs
-to scChromatic. These colors are perceptually optimized and audited against
-normal, deutan, protan, and tritan simulations; they are not claimed to be
-universally color-blind safe.
+chromatic is regenerated for scChromatic as a nested, deterministic 40-color
+sequence under GPL (>= 3). Runtime qualitative extension also belongs to
+scChromatic. These colors are perceptually optimized and audited against normal,
+deutan, protan, and tritan simulations; they are not claimed to be universally
+color-blind safe. The generator is data-raw/generate-owned-palettes.R.
 
-chromatic_balance is a frozen 11-anchor diverging HCL palette generated with
+chromatic_balance is an 11-anchor diverging HCL palette generated with
 colorspace::diverging_hcl() using hues 250 and 10, chroma 75, luminance 35 to
 95, and power 1.1. It uses a neutral midpoint and was audited under normal,
 deutan, protan, and tritan simulations. The colorspace package is BSD-3-Clause;

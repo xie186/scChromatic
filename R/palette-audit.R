@@ -1,40 +1,67 @@
 .sc_audit_colors <- function(x) {
   if (inherits(x, "sc_color_map")) {
-    return(list(colors = as_named_colors(x), palette_type = "qualitative", palette_id = x$palette))
-  }
-  if (is.character(x) && length(x) == 1L && !.sc_is_color(x)) {
+    resolved <- list(
+      colors = as_named_colors(x), palette_type = "qualitative",
+      palette_id = x$palette
+    )
+  } else if (is.character(x) && length(x) == 1L && !.sc_is_color(x)) {
     row <- .sc_palette_row(x)
-    return(list(
+    resolved <- list(
       colors = sc_palette(row$palette_id[[1L]], row$max_n[[1L]], extend = "generate"),
       palette_type = row$palette_type[[1L]],
       palette_id = row$palette_id[[1L]]
-    ))
+    )
+  } else {
+    if (!is.character(x)) {
+      .sc_abort("{.arg x} must be a palette ID, color vector, or sc_color_map.")
+    }
+    resolved <- list(colors = x, palette_type = NA_character_, palette_id = NA_character_)
   }
-  if (!is.character(x)) {
-    .sc_abort("{.arg x} must be a palette ID, color vector, or sc_color_map.")
+
+  colors <- resolved$colors
+  if (!length(colors)) {
+    .sc_abort("{.arg x} must contain at least one color.")
   }
-  list(colors = x, palette_type = NA_character_, palette_id = NA_character_)
+  labels <- names(colors)
+  if (!is.null(labels)) {
+    if (anyNA(labels) || any(!nzchar(trimws(labels)))) {
+      .sc_abort("Named colors in {.arg x} must have a non-missing label for every color.")
+    }
+    if (anyDuplicated(labels)) {
+      .sc_abort("Named colors in {.arg x} contain duplicate labels.")
+    }
+  }
+  resolved
 }
 
 .sc_distance_summary <- function(colors, mode) {
-  viewed <- .sc_cvd(colors, mode)
+  labels <- names(colors)
+  viewed <- .sc_cvd(unname(colors), mode)
   distance <- .sc_pairwise_distance(viewed)
   if (length(colors) < 2L) {
     return(data.frame(
       vision = mode, min_distance = NA_real_, median_distance = NA_real_,
-      worst_pair = NA_character_, stringsAsFactors = FALSE
+      worst_pair = NA_character_, worst_label_1 = NA_character_,
+      worst_label_2 = NA_character_, worst_color_1 = NA_character_,
+      worst_color_2 = NA_character_, stringsAsFactors = FALSE
     ))
   }
   upper <- upper.tri(distance)
   values <- distance[upper]
   pairs <- which(upper, arr.ind = TRUE)
   worst <- pairs[which.min(values), , drop = FALSE]
-  label <- paste(colors[worst[1L, 1L]], colors[worst[1L, 2L]], sep = " / ")
+  index <- unname(worst[1L, ])
+  pair_colors <- unname(colors[index])
+  pair_labels <- if (is.null(labels)) pair_colors else labels[index]
   data.frame(
     vision = mode,
     min_distance = min(values, na.rm = TRUE),
     median_distance = stats::median(values, na.rm = TRUE),
-    worst_pair = label,
+    worst_pair = paste(pair_labels, collapse = " / "),
+    worst_label_1 = if (is.null(labels)) NA_character_ else pair_labels[[1L]],
+    worst_label_2 = if (is.null(labels)) NA_character_ else pair_labels[[2L]],
+    worst_color_1 = pair_colors[[1L]],
+    worst_color_2 = pair_colors[[2L]],
     stringsAsFactors = FALSE
   )
 }
@@ -42,13 +69,18 @@
 #' Audit palette separation and background contrast
 #'
 #' Contrast values are diagnostic for plotted marks and are not treated as
-#' definitive WCAG pass/fail thresholds for small points.
+#' definitive WCAG pass/fail thresholds for small points. Fully named color
+#' vectors retain their labels in the worst-pair diagnostics. Exact duplicate
+#' assignments remain in the distance calculation and therefore produce a
+#' zero-distance collision rather than being discarded.
 #'
 #' @param x Palette ID, color vector, or `sc_color_map`.
 #' @param background Background color.
 #' @param cvd Vision simulations to include.
 #' @param method Color-distance method; currently `"cie2000"`.
-#' @return An object of class `sc_palette_audit`.
+#' @return An object of class `sc_palette_audit`. Its `vision` table includes
+#'   the display-ready `worst_pair` plus separate label and color columns for
+#'   the pair. Label columns are `NA` for unnamed color vectors.
 #' @export
 #' @examples
 #' sc_palette_audit("okabe_ito", cvd = c("none", "deutan"))
@@ -73,18 +105,20 @@ sc_palette_audit <- function(x, background = "#FFFFFF",
   colors <- resolved$colors
   valid <- vapply(colors, function(z) !is.na(z) && .sc_is_color(z), logical(1))
   normalized <- .sc_hex(colors[valid])
+  if (!is.null(names(colors))) {
+    names(normalized) <- names(colors)[valid]
+  }
   duplicate_count <- sum(duplicated(normalized))
-  unique_colors <- unique(normalized)
   vision <- do.call(rbind, lapply(modes, function(mode) {
-    .sc_distance_summary(unique_colors, mode)
+    .sc_distance_summary(normalized, mode)
   }))
-  contrast <- if (length(unique_colors)) {
-    as.numeric(colorspace::contrast_ratio(unique_colors, background))
+  contrast <- if (length(normalized)) {
+    as.numeric(colorspace::contrast_ratio(normalized, background))
   } else {
     numeric()
   }
-  lightness <- if (length(unique_colors)) {
-    farver::decode_colour(unique_colors, to = "lab")[, "l"]
+  lightness <- if (length(normalized)) {
+    farver::decode_colour(normalized, to = "lab")[, "l"]
   } else {
     numeric()
   }
@@ -95,9 +129,9 @@ sc_palette_audit <- function(x, background = "#FFFFFF",
     NA
   }
   diverging_distinct <- if (identical(resolved$palette_type, "diverging") &&
-                            length(unique_colors) >= 3L) {
-    center <- unique_colors[[ceiling(length(unique_colors) / 2)]]
-    endpoints <- unique_colors[c(1L, length(unique_colors))]
+                            length(normalized) >= 3L) {
+    center <- normalized[[ceiling(length(normalized) / 2)]]
+    endpoints <- normalized[c(1L, length(normalized))]
     all(.sc_pairwise_distance(center, endpoints) > 5) &&
       .sc_pairwise_distance(endpoints)[1L, 2L] > 5
   } else {
@@ -121,8 +155,11 @@ sc_palette_audit <- function(x, background = "#FFFFFF",
     if (duplicate_count) "duplicate_colors",
     if (identical(monotonic, FALSE)) "non_monotonic_lightness",
     if (identical(diverging_distinct, FALSE)) "weak_diverging_structure",
-    if (length(unique_colors) > 20L) "high_cardinality_needs_redundant_encoding"
+    if (identical(resolved$palette_type, "qualitative") && length(colors) > 20L) {
+      "high_cardinality_needs_redundant_encoding"
+    }
   )
+  contrast_names <- if (is.null(names(normalized))) unname(normalized) else names(normalized)
   structure(
     list(
       palette_id = resolved$palette_id,
@@ -131,7 +168,7 @@ sc_palette_audit <- function(x, background = "#FFFFFF",
       method = method,
       summary = summary,
       vision = vision,
-      contrast = stats::setNames(contrast, unique_colors),
+      contrast = stats::setNames(contrast, contrast_names),
       flags = flags
     ),
     class = "sc_palette_audit"

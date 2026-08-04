@@ -4,7 +4,8 @@ test_that("audit includes every requested vision mode", {
   expect_s3_class(audit, "sc_palette_audit")
   expect_setequal(audit$vision$vision, modes)
   expect_true(all(c(
-    "min_distance", "median_distance", "worst_pair"
+    "min_distance", "median_distance", "worst_pair", "worst_label_1",
+    "worst_label_2", "worst_color_1", "worst_color_2"
   ) %in% names(audit$vision)))
   expect_true(all(c(
     "min_contrast", "median_contrast", "lightness_monotonic",
@@ -16,6 +17,46 @@ test_that("invalid and duplicate colors are reported", {
   audit <- sc_palette_audit(c("#000000", "#000000", "not-a-color"), cvd = "none")
   expect_identical(audit$summary$invalid_color_count, 1L)
   expect_identical(audit$summary$duplicate_count, 1L)
+  expect_identical(audit$summary$min_distance, 0)
+})
+
+test_that("worst pairs retain biological labels and their colors", {
+  colors <- c(B_cell = "#000000", T_cell = "#000000", NK_cell = "#FFFFFF")
+  audit <- sc_palette_audit(colors, cvd = "none")
+
+  expect_identical(audit$vision$worst_pair, "B_cell / T_cell")
+  expect_identical(audit$vision$worst_label_1, "B_cell")
+  expect_identical(audit$vision$worst_label_2, "T_cell")
+  expect_identical(audit$vision$worst_color_1, "#000000")
+  expect_identical(audit$vision$worst_color_2, "#000000")
+  expect_named(audit$contrast, names(colors))
+})
+
+test_that("named audit inputs require complete unique labels", {
+  expect_error(
+    sc_palette_audit(c(B = "#000000", "#FFFFFF")),
+    "non-missing label"
+  )
+  expect_error(
+    sc_palette_audit(c(B = "#000000", B = "#FFFFFF")),
+    "duplicate labels"
+  )
+  expect_error(sc_palette_audit(character()), "at least one color")
+})
+
+test_that("only qualitative palettes receive categorical cardinality flags", {
+  continuous <- c("viridis", "chromatic_balance", "d3_cool")
+  for (id in continuous) {
+    expect_false(
+      "high_cardinality_needs_redundant_encoding" %in% sc_palette_audit(id)$flags,
+      info = id
+    )
+  }
+
+  map <- sc_color_map(sprintf("cell_type_%02d", seq_len(21)))
+  expect_true(
+    "high_cardinality_needs_redundant_encoding" %in% sc_palette_audit(map)$flags
+  )
 })
 
 test_that("palette previews render on light and dark backgrounds", {

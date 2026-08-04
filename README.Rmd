@@ -1,10 +1,15 @@
 ---
-output: github_document
+output:
+  github_document:
+    html_preview: false
 ---
 
 <!-- README.md is generated from README.Rmd. -->
 
 # scChromatic
+
+[![R-CMD-check](https://github.com/xie186/scChromatic/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/xie186/scChromatic/actions/workflows/R-CMD-check.yaml)
+[![test-coverage](https://github.com/xie186/scChromatic/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/xie186/scChromatic/actions/workflows/test-coverage.yaml)
 
 Reproducible, provenance-aware color systems for single-cell data
 visualization.
@@ -93,6 +98,21 @@ ggplot(sc_example, aes(UMAP1, UMAP2, color = pseudotime)) +
   scale_color_sc_c("cividis")
 ```
 
+## Portable, versioned color maps
+
+```r
+path <- tempfile(fileext = ".json")
+write_sc_color_map(cell_map, path)
+restored_map <- read_sc_color_map(path)
+stopifnot(identical(as_named_colors(restored_map), as_named_colors(cell_map)))
+```
+
+JSON and CSV preserve the complete mapping contract, including provenance,
+hierarchy, focus, aliases, locks, history, context, and seed metadata. The
+installed [Draft 2020-12 JSON Schema](https://json-schema.org/draft/2020-12) at
+`schema/sc-color-map.schema.json` makes map files independently validatable
+outside R; unknown future schema versions are rejected instead of guessed.
+
 ## Accessibility auditing
 
 ```r
@@ -107,16 +127,15 @@ guarantee that every viewer or plotting geometry can distinguish every color.
 ## Palette provenance
 
 `sc_palette_info()` exposes capacity, intended use, source URL, exact source
-commit where known, citation, license, derivation status, and frozen audit
-metrics. The full registry is installed at
-`extdata/palette-provenance.csv`; `NOTICE` records borrowed-palette disclosures
-and unresolved review items.
+version and commit or archive hash where known, citation, license, derivation
+status, and frozen audit metrics. The full registry is installed at
+`extdata/palette-provenance.csv`; `NOTICE` records applicable third-party
+license notices.
 
 ## Interoperability
 
 `as_named_colors()` returns the ordinary named vectors expected by Seurat,
 SingleCellExperiment metadata workflows, ArchR plotting arguments, and
-ComplexHeatmap annotations. These frameworks remain optional. Frozen ArchR
-compatibility colors remain available under explicit `archr_*` palette IDs;
-scico palettes are also optional and produce an installation hint only when
-requested.
+ComplexHeatmap annotations. These frameworks remain optional. ArchR
+compatibility vectors are not distributed. The licensed `scico_*` LUTs are
+bundled from pinned sources and require no runtime framework dependency.

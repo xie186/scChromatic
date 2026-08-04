@@ -10,10 +10,13 @@ read_sc_color_map(path)
 \item{path}{JSON or CSV path written by \code{\link[=write_sc_color_map]{write_sc_color_map()}}.}
 }
 \value{
-An \code{sc_color_map}.
+A validated \code{sc_color_map} using the current schema version.
 }
 \description{
-Read a persistent color map
+Versioned JSON and CSV files are validated before object construction.
+Unversioned JSON files and legacy two-column CSV files written by
+scChromatic 0.1.0 remain readable and are migrated to schema version 1.
+Unknown future schema versions are rejected rather than guessed.
 }
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}

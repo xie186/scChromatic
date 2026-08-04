@@ -16,8 +16,7 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 This gallery is generated from the package's offline registry, so it stays in
 sync with the colors returned by `sc_palette()`. Hover over a qualitative
 swatch to see its hexadecimal value. Status groups put recommended starting
-points first while keeping compatibility and provenance-review collections
-visible.
+points first while keeping compatibility collections visible.
 
 ```{r summary, results='asis'}
 ids <- sc_palette_names()
@@ -51,23 +50,6 @@ cat(
 palette_card <- function(id) {
   metadata <- sc_palette_info(id)
   type <- metadata$palette_type[[1L]]
-  if (startsWith(id, "scico_") &&
-      !requireNamespace("scico", quietly = TRUE)) {
-    return(paste0(
-      '<article class="palette-card">',
-      '<div class="palette-id"><strong class="palette-heading"><code>',
-      id,
-      "</code></strong>",
-      '<span class="palette-badge">', type, "</span></div>",
-      '<div class="palette-meta">',
-      metadata$source[[1L]], " · ", metadata$status[[1L]],
-      "<br>", gsub(",", " · ", metadata$intended_use[[1L]]),
-      "</div>",
-      '<div class="palette-unavailable">',
-      "Install the optional scico package to render this palette.",
-      "</div></article>"
-    ))
-  }
   n <- if (type == "qualitative") metadata$max_n[[1L]] else 64L
   colors <- sc_palette(
     id,
@@ -137,7 +119,7 @@ palette_section("Compatibility collections", "compatibility")
 ```
 
 Compatibility palettes preserve explicitly named external collections,
-including frozen `archr_*` colors, optional `scico_*` palettes, and the
+including licensed Polychrome and `scico_*` palettes, and the
 `d3_rainbow` and `d3_cool` schemes used by CELLXGENE. `d3_rainbow` reproduces
 CELLXGENE's categorical fallback, but its colors depend on both the requested
 count and category order. It is therefore a visual-compatibility option, not a
@@ -150,13 +132,6 @@ exact 100 D3 source bins are available with
 through those bins in reverse order, so the default priority order and the R
 continuous scale run from low green to high purple; the smooth R scale preserves
 the appearance rather than identical upstream bin boundaries.
-
-```{r provenance-review, results='asis'}
-palette_section("Provenance review", "provenance_review")
-```
-
-These palettes remain visible for reproducibility while their original source
-or licensing details receive additional review.
 
 For signed values, pass the data midpoint to the scale so rescaling is
 centered correctly:

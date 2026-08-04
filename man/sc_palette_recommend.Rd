@@ -11,7 +11,8 @@ sc_palette_recommend(
   geometry = c("point", "fill", "line"),
   background = c("light", "dark"),
   cvd = TRUE,
-  top = 5
+  top = 5,
+  min_cie2000 = 0
 )
 }
 \arguments{
@@ -26,6 +27,12 @@ sc_palette_recommend(
 \item{cvd}{Include normal/CVD minimum separation in ranking.}
 
 \item{top}{Maximum rows to return.}
+
+\item{min_cie2000}{Minimum worst-vision CIE2000 separation required for a
+qualitative recommendation. The default \code{0} requests a best-effort
+ranking without imposing an unvalidated perceptual pass/fail cutoff. This
+screen is not applied to continuous palettes, where neighboring gradient
+anchors are intentionally similar.}
 }
 \value{
 A data frame of ranked palettes and reasons.
@@ -34,8 +41,9 @@ A data frame of ranked palettes and reasons.
 Ranking uses palette type, intended-use metadata, capacity, status,
 background guidance, and measured CIE2000 separation. Registered
 \code{recommended} palettes are preferred as a group; compatibility collections
-are considered only when no recommended palette fits. No learned model is
-involved.
+are considered only when no recommended palette meets the qualitative
+separation screen. No learned model is involved. The screen is a pragmatic
+diagnostic, not a universal perceptual pass/fail threshold.
 }
 \examples{
 sc_palette_recommend(8, use = "cell_identity")

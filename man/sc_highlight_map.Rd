@@ -24,7 +24,8 @@ sc_highlight_map(
 \item{background}{Light or dark background.}
 }
 \value{
-An \code{sc_color_map}.
+An \code{sc_color_map} whose focus and muted-color metadata are retained
+by JSON and CSV serialization.
 }
 \description{
 Create a focus-versus-other color map
