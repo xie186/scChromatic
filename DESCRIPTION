@@ -11,9 +11,12 @@ Authors@R:
            ))
 Description: Reproducible, provenance-aware, and accessible color systems for
     single-cell data visualization. Persistent mappings keep labels stable
-    across subsets and reordered factors, while palette diagnostics and
-    recommendations support categorical annotations, expression, signed
-    scores, pseudotime, quality-control metrics, and heatmaps.
+    across subsets and reordered factors. Relationship-aware optimization uses
+    supplied affinities or sample-balanced coordinate neighborhoods, canonical
+    locks, and explicit stability budgets. Optional redundant shape and pattern
+    encodings support confusable colors, while palette diagnostics and
+    recommendations cover categorical annotations, expression, signed scores,
+    pseudotime, quality-control metrics, and heatmaps.
 License: GPL (>= 3)
 URL: https://xie186.github.io/scChromatic/, https://github.com/xie186/scChromatic
 BugReports: https://github.com/xie186/scChromatic/issues

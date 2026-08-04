@@ -68,6 +68,45 @@ ggplot(stimulated, aes(UMAP1, UMAP2, color = cell_type)) +
   scale_color_sc_map(cell_map)
 ```
 
+## Relationship-aware maps
+
+A symmetric affinity matrix can guide related annotations toward closer
+hues, while a soft penalty discourages worst-case separation shortfalls
+across normal and simulated CVD views. `sc_relationship_from_knn()`
+derives such a matrix from within-sample coordinate neighborhoods, then
+combines samples with equal weight so a large sample does not dominate.
+Samples missing either label are excluded for that pair, and pairs never
+observed together are errors by default. Hard locks never move; the
+stability budget limits changes to other canonical assignments.
+
+``` r
+affinity <- sc_relationship_from_knn(
+  as.matrix(sc_example[c("UMAP1", "UMAP2")]),
+  labels = sc_example$cell_type,
+  sample = sc_example$sample,
+  k = 15
+)
+relationship_map <- sc_relationship_map(
+  affinity,
+  canonical = cell_map,
+  locked = "B cell",
+  stability_budget = 1,
+  seed = 2026
+)
+as_named_colors(relationship_map)
+
+encoding <- sc_redundant_encoding(relationship_map, channel = "shape")
+setNames(encoding$shape, encoding$label)
+```
+
+The UMAP-like coordinates above demonstrate the interface only. For
+quantitative context, prefer appropriately scaled PCA, model-derived
+latent, or spatial coordinates. Redundant encodings leave colors
+unchanged; `channel = "pattern"` returns pattern names and texture
+groups for compatible plotting layers. Allocate redundancy once for the
+full label set and reuse that table across subsets; rerunning on a
+changed label set can change the graph allocation.
+
 ## Continuous expression and signed scores
 
 ``` r

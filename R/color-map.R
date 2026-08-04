@@ -276,6 +276,12 @@
   if (!length(new_labels)) {
     return(map)
   }
+  if (identical(map$palette, "derived:relationship-v1")) {
+    .sc_abort(c(
+      "Relationship maps require relationship values for every new label.",
+      "i" = "Rerun {.fun sc_relationship_map} with an expanded matrix and {.arg canonical} set to this map."
+    ))
+  }
   if (identical(map$map_type, "hierarchy")) {
     .sc_abort(c(
       "Hierarchy maps require a parent for every new child.",
@@ -814,12 +820,12 @@ write_sc_color_map <- function(map, path) {
   if (grepl("\\.json$", path, ignore.case = TRUE)) {
     jsonlite::write_json(
       payload, path, auto_unbox = TRUE, pretty = TRUE, null = "null", na = "null",
-      dataframe = "rows", keep_vec_names = TRUE
+      dataframe = "rows", keep_vec_names = TRUE, digits = 17
     )
   } else {
     metadata <- as.character(jsonlite::toJSON(
       payload, auto_unbox = TRUE, pretty = FALSE, null = "null", na = "null",
-      dataframe = "rows", keep_vec_names = TRUE
+      dataframe = "rows", keep_vec_names = TRUE, digits = 17
     ))
     table <- data.frame(
       record_type = c("metadata", rep("mapping", length(map$labels))),

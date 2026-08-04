@@ -4,6 +4,8 @@
   farver::compare_colour(xr, yr, from_space = "rgb", method = "cie2000")
 }
 
+.sc_candidate_grid_version <- "hcl-grid-v1"
+
 .sc_candidate_colors <- function(background) {
   lightness <- if (background == "light") c(40, 52, 64, 76) else c(48, 60, 72, 84)
   grid <- expand.grid(

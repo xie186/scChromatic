@@ -1,5 +1,15 @@
 # scChromatic (development version)
 
+* Adds `sc_relationship_map()`, a seeded relationship-affinity optimizer that
+  scores worst-case CIE2000 separation across normal and simulated CVD views,
+  preserves hard canonical locks, limits other canonical changes with an
+  explicit stability budget, and records the effective matrix, baseline,
+  settings, outcome, and construction provenance in the versioned map.
+* Adds `sc_relationship_from_knn()` for exact within-sample coordinate
+  neighborhoods, pairwise-complete aggregation with equal sample weights, and
+  recorded construction and support metadata.
+* Adds `sc_redundant_encoding()` to assign shapes, patterns, or their
+  combinations to CVD-confusable color pairs without changing their colors.
 * Removes the unresolved ArchR palette snapshot and all installed `archr_*`
   registry entries; ArchR is no longer a package or palette-data dependency.
 * Pins every remaining third-party palette to an exact licensed source package,

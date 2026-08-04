@@ -38,7 +38,7 @@
     return(NULL)
   }
   if (!is.numeric(n) || length(n) != 1L || !is.finite(n) || n < 1 ||
-      n != as.integer(n)) {
+      n > .Machine$integer.max || n != floor(n)) {
     .sc_abort("{.arg n} must be a positive whole number.")
   }
   as.integer(n)
