@@ -679,6 +679,16 @@ update_sc_color_map <- function(map, labels, extend = c("generate", "error")) {
   x
 }
 
+.sc_payload_from_json <- function(json) {
+  payload <- jsonlite::fromJSON(json, simplifyVector = TRUE)
+  records <- jsonlite::fromJSON(
+    json, simplifyVector = TRUE, simplifyDataFrame = FALSE
+  )
+  fields <- intersect(c("provenance", "history"), names(records))
+  payload[fields] <- records[fields]
+  payload
+}
+
 .sc_map_from_payload <- function(payload) {
   if (!is.list(payload)) {
     .sc_abort("Color-map JSON must contain an object.")
@@ -864,7 +874,7 @@ read_sc_color_map <- function(path) {
   is_json <- grepl("^[[:space:]]*\\{", sub("^\\ufeff", "", prefix))
   if (is_json) {
     payload <- tryCatch(
-      jsonlite::read_json(path, simplifyVector = TRUE),
+      .sc_payload_from_json(path),
       error = function(e) .sc_abort("Invalid color-map JSON: {conditionMessage(e)}")
     )
     if (is.null(payload$schema)) {
@@ -902,7 +912,7 @@ read_sc_color_map <- function(path) {
     .sc_abort("Versioned CSV color-map metadata is empty.")
   }
   payload <- tryCatch(
-    jsonlite::fromJSON(metadata_text, simplifyVector = TRUE),
+    .sc_payload_from_json(metadata_text),
     error = function(e) .sc_abort("Invalid JSON in CSV color-map metadata: {conditionMessage(e)}")
   )
   csv_mapping <- table[table$record_type == "mapping", c("label", "color"), drop = FALSE]

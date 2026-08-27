@@ -173,6 +173,25 @@ test_that("relationship construction provenance survives JSON and CSV", {
   )
 })
 
+test_that("registered provenance survives derived map round trips", {
+  affinity <- relationship_fixture(c("A", "B"))
+  canonical <- sc_color_map(c("A", "B"))
+  canonical$provenance[[1]]["review"] <- list(NULL)
+  canonical$history <- list(list(action = "created", note = NULL))
+  map <- sc_relationship_map(
+    affinity, canonical = canonical, stability_budget = 0, seed = 1
+  )
+
+  for (extension in c(".json", ".csv")) {
+    path <- tempfile(fileext = extension)
+    write_sc_color_map(map, path)
+    restored <- read_sc_color_map(path)
+    for (field in names(map)) {
+      expect_identical(restored[[field]], map[[field]], info = field)
+    }
+  }
+})
+
 test_that("whole-valued construction metadata round trips exactly", {
   affinity <- relationship_fixture(c("A", "B"))
   canonical <- c(A = "#000000", B = "#000000")
