@@ -14,6 +14,7 @@
 <url><loc>https://xie186.github.io/scChromatic/reference/read_sc_color_map.html</loc></url>
 <url><loc>https://xie186.github.io/scChromatic/reference/scChromatic-package.html</loc></url>
 <url><loc>https://xie186.github.io/scChromatic/reference/sc_color_map.html</loc></url>
+<url><loc>https://xie186.github.io/scChromatic/reference/sc_color_map_plot.html</loc></url>
 <url><loc>https://xie186.github.io/scChromatic/reference/sc_example.html</loc></url>
 <url><loc>https://xie186.github.io/scChromatic/reference/sc_hierarchy_map.html</loc></url>
 <url><loc>https://xie186.github.io/scChromatic/reference/sc_highlight_map.html</loc></url>
@@ -25,6 +26,9 @@
 <url><loc>https://xie186.github.io/scChromatic/reference/sc_palette_names.html</loc></url>
 <url><loc>https://xie186.github.io/scChromatic/reference/sc_palette_plot.html</loc></url>
 <url><loc>https://xie186.github.io/scChromatic/reference/sc_palette_recommend.html</loc></url>
+<url><loc>https://xie186.github.io/scChromatic/reference/sc_redundant_encoding.html</loc></url>
+<url><loc>https://xie186.github.io/scChromatic/reference/sc_relationship_from_knn.html</loc></url>
+<url><loc>https://xie186.github.io/scChromatic/reference/sc_relationship_map.html</loc></url>
 <url><loc>https://xie186.github.io/scChromatic/reference/scale_color_sc_c.html</loc></url>
 <url><loc>https://xie186.github.io/scChromatic/reference/scale_color_sc_d.html</loc></url>
 <url><loc>https://xie186.github.io/scChromatic/reference/scale_color_sc_map.html</loc></url>

@@ -38,13 +38,14 @@ sc_highlight_map(
 
 ## Value
 
-An `sc_color_map`.
+An `sc_color_map` whose focus and muted-color metadata are retained by
+JSON and CSV serialization.
 
 ## Examples
 
 ``` r
 sc_highlight_map(c("B", "T", "NK"), focus = c("B", "NK"))
-#> <sc_color_map[3]> palette: highlight:okabe_ito; background: light
+#> <sc_color_map[3]> type: highlight; palette: highlight:okabe_ito; background: light; schema: v1
 #>   B: #E69F00
 #>   NK: #56B4E9
 #>   T: #D9D9D9

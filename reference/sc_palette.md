@@ -4,7 +4,9 @@ Fixed qualitative palettes are truncated but never interpolated. Use
 `extend = "generate"` to deterministically append colors while
 preserving all selected registered colors. Continuous palettes preserve
 their registered anchors at the native length and otherwise interpolate
-in Lab space.
+in Lab space. The cyclic `d3_rainbow` compatibility palette is sampled
+directly at `i / n`, so its colors intentionally change when `n`
+changes.
 
 ## Usage
 

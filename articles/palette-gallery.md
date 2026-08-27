@@ -5,41 +5,43 @@ stays in sync with the colors returned by
 [`sc_palette()`](https://xie186.github.io/scChromatic/reference/sc_palette.md).
 Hover over a qualitative swatch to see its hexadecimal value. Status
 groups put recommended starting points first while keeping compatibility
-and provenance-review collections visible.
+collections visible.
 
-**39**registered palettes
+**19**registered palettes
 
-**20**qualitative
+**9**qualitative
 
-**13**sequential
+**6**sequential
 
-**6**diverging
+**3**diverging
+
+**1**cyclic
 
 ## Recommended palettes
 
 **`okabe_ito`**qualitative
 
-Okabe-Ito · 8 colors · recommended  
+khroma · 8 colors · recommended  
 cell_identity · sample · condition · highlight
 
 **`tol_bright`**qualitative
 
-Paul Tol · 7 colors · recommended  
+khroma · 7 colors · recommended  
 cell_identity · sample · condition · highlight
 
 **`tol_vibrant`**qualitative
 
-Paul Tol · 7 colors · recommended  
+khroma · 7 colors · recommended  
 cell_identity · sample · condition · highlight
 
 **`tol_muted`**qualitative
 
-Paul Tol · 9 colors · recommended  
+khroma · 9 colors · recommended  
 cell_identity · sample · lineage · heatmap_annotation
 
 **`tol_medium_contrast`**qualitative
 
-Paul Tol · 6 colors · recommended  
+khroma · 6 colors · recommended  
 condition · sample · highlight
 
 **`ditto40`**qualitative
@@ -78,6 +80,26 @@ only when more colors are needed.
 
 ## Compatibility collections
 
+**`glasbey32`**qualitative
+
+Polychrome · 32 colors · compatibility  
+cell_identity · sample · heatmap_annotation
+
+**`polychrome36`**qualitative
+
+Polychrome · 36 colors · compatibility  
+cell_identity · sample · heatmap_annotation
+
+**`d3_rainbow`**cyclic
+
+D3 Scale Chromatic · compatibility  
+cell_identity · sample · condition · lineage · heatmap_annotation
+
+**`d3_cool`**sequential
+
+D3 Scale Chromatic · compatibility  
+expression · pseudotime · qc
+
 **`scico_batlow`**sequential
 
 scico · compatibility  
@@ -98,133 +120,23 @@ signed_score
 scico · compatibility  
 signed_score
 
-**`archr_stallion`**qualitative
-
-ArchR · 20 colors · compatibility  
-cell_identity · sample · condition · lineage · heatmap_annotation
-
-**`archr_stallion2`**qualitative
-
-ArchR · 19 colors · compatibility  
-cell_identity · sample · condition · lineage · heatmap_annotation
-
-**`archr_calm`**qualitative
-
-ArchR · 20 colors · compatibility  
-cell_identity · sample · condition · lineage · heatmap_annotation
-
-**`archr_kelly`**qualitative
-
-ArchR · 20 colors · compatibility  
-cell_identity · sample · condition · lineage · heatmap_annotation
-
-**`archr_bear`**qualitative
-
-ArchR · 16 colors · compatibility  
-cell_identity · sample · condition · lineage · heatmap_annotation
-
-**`archr_iron_man`**qualitative
-
-ArchR · 15 colors · compatibility  
-cell_identity · sample · condition · lineage · heatmap_annotation
-
-**`archr_circus`**qualitative
-
-ArchR · 15 colors · compatibility  
-cell_identity · sample · condition · lineage · heatmap_annotation
-
-**`archr_paired`**qualitative
-
-ArchR · 12 colors · compatibility  
-cell_identity · sample · condition · lineage · heatmap_annotation
-
-**`archr_grove`**qualitative
-
-ArchR · 11 colors · compatibility  
-cell_identity · sample · condition · lineage · heatmap_annotation
-
-**`archr_summer_night`**qualitative
-
-ArchR · 7 colors · compatibility  
-cell_identity · sample · condition · lineage · heatmap_annotation
-
-**`archr_captain`**qualitative
-
-ArchR · 5 colors · compatibility  
-cell_identity · sample · condition · lineage · heatmap_annotation
-
-**`archr_horizon`**sequential
-
-ArchR · compatibility  
-expression · pseudotime · qc
-
-**`archr_horizon_extra`**sequential
-
-ArchR · compatibility  
-expression · pseudotime · qc
-
-**`archr_blue_yellow`**sequential
-
-ArchR · compatibility  
-expression · pseudotime · qc
-
-**`archr_white_red`**sequential
-
-ArchR · compatibility  
-expression · pseudotime · qc
-
-**`archr_comet`**sequential
-
-ArchR · compatibility  
-expression · pseudotime · qc
-
-**`archr_beach`**sequential
-
-ArchR · compatibility  
-expression · pseudotime · qc
-
-**`archr_coolwarm`**diverging
-
-ArchR · compatibility  
-expression · pseudotime · qc
-
-**`archr_fireworks`**diverging
-
-ArchR · compatibility  
-expression · pseudotime · qc
-
-**`archr_grey_magma`**sequential
-
-ArchR · compatibility  
-expression · pseudotime · qc
-
-**`archr_fireworks2`**diverging
-
-ArchR · compatibility  
-expression · pseudotime · qc
-
-**`archr_purple_orange`**sequential
-
-ArchR · compatibility  
-expression · pseudotime · qc
-
 Compatibility palettes preserve explicitly named external collections,
-including frozen `archr_*` colors and optional `scico_*` palettes.
+including licensed Polychrome and `scico_*` palettes, and the
+`d3_rainbow` and `d3_cool` schemes used by CELLXGENE. `d3_rainbow`
+reproduces CELLXGENE’s categorical fallback, but its colors depend on
+both the requested count and category order. It is therefore a
+visual-compatibility option, not a stable label-to-color contract, and
+[`sc_color_map()`](https://xie186.github.io/scChromatic/reference/sc_color_map.md)
+intentionally excludes it. Request it with `sc_palette("d3_rainbow", n)`
+or a discrete `scale_*_sc_d()`.
 
-## Provenance review
-
-**`glasbey32`**qualitative
-
-Glasbey et al. · 32 colors · provenance_review  
-cell_identity · sample · heatmap_annotation
-
-**`polychrome36`**qualitative
-
-Polychrome · 36 colors · provenance_review  
-cell_identity · sample · heatmap_annotation
-
-These palettes remain visible for reproducibility while their original
-source or licensing details receive additional review.
+`d3_cool` provides a smooth continuous gradient for visual
+compatibility. Its exact 100 D3 source bins are available with
+`sc_palette("d3_cool", 100, selection = "source")`. CELLXGENE assigns
+points through those bins in reverse order, so the default priority
+order and the R continuous scale run from low green to high purple; the
+smooth R scale preserves the appearance rather than identical upstream
+bin boundaries.
 
 For signed values, pass the data midpoint to the scale so rescaling is
 centered correctly:

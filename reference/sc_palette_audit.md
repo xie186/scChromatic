@@ -1,7 +1,10 @@
 # Audit palette separation and background contrast
 
 Contrast values are diagnostic for plotted marks and are not treated as
-definitive WCAG pass/fail thresholds for small points.
+definitive WCAG pass/fail thresholds for small points. Fully named color
+vectors retain their labels in the worst-pair diagnostics. Exact
+duplicate assignments remain in the distance calculation and therefore
+produce a zero-distance collision rather than being discarded.
 
 ## Usage
 
@@ -34,7 +37,9 @@ sc_palette_audit(
 
 ## Value
 
-An object of class `sc_palette_audit`.
+An object of class `sc_palette_audit`. Its `vision` table includes the
+display-ready `worst_pair` plus separate label and color columns for the
+pair. Label columns are `NA` for unnamed color vectors.
 
 ## Examples
 

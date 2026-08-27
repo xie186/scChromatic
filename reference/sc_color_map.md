@@ -3,7 +3,9 @@
 Character labels use natural ordering by default. For factors,
 `order = "factor"` includes all declared levels, including unused
 levels. Existing assignments are retained exactly and new labels receive
-unused colors deterministically.
+unused colors deterministically. Supplying an existing map with
+`palette = "auto"` also preserves its schema metadata and does not
+require its palette to be registered.
 
 ## Usage
 
@@ -23,7 +25,7 @@ sc_color_map(
 
 - labels:
 
-  Character or factor labels.
+  One or more non-missing, non-empty character or factor labels.
 
 - palette:
 
@@ -51,7 +53,8 @@ sc_color_map(
 
 ## Value
 
-An object of class `sc_color_map`.
+An object of class `sc_color_map` using the current versioned map
+schema.
 
 ## Examples
 

@@ -1,7 +1,10 @@
 # Write a persistent color map
 
-JSON is used for a `.json` path when jsonlite is installed; otherwise a
-transparent two-column CSV is written.
+JSON files follow the installed `sc-color-map.schema.json` schema. CSV
+files keep transparent `label` and `color` rows and store the same
+complete, schema-versioned JSON payload in one metadata row, so neither
+format loses hierarchy, focus, provenance, locks, aliases, history,
+context, seed, or future JSON-compatible metadata fields.
 
 ## Usage
 
@@ -17,7 +20,7 @@ write_sc_color_map(map, path)
 
 - path:
 
-  Output path.
+  Output `.json` or `.csv` path.
 
 ## Value
 

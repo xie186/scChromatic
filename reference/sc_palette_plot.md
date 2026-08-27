@@ -11,7 +11,8 @@ sc_palette_plot(
   view = c("swatch", "points", "both"),
   background = c("light", "dark"),
   cvd = c("none", "deutan", "protan", "tritan"),
-  labels = TRUE
+  labels = TRUE,
+  codes = FALSE
 )
 ```
 
@@ -40,6 +41,10 @@ sc_palette_plot(
 - labels:
 
   Label swatches.
+
+- codes:
+
+  Label swatches with their hexadecimal color codes.
 
 ## Value
 

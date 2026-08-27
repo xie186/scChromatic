@@ -82,19 +82,19 @@ sc_palette_recommend(
 ```
 
     ##   palette_id
-    ## 4  chromatic
+    ## 6  chromatic
     ## 2  tol_muted
-    ## 3    ditto40
+    ## 5    ditto40
     ## 1  okabe_ito
     ##                                                                         reason
-    ## 4 qualitative; registered for this use; recommended; sufficient fixed capacity
+    ## 6 qualitative; registered for this use; recommended; sufficient fixed capacity
     ## 2 qualitative; registered for this use; recommended; sufficient fixed capacity
-    ## 3 qualitative; registered for this use; recommended; sufficient fixed capacity
+    ## 5 qualitative; registered for this use; recommended; sufficient fixed capacity
     ## 1 qualitative; registered for this use; recommended; sufficient fixed capacity
     ##   capacity      status min_cie2000    score
-    ## 4       40 recommended    12.38083 83.38083
+    ## 6       40 recommended    12.38083 83.38083
     ## 2        9 recommended    11.82594 82.82594
-    ## 3       40 recommended    11.13303 82.13303
+    ## 5       40 recommended    11.13303 82.13303
     ## 1        8 recommended    11.13303 82.13303
 
 ## Point versus fill geometry
@@ -133,7 +133,7 @@ sc_hierarchy_map(
 )
 ```
 
-    ## <sc_color_map[5]> palette: hierarchy:tol_muted; background: light
+    ## <sc_color_map[5]> type: hierarchy; palette: hierarchy:tol_muted; background: light; schema: v1
     ##   B: #833744
     ##   NK: #C76A79
     ##   T: #FF9FB1

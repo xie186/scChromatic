@@ -62,6 +62,7 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="scchromatic">scChromatic<a class="anchor" aria-label="anchor" href="#scchromatic"></a>
 </h1></div>
+<p><a href="https://github.com/xie186/scChromatic/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/xie186/scChromatic/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a> <a href="https://github.com/xie186/scChromatic/actions/workflows/test-coverage.yaml" class="external-link"><img src="https://github.com/xie186/scChromatic/actions/workflows/test-coverage.yaml/badge.svg" alt="test-coverage"></a></p>
 <p>Reproducible, provenance-aware color systems for single-cell data visualization.</p>
 <div class="section level2">
 <h2 id="why-single-cell-analyses-need-persistent-color-mappings">Why single-cell analyses need persistent color mappings<a class="anchor" aria-label="anchor" href="#why-single-cell-analyses-need-persistent-color-mappings"></a>
@@ -95,6 +96,7 @@
 <span><span class="va">cell_types</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">sc_example</span><span class="op">$</span><span class="va">cell_type</span><span class="op">)</span></span>
 <span><span class="va">cell_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sc_color_map.html">sc_color_map</a></span><span class="op">(</span><span class="va">sc_example</span><span class="op">$</span><span class="va">cell_type</span>, palette <span class="op">=</span> <span class="st">"chromatic"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/as_named_colors.html">as_named_colors</a></span><span class="op">(</span><span class="va">cell_map</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/sc_color_map_plot.html">sc_color_map_plot</a></span><span class="op">(</span><span class="va">cell_map</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sc_example</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">UMAP1</span>, <span class="va">UMAP2</span>, color <span class="op">=</span> <span class="va">cell_type</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
@@ -117,9 +119,33 @@
 <span>  <span class="fu"><a href="reference/scale_color_sc_map.html">scale_color_sc_map</a></span><span class="op">(</span><span class="va">cell_map</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
+<h2 id="relationship-aware-maps">Relationship-aware maps<a class="anchor" aria-label="anchor" href="#relationship-aware-maps"></a>
+</h2>
+<p>A symmetric affinity matrix can guide related annotations toward closer hues, while a soft penalty discourages worst-case separation shortfalls across normal and simulated CVD views. <code><a href="reference/sc_relationship_from_knn.html">sc_relationship_from_knn()</a></code> derives such a matrix from within-sample coordinate neighborhoods, then combines samples with equal weight so a large sample does not dominate. Samples missing either label are excluded for that pair, and pairs never observed together are errors by default. Hard locks never move; the stability budget limits changes to other canonical assignments.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">affinity</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sc_relationship_from_knn.html">sc_relationship_from_knn</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">sc_example</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"UMAP1"</span>, <span class="st">"UMAP2"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>  labels <span class="op">=</span> <span class="va">sc_example</span><span class="op">$</span><span class="va">cell_type</span>,</span>
+<span>  sample <span class="op">=</span> <span class="va">sc_example</span><span class="op">$</span><span class="va">sample</span>,</span>
+<span>  k <span class="op">=</span> <span class="fl">15</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">relationship_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sc_relationship_map.html">sc_relationship_map</a></span><span class="op">(</span></span>
+<span>  <span class="va">affinity</span>,</span>
+<span>  canonical <span class="op">=</span> <span class="va">cell_map</span>,</span>
+<span>  locked <span class="op">=</span> <span class="st">"B cell"</span>,</span>
+<span>  stability_budget <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">2026</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/as_named_colors.html">as_named_colors</a></span><span class="op">(</span><span class="va">relationship_map</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">encoding</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sc_redundant_encoding.html">sc_redundant_encoding</a></span><span class="op">(</span><span class="va">relationship_map</span>, channel <span class="op">=</span> <span class="st">"shape"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="va">encoding</span><span class="op">$</span><span class="va">shape</span>, <span class="va">encoding</span><span class="op">$</span><span class="va">label</span><span class="op">)</span></span></code></pre></div>
+<p>The UMAP-like coordinates above demonstrate the interface only. For quantitative context, prefer appropriately scaled PCA, model-derived latent, or spatial coordinates. Redundant encodings leave colors unchanged; <code>channel = "pattern"</code> returns pattern names and texture groups for compatible plotting layers. Allocate redundancy once for the full label set and reuse that table across subsets; rerunning on a changed label set can change the graph allocation.</p>
+</div>
+<div class="section level2">
 <h2 id="continuous-expression-and-signed-scores">Continuous expression and signed scores<a class="anchor" aria-label="anchor" href="#continuous-expression-and-signed-scores"></a>
 </h2>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sc_example</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">UMAP1</span>, <span class="va">UMAP2</span>, color <span class="op">=</span> <span class="va">MS4A1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="reference/scale_color_sc_c.html">scale_color_sc_c</a></span><span class="op">(</span><span class="st">"viridis"</span><span class="op">)</span></span>
@@ -131,7 +157,7 @@
 <div class="section level2">
 <h2 id="lineages-pseudotime-and-qc">Lineages, pseudotime, and QC<a class="anchor" aria-label="anchor" href="#lineages-pseudotime-and-qc"></a>
 </h2>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lineage_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sc_hierarchy_map.html">sc_hierarchy_map</a></span><span class="op">(</span><span class="va">sc_example</span><span class="op">$</span><span class="va">lineage</span>, <span class="va">sc_example</span><span class="op">$</span><span class="va">cell_type</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sc_example</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">UMAP1</span>, <span class="va">UMAP2</span>, color <span class="op">=</span> <span class="va">cell_type</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -143,9 +169,19 @@
 <span>  <span class="fu"><a href="reference/scale_color_sc_c.html">scale_color_sc_c</a></span><span class="op">(</span><span class="st">"cividis"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
+<h2 id="portable-versioned-color-maps">Portable, versioned color maps<a class="anchor" aria-label="anchor" href="#portable-versioned-color-maps"></a>
+</h2>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".json"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/write_sc_color_map.html">write_sc_color_map</a></span><span class="op">(</span><span class="va">cell_map</span>, <span class="va">path</span><span class="op">)</span></span>
+<span><span class="va">restored_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_sc_color_map.html">read_sc_color_map</a></span><span class="op">(</span><span class="va">path</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="fu"><a href="reference/as_named_colors.html">as_named_colors</a></span><span class="op">(</span><span class="va">restored_map</span><span class="op">)</span>, <span class="fu"><a href="reference/as_named_colors.html">as_named_colors</a></span><span class="op">(</span><span class="va">cell_map</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>JSON and CSV preserve the complete mapping contract, including provenance, hierarchy, focus, aliases, locks, history, context, and seed metadata. The installed <a href="https://json-schema.org/draft/2020-12" class="external-link">Draft 2020-12 JSON Schema</a> at <code>schema/sc-color-map.schema.json</code> makes map files independently validatable outside R; unknown future schema versions are rejected instead of guessed.</p>
+</div>
+<div class="section level2">
 <h2 id="accessibility-auditing">Accessibility auditing<a class="anchor" aria-label="anchor" href="#accessibility-auditing"></a>
 </h2>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/sc_palette_audit.html">sc_palette_audit</a></span><span class="op">(</span><span class="st">"chromatic"</span>, cvd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"deutan"</span>, <span class="st">"protan"</span>, <span class="st">"tritan"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/sc_palette_plot.html">sc_palette_plot</a></span><span class="op">(</span><span class="st">"okabe_ito"</span>, view <span class="op">=</span> <span class="st">"both"</span>, cvd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"deutan"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/sc_palette_recommend.html">sc_palette_recommend</a></span><span class="op">(</span><span class="fl">12</span>, use <span class="op">=</span> <span class="st">"cell_identity"</span>, geometry <span class="op">=</span> <span class="st">"point"</span><span class="op">)</span></span></code></pre></div>
@@ -154,12 +190,12 @@
 <div class="section level2">
 <h2 id="palette-provenance">Palette provenance<a class="anchor" aria-label="anchor" href="#palette-provenance"></a>
 </h2>
-<p><code><a href="reference/sc_palette_info.html">sc_palette_info()</a></code> exposes capacity, intended use, source URL, exact source commit where known, citation, license, derivation status, and frozen audit metrics. The full registry is installed at <code>extdata/palette-provenance.csv</code>; <code>NOTICE</code> records borrowed-palette disclosures and unresolved review items.</p>
+<p><code><a href="reference/sc_palette_info.html">sc_palette_info()</a></code> exposes capacity, intended use, source URL, exact source version and commit or archive hash where known, citation, license, derivation status, and frozen audit metrics. The full registry is installed at <code>extdata/palette-provenance.csv</code>; <code>NOTICE</code> records applicable third-party license notices.</p>
 </div>
 <div class="section level2">
 <h2 id="interoperability">Interoperability<a class="anchor" aria-label="anchor" href="#interoperability"></a>
 </h2>
-<p><code><a href="reference/as_named_colors.html">as_named_colors()</a></code> returns the ordinary named vectors expected by Seurat, SingleCellExperiment metadata workflows, ArchR plotting arguments, and ComplexHeatmap annotations. These frameworks remain optional. Frozen ArchR compatibility colors remain available under explicit <code>archr_*</code> palette IDs; scico palettes are also optional and produce an installation hint only when requested.</p>
+<p><code><a href="reference/as_named_colors.html">as_named_colors()</a></code> returns the ordinary named vectors expected by Seurat, SingleCellExperiment metadata workflows, ArchR plotting arguments, and ComplexHeatmap annotations. These frameworks remain optional. ArchR compatibility vectors are not distributed. The licensed <code>scico_*</code> LUTs are bundled from pinned sources and require no runtime framework dependency.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -175,8 +211,7 @@
 <div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li>GPL (&gt;= 3) + file <a href="LICENSE-text.html">LICENSE</a>
-</li>
+<li>GPL (&gt;= 3)</li>
 </ul>
 </div>
 

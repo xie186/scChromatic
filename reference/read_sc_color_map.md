@@ -1,6 +1,9 @@
 # Read a persistent color map
 
-Read a persistent color map
+Versioned JSON and CSV files are validated before object construction.
+Unversioned JSON files and legacy two-column CSV files written by
+scChromatic 0.1.0 remain readable and are migrated to schema version 1.
+Unknown future schema versions are rejected rather than guessed.
 
 ## Usage
 
@@ -17,7 +20,7 @@ read_sc_color_map(path)
 
 ## Value
 
-An `sc_color_map`.
+A validated `sc_color_map` using the current schema version.
 
 ## Examples
 

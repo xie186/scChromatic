@@ -21,16 +21,22 @@ Keep labels stable across subsets, reorderings, and related lineages.
 
 - [`sc_color_map()`](https://xie186.github.io/scChromatic/reference/sc_color_map.md)
   : Create a persistent label-to-color mapping
+- [`sc_relationship_from_knn()`](https://xie186.github.io/scChromatic/reference/sc_relationship_from_knn.md)
+  : Derive label relationships from coordinate neighborhoods
+- [`sc_relationship_map()`](https://xie186.github.io/scChromatic/reference/sc_relationship_map.md)
+  : Optimize a persistent color map from label relationships
 - [`update_sc_color_map()`](https://xie186.github.io/scChromatic/reference/update_sc_color_map.md)
   : Update a persistent color map
 - [`as_named_colors()`](https://xie186.github.io/scChromatic/reference/as_named_colors.md)
   : Extract named colors from a persistent map
+- [`sc_color_map_plot()`](https://xie186.github.io/scChromatic/reference/sc_color_map_plot.md)
+  : Plot a persistent color map
 - [`write_sc_color_map()`](https://xie186.github.io/scChromatic/reference/write_sc_color_map.md)
   : Write a persistent color map
 - [`read_sc_color_map()`](https://xie186.github.io/scChromatic/reference/read_sc_color_map.md)
   : Read a persistent color map
 - [`sc_hierarchy_map()`](https://xie186.github.io/scChromatic/reference/sc_hierarchy_map.md)
-  : Create a hierarchy-aware color map
+  : Create or extend a hierarchy-aware color map
 - [`sc_highlight_map()`](https://xie186.github.io/scChromatic/reference/sc_highlight_map.md)
   : Create a focus-versus-other color map
 
@@ -57,6 +63,8 @@ Keep labels stable across subsets, reorderings, and related lineages.
   : Recommend palettes from transparent registry rules
 - [`sc_palette_plot()`](https://xie186.github.io/scChromatic/reference/sc_palette_plot.md)
   : Plot palette swatches or dense point previews
+- [`sc_redundant_encoding()`](https://xie186.github.io/scChromatic/reference/sc_redundant_encoding.md)
+  : Allocate redundant shapes or patterns for confusable colors
 
 ## Example data
 

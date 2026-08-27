@@ -41,12 +41,23 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="scchromatic-010">scChromatic 0.1.0<a class="anchor" aria-label="anchor" href="#scchromatic-010"></a></h2>
-<ul><li>Initial release with persistent color maps, hierarchy-aware mappings, qualitative and continuous scales, deterministic palette extension, accessibility diagnostics, and provenance metadata.</li>
-<li>Includes palettes frozen from ArchR commit <code>6feec354ad6c8052ddbc4626a2ca2d858ed465bf</code>.</li>
-<li>Adds <code>sc_example</code>, a deterministic synthetic PBMC-like dataset demonstrating identity, lineage, sample, condition, expression, signed-score, pseudotime, and QC color semantics.</li>
-<li>Reframes ArchR-derived palettes as an explicitly named compatibility collection, removes unresolved ArchR provenance entries, and prioritizes framework-neutral palettes throughout the API documentation and website.</li>
-<li>Removes the ArchR-specific <code>pal_archr()</code> helper and unprefixed palette aliases; retained compatibility colors remain available through explicit <code>archr_*</code> IDs.</li>
-<li>Adds <code>chromatic_balance</code>, a package-owned diverging HCL palette for signed scores centered at zero.</li>
+<ul><li><p>Adds <code><a href="../reference/sc_relationship_map.html">sc_relationship_map()</a></code>, a seeded relationship-affinity optimizer that scores worst-case CIE2000 separation across normal and simulated CVD views, preserves hard canonical locks, limits other canonical changes with an explicit stability budget, and records the effective matrix, baseline, settings, outcome, and construction provenance in the versioned map.</p></li>
+<li><p>Adds <code><a href="../reference/sc_relationship_from_knn.html">sc_relationship_from_knn()</a></code> for exact within-sample coordinate neighborhoods, pairwise-complete aggregation with equal sample weights, and recorded construction and support metadata.</p></li>
+<li><p>Adds <code><a href="../reference/sc_redundant_encoding.html">sc_redundant_encoding()</a></code> to assign shapes, patterns, or their combinations to CVD-confusable color pairs without changing their colors.</p></li>
+<li><p>Removes the unresolved ArchR palette snapshot and all installed <code>archr_*</code> registry entries; ArchR is no longer a package or palette-data dependency.</p></li>
+<li><p>Pins every remaining third-party palette to an exact licensed source package, version, URL, and SHA-256 checksum, and resolves the Glasbey and Polychrome provenance-review entries against Polychrome 1.6.1.</p></li>
+<li><p>Adds deterministic build-time generation for package-owned palettes and frozen registry diagnostics for deutan, protan, and tritan simulations.</p></li>
+<li><p>Bundles exact 256-color viridisLite 0.4.3 and scico 1.5.0 lookup tables, preserving provider output without runtime palette-package dependencies.</p></li>
+<li><p>Adds a versioned Draft 2020-12 color-map schema and lossless JSON/CSV interchange for mappings, hierarchy, focus, provenance, aliases, locks, history, context, seeds, and JSON-native extension metadata. Legacy files are migrated, while unknown future schema versions are rejected.</p></li>
+<li><p>Makes hierarchy growth append-only: new parents and children receive colors without changing established child assignments or parent anchors, including after serialization and restoration.</p></li>
+<li><p>Reports biological labels and colors for worst palette pairs, retains exact duplicate collisions, avoids categorical-cardinality warnings for continuous palettes, and makes qualitative recommendation cutoffs explicitly opt-in.</p></li>
+<li><p>Adds cross-platform R CMD check (including the declared R 4.2 minimum), pinned-source verification and palette-database regeneration, informational coverage, and check-gated pkgdown deployment workflows.</p></li>
+<li><p>Removes unused framework and testing packages from <code>Suggests</code>.</p></li>
+<li><p>Initial release with persistent color maps, hierarchy-aware mappings, qualitative and continuous scales, deterministic palette extension, accessibility diagnostics, and provenance metadata.</p></li>
+<li><p>Adds <code>sc_example</code>, a deterministic synthetic PBMC-like dataset demonstrating identity, lineage, sample, condition, expression, signed-score, pseudotime, and QC color semantics.</p></li>
+<li><p>Removes the ArchR-specific <code>pal_archr()</code> helper and unprefixed palette aliases.</p></li>
+<li><p>Adds <code>chromatic_balance</code>, a package-owned diverging HCL palette for signed scores centered at zero.</p></li>
+<li><p>Adds <code>d3_rainbow</code> and <code>d3_cool</code> as explicit CELLXGENE compatibility palettes. The cyclic rainbow reproduces count- and order-dependent categorical colors and is excluded from persistent <code><a href="../reference/sc_color_map.html">sc_color_map()</a></code> assignments; the cool scale includes CELLXGENE’s exact 100 source bins and offers smooth continuous-scale compatibility in the same low-to-high direction.</p></li>
 </ul></div>
   </main></div>
 
