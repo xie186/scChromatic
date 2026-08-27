@@ -70,6 +70,7 @@ reference:
   - sc_relationship_map
   - update_sc_color_map
   - as_named_colors
+  - sc_color_map_plot
   - write_sc_color_map
   - read_sc_color_map
   - sc_hierarchy_map
