@@ -74,6 +74,18 @@ test_that("palette previews render on light and dark backgrounds", {
   }
 })
 
+test_that("color-map plots display labels and color codes", {
+  map <- sc_color_map(c("B", "T", "NK"))
+  colors <- as_named_colors(map)
+  plot <- sc_color_map_plot(map)
+
+  expect_s3_class(plot, "ggplot")
+  expect_identical(
+    plot$layers[[2L]]$data$label,
+    paste(names(colors), unname(colors), sep = "\n")
+  )
+})
+
 test_that("invalid CVD modes fail clearly", {
   expect_error(sc_palette_audit("#000000", cvd = "unknown"), "cvd")
   expect_error(sc_palette_plot("#000000", cvd = "unknown"), "cvd")

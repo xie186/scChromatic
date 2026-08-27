@@ -10,7 +10,8 @@ sc_palette_plot(
   view = c("swatch", "points", "both"),
   background = c("light", "dark"),
   cvd = c("none", "deutan", "protan", "tritan"),
-  labels = TRUE
+  labels = TRUE,
+  codes = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ sc_palette_plot(
 \item{cvd}{One or more vision simulations.}
 
 \item{labels}{Label swatches.}
+
+\item{codes}{Label swatches with their hexadecimal color codes.}
 }
 \value{
 A ggplot object for one CVD view, otherwise a named list of plots.

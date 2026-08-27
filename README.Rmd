@@ -50,6 +50,7 @@ data(sc_example)
 cell_types <- levels(sc_example$cell_type)
 cell_map <- sc_color_map(sc_example$cell_type, palette = "chromatic")
 as_named_colors(cell_map)
+sc_color_map_plot(cell_map)
 
 ggplot(sc_example, aes(UMAP1, UMAP2, color = cell_type)) +
   geom_point(size = 0.7) +

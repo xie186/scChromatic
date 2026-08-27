@@ -12,7 +12,7 @@
   x
 }
 
-.sc_one_palette_plot <- function(colors, view, background, mode, labels) {
+.sc_one_palette_plot <- function(colors, view, background, mode, labels, codes) {
   viewed <- .sc_cvd(colors, mode)
   names(viewed) <- if (is.null(names(colors))) seq_along(colors) else names(colors)
   background_color <- if (background == "light") "#FFFFFF" else "#1A1A1A"
@@ -36,12 +36,25 @@
         width = 0.96, height = 0.75
       ) +
       ggplot2::scale_fill_identity()
-    if (labels) {
+    if (labels || codes) {
+      swatches$label <- if (labels && codes) {
+        paste(swatches$label, swatches$color, sep = "\n")
+      } else if (labels) {
+        swatches$label
+      } else {
+        swatches$color
+      }
       base <- base + ggplot2::geom_text(
         data = swatches,
         ggplot2::aes(x = x, y = 0.48, label = label),
         color = foreground, angle = 45, hjust = 1, size = 3
-      )
+      ) +
+        ggplot2::coord_cartesian(clip = "off") +
+        ggplot2::theme(
+          plot.margin = ggplot2::margin(
+            5.5, 5.5, if (codes) 70 else 45, 5.5
+          )
+        )
     }
   }
   if (view %in% c("points", "both")) {
@@ -74,6 +87,7 @@
 #' @param background Light or dark background.
 #' @param cvd One or more vision simulations.
 #' @param labels Label swatches.
+#' @param codes Label swatches with their hexadecimal color codes.
 #' @return A ggplot object for one CVD view, otherwise a named list of plots.
 #' @export
 #' @examples
@@ -81,10 +95,11 @@
 sc_palette_plot <- function(x, n = NULL, view = c("swatch", "points", "both"),
                             background = c("light", "dark"),
                             cvd = c("none", "deutan", "protan", "tritan"),
-                            labels = TRUE) {
+                            labels = TRUE, codes = FALSE) {
   view <- match.arg(view)
   background <- match.arg(background)
   labels <- .sc_validate_flag(labels, "labels")
+  codes <- .sc_validate_flag(codes, "codes")
   modes <- unique(cvd)
   allowed <- c("none", "deutan", "protan", "tritan")
   if (!length(modes) || any(!modes %in% allowed)) {
@@ -94,8 +109,26 @@ sc_palette_plot <- function(x, n = NULL, view = c("swatch", "points", "both"),
   }
   colors <- .sc_plot_colors(x, .sc_validate_n(n), background)
   plots <- lapply(modes, function(mode) {
-    .sc_one_palette_plot(colors, view, background, mode, labels)
+    .sc_one_palette_plot(colors, view, background, mode, labels, codes)
   })
   names(plots) <- modes
   if (length(plots) == 1L) plots[[1L]] else plots
+}
+
+#' Plot a persistent color map
+#'
+#' Displays each mapped label alongside its color swatch and hexadecimal code.
+#'
+#' @param x An `sc_color_map`.
+#' @return A ggplot object.
+#' @export
+#' @examples
+#' cell_map <- sc_color_map(c("B", "T", "NK"))
+#' sc_color_map_plot(cell_map)
+sc_color_map_plot <- function(x) {
+  .sc_validate_map(x)
+  sc_palette_plot(
+    x, view = "swatch", background = x$background, cvd = "none",
+    labels = TRUE, codes = TRUE
+  ) + ggplot2::labs(title = NULL)
 }
