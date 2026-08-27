@@ -32,6 +32,11 @@
 #' A non-`NULL` midpoint uses [scales::rescale_mid()] so the data value at the
 #' midpoint maps to the center of the gradient.
 #'
+#' Use the color or colour variant for numeric variables mapped to `color`, and
+#' the fill variant for numeric variables mapped to `fill`. Continuous scales
+#' accept sequential, diverging, or cyclic palettes, not qualitative palettes.
+#' For categories, use the `_sc_d()` family or a persistent `_sc_map()` scale.
+#'
 #' @param palette Sequential, diverging, or cyclic palette ID.
 #' @param alpha Opacity in `(0, 1]`.
 #' @param reverse Reverse the color sequence.

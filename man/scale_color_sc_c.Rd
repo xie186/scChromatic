@@ -63,6 +63,12 @@ A ggplot2 continuous scale.
 A non-\code{NULL} midpoint uses \code{\link[scales:rescale_mid]{scales::rescale_mid()}} so the data value at the
 midpoint maps to the center of the gradient.
 }
+\details{
+Use the color or colour variant for numeric variables mapped to \code{color}, and
+the fill variant for numeric variables mapped to \code{fill}. Continuous scales
+accept sequential, diverging, or cyclic palettes, not qualitative palettes.
+For categories, use the \verb{_sc_d()} family or a persistent \verb{_sc_map()} scale.
+}
 \examples{
 ggplot2::ggplot(mtcars, ggplot2::aes(wt, mpg, color = disp)) +
   ggplot2::geom_point() + scale_color_sc_c("viridis")

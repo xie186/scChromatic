@@ -53,7 +53,12 @@ order.}
 \item{...}{Passed to \code{\link[ggplot2:discrete_scale]{ggplot2::discrete_scale()}}.}
 }
 \description{
-Discrete scChromatic color scale
+Use the color or colour variant for variables mapped to the \code{color}
+aesthetic, and the fill variant for variables mapped to \code{fill}. These scales
+assign colors from the discrete levels supplied to the plot. Use
+\code{\link[=scale_color_sc_map]{scale_color_sc_map()}} or \code{\link[=scale_fill_sc_map]{scale_fill_sc_map()}} instead when exact category
+assignments must remain stable across plots and subsets; use the \verb{_sc_c()}
+family for numeric gradients.
 }
 \examples{
 ggplot2::ggplot(mtcars, ggplot2::aes(factor(cyl), mpg, color = factor(cyl))) +

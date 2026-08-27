@@ -12,6 +12,13 @@
 
 #' Discrete scChromatic color scale
 #'
+#' Use the color or colour variant for variables mapped to the `color`
+#' aesthetic, and the fill variant for variables mapped to `fill`. These scales
+#' assign colors from the discrete levels supplied to the plot. Use
+#' [scale_color_sc_map()] or [scale_fill_sc_map()] instead when exact category
+#' assignments must remain stable across plots and subsets; use the `_sc_c()`
+#' family for numeric gradients.
+#'
 #' @inheritParams sc_palette
 #' @param ... Passed to [ggplot2::discrete_scale()].
 #' @export
@@ -64,6 +71,13 @@ scale_fill_sc_d <- function(palette = "auto", alpha = 1, reverse = FALSE,
 #'
 #' These scales use the exact named assignments stored in `map`; assignments
 #' are never recomputed from the plotted subset.
+#'
+#' Use the color or colour variant for points, lines, text, and geometry
+#' outlines mapped with `color`. Use the fill variant for geometry interiors
+#' mapped with `fill`, such as violins, bars, tiles, and polygons. The
+#' `scale_colour_*()` spelling is an exact alias of `scale_color_*()`. For a
+#' one-off categorical plot that does not require locked assignments, use the
+#' `_sc_d()` family; for numeric gradients, use `_sc_c()`.
 #'
 #' @param map An `sc_color_map`.
 #' @param ... Passed to [ggplot2::scale_color_manual()] or

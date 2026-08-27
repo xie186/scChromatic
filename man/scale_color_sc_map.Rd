@@ -27,6 +27,14 @@ A ggplot2 scale.
 These scales use the exact named assignments stored in \code{map}; assignments
 are never recomputed from the plotted subset.
 }
+\details{
+Use the color or colour variant for points, lines, text, and geometry
+outlines mapped with \code{color}. Use the fill variant for geometry interiors
+mapped with \code{fill}, such as violins, bars, tiles, and polygons. The
+\verb{scale_colour_*()} spelling is an exact alias of \verb{scale_color_*()}. For a
+one-off categorical plot that does not require locked assignments, use the
+\verb{_sc_d()} family; for numeric gradients, use \verb{_sc_c()}.
+}
 \examples{
 map <- sc_color_map(c("B", "T", "NK"))
 ggplot2::ggplot(
