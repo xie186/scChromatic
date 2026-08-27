@@ -95,16 +95,27 @@ jobs:
           remotes::install_version("farver", "2.1.2", upgrade = "never")
         shell: Rscript {0}
 
+      - name: Snapshot generated palette database
+        run: cp R/sysdata.rda "$RUNNER_TEMP/scChromatic-sysdata.rda"
+
       - name: Rebuild palette database
         run: source("data-raw/build-palette-db.R")
         shell: Rscript {0}
 
-      - name: Check generated palette artifacts
+      - name: Check generated palette tables
         run: >-
           git diff --exit-code --
-          R/sysdata.rda
           data-raw/palette-registry.csv
           inst/extdata/palette-provenance.csv
+
+      - name: Check generated palette database
+        run: |
+          before <- new.env(parent = emptyenv())
+          after <- new.env(parent = emptyenv())
+          load(file.path(Sys.getenv("RUNNER_TEMP"), "scChromatic-sysdata.rda"), envir = before)
+          load("R/sysdata.rda", envir = after)
+          stopifnot(identical(before$sc_palette_db, after$sc_palette_db))
+        shell: Rscript {0}
 
   pkgdown:
     needs: [R-CMD-check, provenance]
