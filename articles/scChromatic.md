@@ -147,7 +147,28 @@ ggplot(stimulated, aes(UMAP1, UMAP2, color = cell_type)) +
 
 ![](scChromatic_files/figure-html/unnamed-chunk-5-1.png)
 
-## Samples and conditions
+## Choosing a ggplot2 scale
+
+Choose a scale from both the mapped data and the ggplot2 aesthetic:
+
+| Mapped data and assignment strategy | `color` or `colour` aesthetic | `fill` aesthetic |
+|:---|:---|:---|
+| Categorical, assigned for one plot | [`scale_color_sc_d()`](https://xie186.github.io/scChromatic/reference/scale_color_sc_d.md) | [`scale_fill_sc_d()`](https://xie186.github.io/scChromatic/reference/scale_color_sc_d.md) |
+| Categorical, locked in an `sc_color_map` | [`scale_color_sc_map()`](https://xie186.github.io/scChromatic/reference/scale_color_sc_map.md) | [`scale_fill_sc_map()`](https://xie186.github.io/scChromatic/reference/scale_color_sc_map.md) |
+| Numeric, shown as a gradient | [`scale_color_sc_c()`](https://xie186.github.io/scChromatic/reference/scale_color_sc_c.md) | [`scale_fill_sc_c()`](https://xie186.github.io/scChromatic/reference/scale_color_sc_c.md) |
+
+The `color` aesthetic controls points, lines, text, and geometry
+outlines; `fill` controls the interiors of violins, bars, tiles,
+polygons, and other filled geometries. The `scale_colour_*()` functions
+are exact aliases of the corresponding `scale_color_*()` functions.
+Match the scale to the aesthetic in
+[`aes()`](https://ggplot2.tidyverse.org/reference/aes.html): mapping
+`fill = sample` requires a `scale_fill_*()` scale, while mapping
+`color = sample` requires a `scale_color_*()` scale.
+
+Use the `_sc_map()` family when categories must keep the same colors
+across figures, subsets, or reordered factors. A single map can drive
+either aesthetic.
 
 ``` r
 
@@ -162,12 +183,41 @@ ggplot(sc_example, aes(UMAP1, UMAP2, color = sample)) +
 
 ``` r
 
+ggplot(sc_example, aes(sample, n_counts, fill = sample)) +
+  geom_violin() +
+  scale_y_log10() +
+  scale_fill_sc_map(sample_map) +
+  labs(x = NULL, y = "Library size")
+```
+
+![](scChromatic_files/figure-html/unnamed-chunk-6-2.png)
+
+Use `_sc_d()` for a one-off categorical plot where a persistent
+assignment is not needed. Its assignments are computed from the discrete
+levels supplied to that plot.
+
+``` r
+
 ggplot(sc_example, aes(UMAP1, UMAP2, color = condition)) +
   geom_point(size = 0.5) +
   scale_color_sc_d("chromatic")
 ```
 
-![](scChromatic_files/figure-html/unnamed-chunk-6-2.png)
+![](scChromatic_files/figure-html/unnamed-chunk-7-1.png)
+
+Use `_sc_c()` only for numeric values. Sequential, diverging, or cyclic
+palettes are valid for continuous scales; qualitative palettes are not.
+If a category is stored as numbers, convert it to a factor before using
+`_sc_d()` or constructing an `sc_color_map`.
+
+These rules do not depend on the source object. For a Seurat object,
+`object[[]]` supplies its metadata data frame and `object$sample`
+supplies the sample vector used to construct a map. A plot returned by
+another package, including pixelatorR, must still use the scale matching
+the aesthetic mapped by that plot. If both `color` and `fill` are
+mapped, add one scale for each aesthetic; otherwise, use only the scale
+that matches
+[`aes()`](https://ggplot2.tidyverse.org/reference/aes.html).
 
 ## Continuous expression
 
@@ -178,7 +228,7 @@ ggplot(sc_example, aes(UMAP1, UMAP2, color = MS4A1)) +
   scale_color_sc_c("viridis")
 ```
 
-![](scChromatic_files/figure-html/unnamed-chunk-7-1.png)
+![](scChromatic_files/figure-html/unnamed-chunk-8-1.png)
 
 ## Signed scores centered at zero
 
@@ -192,7 +242,7 @@ ggplot(sc_example, aes(UMAP1, UMAP2, color = signed_score)) +
   scale_color_sc_c("chromatic_balance", midpoint = 0)
 ```
 
-![](scChromatic_files/figure-html/unnamed-chunk-8-1.png)
+![](scChromatic_files/figure-html/unnamed-chunk-9-1.png)
 
 ## Parent lineage and child subtype colors
 
@@ -205,7 +255,7 @@ ggplot(sc_example, aes(UMAP1, UMAP2, color = cell_type)) +
   scale_color_sc_map(lineage_map)
 ```
 
-![](scChromatic_files/figure-html/unnamed-chunk-9-1.png)
+![](scChromatic_files/figure-html/unnamed-chunk-10-1.png)
 
 ## Pseudotime and QC
 
@@ -216,7 +266,7 @@ ggplot(sc_example, aes(UMAP1, UMAP2, color = pseudotime)) +
   scale_color_sc_c("cividis")
 ```
 
-![](scChromatic_files/figure-html/unnamed-chunk-10-1.png)
+![](scChromatic_files/figure-html/unnamed-chunk-11-1.png)
 
 ``` r
 
@@ -225,4 +275,4 @@ ggplot(sc_example, aes(UMAP1, UMAP2, color = percent_mito)) +
   scale_color_sc_c("viridis")
 ```
 
-![](scChromatic_files/figure-html/unnamed-chunk-10-2.png)
+![](scChromatic_files/figure-html/unnamed-chunk-11-2.png)

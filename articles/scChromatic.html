@@ -64,7 +64,7 @@
       <h1>scChromatic</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/xie186/scChromatic/blob/v0.1.0/vignettes/scChromatic.Rmd" class="external-link"><code>vignettes/scChromatic.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/xie186/scChromatic/blob/main/vignettes/scChromatic.Rmd" class="external-link"><code>vignettes/scChromatic.Rmd</code></a></small>
       <div class="d-none name"><code>scChromatic.Rmd</code></div>
     </div>
 
@@ -181,8 +181,56 @@ identities keep their original colors.</p>
 <p><img src="scChromatic_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level2">
-<h2 id="samples-and-conditions">Samples and conditions<a class="anchor" aria-label="anchor" href="#samples-and-conditions"></a>
+<h2 id="choosing-a-ggplot2-scale">Choosing a ggplot2 scale<a class="anchor" aria-label="anchor" href="#choosing-a-ggplot2-scale"></a>
 </h2>
+<p>Choose a scale from both the mapped data and the ggplot2
+aesthetic:</p>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Mapped data and assignment strategy</th>
+<th align="left">
+<code>color</code> or <code>colour</code>
+aesthetic</th>
+<th align="left">
+<code>fill</code> aesthetic</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">Categorical, assigned for one plot</td>
+<td align="left"><code><a href="../reference/scale_color_sc_d.html">scale_color_sc_d()</a></code></td>
+<td align="left"><code><a href="../reference/scale_color_sc_d.html">scale_fill_sc_d()</a></code></td>
+</tr>
+<tr class="even">
+<td align="left">Categorical, locked in an
+<code>sc_color_map</code>
+</td>
+<td align="left"><code><a href="../reference/scale_color_sc_map.html">scale_color_sc_map()</a></code></td>
+<td align="left"><code><a href="../reference/scale_color_sc_map.html">scale_fill_sc_map()</a></code></td>
+</tr>
+<tr class="odd">
+<td align="left">Numeric, shown as a gradient</td>
+<td align="left"><code><a href="../reference/scale_color_sc_c.html">scale_color_sc_c()</a></code></td>
+<td align="left"><code><a href="../reference/scale_color_sc_c.html">scale_fill_sc_c()</a></code></td>
+</tr>
+</tbody>
+</table>
+<p>The <code>color</code> aesthetic controls points, lines, text, and
+geometry outlines; <code>fill</code> controls the interiors of violins,
+bars, tiles, polygons, and other filled geometries. The
+<code>scale_colour_*()</code> functions are exact aliases of the
+corresponding <code>scale_color_*()</code> functions. Match the scale to
+the aesthetic in <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code>: mapping <code>fill = sample</code>
+requires a <code>scale_fill_*()</code> scale, while mapping
+<code>color = sample</code> requires a <code>scale_color_*()</code>
+scale.</p>
+<p>Use the <code>_sc_map()</code> family when categories must keep the
+same colors across figures, subsets, or reordered factors. A single map
+can drive either aesthetic.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sample_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sc_color_map.html">sc_color_map</a></span><span class="op">(</span><span class="va">sc_example</span><span class="op">$</span><span class="va">sample</span>, palette <span class="op">=</span> <span class="st">"chromatic"</span><span class="op">)</span></span>
 <span></span>
@@ -191,55 +239,78 @@ identities keep their original colors.</p>
 <span>  <span class="fu"><a href="../reference/scale_color_sc_map.html">scale_color_sc_map</a></span><span class="op">(</span><span class="va">sample_map</span><span class="op">)</span></span></code></pre></div>
 <p><img src="scChromatic_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="700"></p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sc_example</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">sample</span>, <span class="va">n_counts</span>, fill <span class="op">=</span> <span class="va">sample</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html" class="external-link">geom_violin</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_log10</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/scale_color_sc_map.html">scale_fill_sc_map</a></span><span class="op">(</span><span class="va">sample_map</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="st">"Library size"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="scChromatic_files/figure-html/unnamed-chunk-6-2.png" class="r-plt" alt="" width="700"></p>
+<p>Use <code>_sc_d()</code> for a one-off categorical plot where a
+persistent assignment is not needed. Its assignments are computed from
+the discrete levels supplied to that plot.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sc_example</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">UMAP1</span>, <span class="va">UMAP2</span>, color <span class="op">=</span> <span class="va">condition</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/scale_color_sc_d.html">scale_color_sc_d</a></span><span class="op">(</span><span class="st">"chromatic"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scChromatic_files/figure-html/unnamed-chunk-6-2.png" class="r-plt" alt="" width="700"></p>
+<p><img src="scChromatic_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="700"></p>
+<p>Use <code>_sc_c()</code> only for numeric values. Sequential,
+diverging, or cyclic palettes are valid for continuous scales;
+qualitative palettes are not. If a category is stored as numbers,
+convert it to a factor before using <code>_sc_d()</code> or constructing
+an <code>sc_color_map</code>.</p>
+<p>These rules do not depend on the source object. For a Seurat object,
+<code>object[[]]</code> supplies its metadata data frame and
+<code>object$sample</code> supplies the sample vector used to construct
+a map. A plot returned by another package, including pixelatorR, must
+still use the scale matching the aesthetic mapped by that plot. If both
+<code>color</code> and <code>fill</code> are mapped, add one scale for
+each aesthetic; otherwise, use only the scale that matches
+<code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code>.</p>
 </div>
 <div class="section level2">
 <h2 id="continuous-expression">Continuous expression<a class="anchor" aria-label="anchor" href="#continuous-expression"></a>
 </h2>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sc_example</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">UMAP1</span>, <span class="va">UMAP2</span>, color <span class="op">=</span> <span class="va">MS4A1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/scale_color_sc_c.html">scale_color_sc_c</a></span><span class="op">(</span><span class="st">"viridis"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scChromatic_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="700"></p>
+<p><img src="scChromatic_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="signed-scores-centered-at-zero">Signed scores centered at zero<a class="anchor" aria-label="anchor" href="#signed-scores-centered-at-zero"></a>
 </h2>
 <p><code>midpoint = 0</code> changes data rescaling, not merely the
 middle displayed color.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sc_example</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">UMAP1</span>, <span class="va">UMAP2</span>, color <span class="op">=</span> <span class="va">signed_score</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/scale_color_sc_c.html">scale_color_sc_c</a></span><span class="op">(</span><span class="st">"chromatic_balance"</span>, midpoint <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scChromatic_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="700"></p>
+<p><img src="scChromatic_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="parent-lineage-and-child-subtype-colors">Parent lineage and child subtype colors<a class="anchor" aria-label="anchor" href="#parent-lineage-and-child-subtype-colors"></a>
 </h2>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lineage_map</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sc_hierarchy_map.html">sc_hierarchy_map</a></span><span class="op">(</span><span class="va">sc_example</span><span class="op">$</span><span class="va">lineage</span>, <span class="va">sc_example</span><span class="op">$</span><span class="va">cell_type</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sc_example</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">UMAP1</span>, <span class="va">UMAP2</span>, color <span class="op">=</span> <span class="va">cell_type</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/scale_color_sc_map.html">scale_color_sc_map</a></span><span class="op">(</span><span class="va">lineage_map</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scChromatic_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="700"></p>
+<p><img src="scChromatic_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="pseudotime-and-qc">Pseudotime and QC<a class="anchor" aria-label="anchor" href="#pseudotime-and-qc"></a>
 </h2>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sc_example</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">UMAP1</span>, <span class="va">UMAP2</span>, color <span class="op">=</span> <span class="va">pseudotime</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/scale_color_sc_c.html">scale_color_sc_c</a></span><span class="op">(</span><span class="st">"cividis"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scChromatic_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="700"></p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<p><img src="scChromatic_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="700"></p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sc_example</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">UMAP1</span>, <span class="va">UMAP2</span>, color <span class="op">=</span> <span class="va">percent_mito</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/scale_color_sc_c.html">scale_color_sc_c</a></span><span class="op">(</span><span class="st">"viridis"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="scChromatic_files/figure-html/unnamed-chunk-10-2.png" class="r-plt" alt="" width="700"></p>
+<p><img src="scChromatic_files/figure-html/unnamed-chunk-11-2.png" class="r-plt" alt="" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

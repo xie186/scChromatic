@@ -34,6 +34,16 @@ scale_fill_sc_map(map, ..., drop = TRUE)
 
 A ggplot2 scale.
 
+## Details
+
+Use the color or colour variant for points, lines, text, and geometry
+outlines mapped with `color`. Use the fill variant for geometry
+interiors mapped with `fill`, such as violins, bars, tiles, and
+polygons. The `scale_colour_*()` spelling is an exact alias of
+`scale_color_*()`. For a one-off categorical plot that does not require
+locked assignments, use the `_sc_d()` family; for numeric gradients, use
+`_sc_c()`.
+
 ## Examples
 
 ``` r

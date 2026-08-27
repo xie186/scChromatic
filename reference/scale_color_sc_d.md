@@ -1,6 +1,13 @@
 # Discrete scChromatic color scale
 
-Discrete scChromatic color scale
+Use the color or colour variant for variables mapped to the `color`
+aesthetic, and the fill variant for variables mapped to `fill`. These
+scales assign colors from the discrete levels supplied to the plot. Use
+[`scale_color_sc_map()`](https://xie186.github.io/scChromatic/reference/scale_color_sc_map.md)
+or
+[`scale_fill_sc_map()`](https://xie186.github.io/scChromatic/reference/scale_color_sc_map.md)
+instead when exact category assignments must remain stable across plots
+and subsets; use the `_sc_c()` family for numeric gradients.
 
 ## Usage
 

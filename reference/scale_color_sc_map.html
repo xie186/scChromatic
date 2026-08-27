@@ -38,7 +38,7 @@ are never recomputed from the plotted subset."><meta name="theme-color" content=
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Manual ggplot2 scales from a persistent color map</h1>
-      <small class="dont-index">Source: <a href="https://github.com/xie186/scChromatic/blob/v0.1.0/R/scales-discrete.R" class="external-link"><code>R/scales-discrete.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/xie186/scChromatic/blob/main/R/scales-discrete.R" class="external-link"><code>R/scales-discrete.R</code></a></small>
       <div class="d-none name"><code>scale_color_sc_map.Rd</code></div>
     </div>
 
@@ -76,6 +76,15 @@ are never recomputed from the plotted subset.</p>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A ggplot2 scale.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>Use the color or colour variant for points, lines, text, and geometry
+outlines mapped with <code>color</code>. Use the fill variant for geometry interiors
+mapped with <code>fill</code>, such as violins, bars, tiles, and polygons. The
+<code>scale_colour_*()</code> spelling is an exact alias of <code>scale_color_*()</code>. For a
+one-off categorical plot that does not require locked assignments, use the
+<code>_sc_d()</code> family; for numeric gradients, use <code>_sc_c()</code>.</p>
     </div>
 
     <div class="section level2">

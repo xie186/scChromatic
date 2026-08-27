@@ -81,6 +81,14 @@ scale_fill_sc_c(
 
 A ggplot2 continuous scale.
 
+## Details
+
+Use the color or colour variant for numeric variables mapped to `color`,
+and the fill variant for numeric variables mapped to `fill`. Continuous
+scales accept sequential, diverging, or cyclic palettes, not qualitative
+palettes. For categories, use the `_sc_d()` family or a persistent
+`_sc_map()` scale.
+
 ## Examples
 
 ``` r
