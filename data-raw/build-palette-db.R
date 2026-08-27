@@ -424,7 +424,8 @@ audit_inputs <- stats::setNames(lapply(meta$palette_id, function(id) {
   colors[[id]]$priority
 }), meta$palette_id)
 audits <- lapply(audit_inputs, audit_values)
-audit_matrix <- do.call(rbind, audits)
+# Normalize platform-level floating-point jitter in generated artifacts.
+audit_matrix <- signif(do.call(rbind, audits), digits = 12L)
 meta$audit_min_cie2000 <- audit_matrix[, 1L]
 meta$audit_min_cie2000_deutan <- audit_matrix[, 2L]
 meta$audit_min_cie2000_protan <- audit_matrix[, 3L]

@@ -1,4 +1,4 @@
-# scChromatic (development version)
+# scChromatic 0.1.0
 
 * Adds `sc_relationship_map()`, a seeded relationship-affinity optimizer that
   scores worst-case CIE2000 separation across normal and simulated CVD views,
@@ -33,8 +33,6 @@
   pinned-source verification and palette-database regeneration, informational
   coverage, and check-gated pkgdown deployment workflows.
 * Removes unused framework and testing packages from `Suggests`.
-
-# scChromatic 0.1.0
 
 * Initial release with persistent color maps, hierarchy-aware mappings,
   qualitative and continuous scales, deterministic palette extension,
